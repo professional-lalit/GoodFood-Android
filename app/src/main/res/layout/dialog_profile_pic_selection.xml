@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:background="@color/transparent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_centerInParent="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/dialog_bg"
+            android:orientation="vertical"
+            android:padding="@dimen/dimen_size_20">
+
+            <TextView
+                android:id="@+id/txt_dialog_title"
+                style="@style/BasicText"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/get_image_from"
+                android:textSize="@dimen/text_size_20" />
+
+            <RadioGroup
+                android:id="@+id/rg_image_selection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_size_10"
+                android:orientation="vertical">
+
+                <RadioButton
+                    android:id="@+id/rb_camera"
+                    style="@style/BasicText"
+                    android:text="@string/camera" />
+
+                <RadioButton
+                    android:id="@+id/rb_gallery"
+                    style="@style/BasicText"
+                    android:layout_marginTop="@dimen/dimen_size_10"
+                    android:text="@string/gallery" />
+
+            </RadioGroup>
+
+            <Button
+                android:id="@+id/btn_select"
+                style="@style/BasicButton"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dimen_size_20"
+                android:text="@string/select" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</layout>

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.goodfood.app.ui.signup.SignupViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context=".ui.signup.SignupActivity">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/txt_signup"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="vertical"
+                android:padding="@dimen/dimen_size_50">
+
+                <ImageView
+                    android:id="@+id/img_profile"
+                    android:layout_width="@dimen/dimen_size_120"
+                    android:layout_height="@dimen/dimen_size_120"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="@dimen/dimen_size_50"
+                    android:adjustViewBounds="true"
+                    android:onClick="@{() -> viewModel.navigateToProfilePicSelection()}"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_profile_placeholder" />
+
+                <TextView
+                    style="@style/BasicText"
+                    android:text="@string/first_name" />
+
+                <EditText
+                    android:id="@+id/edt_first_name"
+                    style="@style/BasicEditText"
+                    android:nextFocusDown="@+id/edt_last_name"
+                    android:text="@={viewModel.signupData.firstName}" />
+
+                <TextView
+                    style="@style/BasicText"
+                    android:layout_marginTop="@dimen/dimen_size_20"
+                    android:text="@string/last_name" />
+
+                <EditText
+                    android:id="@+id/edt_last_name"
+                    style="@style/BasicEditText"
+                    android:nextFocusDown="@+id/edt_mobile_number"
+                    android:text="@={viewModel.signupData.lastName}" />
+
+                <TextView
+                    style="@style/BasicText"
+                    android:layout_marginTop="@dimen/dimen_size_20"
+                    android:text="@string/mobile_number" />
+
+
+                <EditText
+                    android:id="@+id/edt_mobile_number"
+                    style="@style/BasicEditText"
+                    android:inputType="phone"
+                    android:nextFocusDown="@+id/edt_email"
+                    android:text="@={viewModel.signupData.mobileNumber}" />
+
+                <TextView
+                    style="@style/BasicText"
+                    android:layout_marginTop="@dimen/dimen_size_20"
+                    android:text="@string/email" />
+
+                <EditText
+                    android:id="@+id/edt_email"
+                    style="@style/BasicEditText"
+                    android:inputType="textEmailAddress"
+                    android:nextFocusDown="@+id/edt_password"
+                    android:text="@={viewModel.signupData.email}" />
+
+                <TextView
+                    style="@style/BasicText"
+                    android:layout_marginTop="@dimen/dimen_size_20"
+                    android:text="@string/password" />
+
+                <EditText
+                    android:id="@+id/edt_password"
+                    style="@style/BasicEditText"
+                    android:inputType="textPassword"
+                    android:nextFocusDown="@+id/edt_confirm_password"
+                    android:text="@={viewModel.signupData.password}" />
+
+                <TextView
+                    style="@style/BasicText"
+                    android:layout_marginTop="@dimen/dimen_size_20"
+                    android:text="@string/confirm_password" />
+
+                <EditText
+                    android:id="@+id/edt_confirm_password"
+                    style="@style/BasicEditText"
+                    android:inputType="textPassword"
+                    android:text="@={viewModel.signupData.confirmPassword}" />
+
+                <Button
+                    android:id="@+id/btn_submit"
+                    style="@style/BasicButton"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/dimen_size_20"
+                    android:onClick="@{() -> viewModel.submit()}"
+                    android:text="@string/submit" />
+
+            </LinearLayout>
+        </ScrollView>
+
+
+        <TextView
+            android:id="@+id/txt_signup"
+            style="@style/BasicText"
+            android:layout_width="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:background="@color/dialog_bg"
+            android:gravity="center"
+            android:onClick="@{() -> viewModel.navigateToLogin()}"
+            android:padding="@dimen/dimen_size_10"
+            android:text="@string/login_link"
+            android:textColor="@color/teal_700" />
+
+    </RelativeLayout>
+
+</layout>
