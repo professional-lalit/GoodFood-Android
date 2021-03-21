@@ -15,18 +15,23 @@ import com.goodfood.app.models.domain.LocalModel
  * (please keep the subject as 'GoodFood Android Code Suggestion')
  */
 data class ErrorResponseDTO(
-    private val data: List<ErrorDetailDTO>,
+    private val data: List<ErrorDetailDTO>?,
     private val message: String? = "",
 ) : DomainMapper {
 
     override fun getDomainModel(): Error {
-        return Error(this.message ?: "Something went wrong")
+        val message = if (this.data?.isNotEmpty() == true) {
+            this.data[0].msg
+        } else {
+            this.message
+        }
+        return Error(message ?: "Something went wrong")
     }
 
     data class ErrorDetailDTO(
-        private val location: String,
-        private val param: String,
-        private val value: String,
-        private val msg: String
+        val location: String,
+        val param: String,
+        val value: String,
+        val msg: String
     )
 }

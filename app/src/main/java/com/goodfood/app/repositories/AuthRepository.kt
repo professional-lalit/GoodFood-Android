@@ -2,10 +2,12 @@ package com.goodfood.app.repositories
 
 import com.goodfood.app.models.response_dtos.ErrorResponseDTO
 import com.goodfood.app.models.response_dtos.SignupResponseDTO
-import com.goodfood.app.networking.NetworkInterface
+import com.goodfood.app.networking.ServerInterface
 import com.goodfood.app.networking.NetworkResponse
 import com.goodfood.app.ui.signup.SignupData
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import dagger.hilt.android.scopes.ViewModelScoped
 import javax.inject.Inject
 
 
@@ -24,12 +26,12 @@ import javax.inject.Inject
  * Sign up, Login, Forgot Password, Change Password - APIs & their respective processing
  */
 class AuthRepository @Inject constructor(
-    private val networkInterface: NetworkInterface
+    val serverInterface: ServerInterface
 ) {
 
     suspend fun signup(signupData: SignupData): NetworkResponse {
         val requestDTO = signupData.getSignupRequestDTO()
-        val response = networkInterface.signup(requestDTO)
+        val response = serverInterface.signup(requestDTO)
         return if (response.code() in 200..210) {
             val signupResponseDTO = Gson().fromJson(
                 Gson().toJson(response.body()),
@@ -39,10 +41,9 @@ class AuthRepository @Inject constructor(
             serverMessage.status = response.code()
             NetworkResponse.NetworkSuccess(serverMessage)
         } else {
-            val errorResponseDTO = Gson().fromJson(
-                Gson().toJson(response.body()),
-                ErrorResponseDTO::class.java
-            )
+            val type = object : TypeToken<ErrorResponseDTO>() {}.type
+            val errorResponseDTO: ErrorResponseDTO =
+                Gson().fromJson(response.errorBody()!!.charStream(), type)
             val errorData = errorResponseDTO.getDomainModel()
             errorData.status = response.code()
             NetworkResponse.NetworkError(errorData)

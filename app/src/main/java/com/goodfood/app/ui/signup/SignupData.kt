@@ -1,6 +1,9 @@
 package com.goodfood.app.ui.signup
 
 
+import androidx.databinding.BaseObservable
+import androidx.databinding.Bindable
+import androidx.databinding.Observable
 import com.goodfood.app.models.request_dtos.SignupRequestDTO
 import com.goodfood.app.utils.Utils
 
@@ -26,7 +29,14 @@ data class SignupData(
     var email: String,
     var password: String,
     var confirmPassword: String
-) {
+) : BaseObservable() {
+
+    @Bindable
+    var loading: Boolean = false
+        set(value) {
+            field = value
+            notifyChange()
+        }
 
     enum class ValidationCode {
         FIRST_NAME_EMPTY, LAST_NAME_EMPTY, MOBILE_NUMBER_EMPTY,

@@ -20,7 +20,9 @@ data class SignupResponseDTO(
 ) : DomainMapper {
 
     override fun getDomainModel(): ServerMessage {
-        return ServerMessage(this.message)
+        val serverMessage = ServerMessage(this.message)
+        serverMessage.userId = userId
+        return serverMessage
     }
 
 }

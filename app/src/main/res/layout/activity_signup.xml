@@ -8,6 +8,8 @@
         <variable
             name="viewModel"
             type="com.goodfood.app.ui.signup.SignupViewModel" />
+
+        <import type="android.view.View" />
     </data>
 
     <RelativeLayout
@@ -71,6 +73,7 @@
                     android:id="@+id/edt_mobile_number"
                     style="@style/BasicEditText"
                     android:inputType="phone"
+                    android:maxLength="10"
                     android:nextFocusDown="@+id/edt_email"
                     android:text="@={viewModel.signupData.mobileNumber}" />
 
@@ -109,13 +112,27 @@
                     android:inputType="textPassword"
                     android:text="@={viewModel.signupData.confirmPassword}" />
 
-                <Button
-                    android:id="@+id/btn_submit"
-                    style="@style/BasicButton"
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/dimen_size_20"
-                    android:onClick="@{() -> viewModel.submit()}"
-                    android:text="@string/submit" />
+                    android:layout_marginTop="@dimen/dimen_size_20">
+
+                    <Button
+                        android:id="@+id/btn_submit"
+                        style="@style/BasicButton"
+                        android:onClick="@{() -> viewModel.submit()}"
+                        android:text="@string/submit"
+                        android:visibility="@{viewModel.signupData.loading ? View.GONE : View.VISIBLE}" />
+
+                    <ProgressBar
+                        android:id="@+id/progress_bar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:visibility="@{viewModel.signupData.loading ? View.VISIBLE : View.GONE}" />
+
+                </FrameLayout>
 
             </LinearLayout>
         </ScrollView>

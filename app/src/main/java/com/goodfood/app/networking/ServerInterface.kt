@@ -2,12 +2,9 @@ package com.goodfood.app.networking
 
 import com.goodfood.app.models.request_dtos.LoginRequestDTO
 import com.goodfood.app.models.request_dtos.SignupRequestDTO
-import com.goodfood.app.models.response_dtos.LoginResponseDTO
+import okhttp3.MultipartBody
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 
 /**
@@ -19,7 +16,7 @@ import retrofit2.http.Query
  * also if any suggestions they are welcomed at: `lalit.appsmail@gmail.com`
  * (please keep the subject as 'GoodFood Android Code Suggestion')
  */
-interface NetworkInterface {
+interface ServerInterface {
 
     @POST("auth/signup")
     suspend fun signup(@Body requestDTO: SignupRequestDTO): Response<Any?>
@@ -32,5 +29,12 @@ interface NetworkInterface {
 
     @POST("auth/change-password")
     suspend fun changePassword(@Body requestDTO: SignupRequestDTO): Response<Any?>
+
+    @Multipart
+    @POST("user/imageUpload")
+    suspend fun uploadUserImage(
+        @Query("userId") userId: String,
+        @Part profileImage: MultipartBody.Part
+    ): Response<Any?>
 
 }

@@ -10,6 +10,7 @@ import androidx.viewbinding.ViewBinding
 import com.goodfood.app.BR
 import com.goodfood.app.R
 import com.goodfood.app.interfaces.Navigable
+import dagger.hilt.android.AndroidEntryPoint
 
 abstract class BaseActivity<V : ViewDataBinding, VM : BaseViewModel> : AppCompatActivity() {
 

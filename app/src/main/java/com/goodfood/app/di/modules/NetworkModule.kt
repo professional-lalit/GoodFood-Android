@@ -3,6 +3,7 @@ package com.goodfood.app.di.modules
 import com.goodfood.app.common.Constants
 import com.goodfood.app.common.CustomApplication
 import com.goodfood.app.common.Prefs
+import com.goodfood.app.networking.ServerInterface
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Module
 import dagger.Provides
@@ -36,7 +37,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class NetworkModule {
 
-    @Singleton
     @Provides
     fun provideAPIClient(prefs: Prefs): OkHttpClient {
         val logInterceptor = HttpLoggingInterceptor()
@@ -50,7 +50,6 @@ class NetworkModule {
             .build()
     }
 
-    @Singleton
     @Provides
     fun provideRetrofit(apiClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
@@ -61,10 +60,9 @@ class NetworkModule {
             .build()
     }
 
-    @Singleton
     @Provides
-    fun provideAPI(retrofit: Retrofit): NetworkInterface {
-        return retrofit.create(NetworkInterface::class.java)
+    fun provideAPI(retrofit: Retrofit): ServerInterface {
+        return retrofit.create(ServerInterface::class.java)
     }
 
     /**

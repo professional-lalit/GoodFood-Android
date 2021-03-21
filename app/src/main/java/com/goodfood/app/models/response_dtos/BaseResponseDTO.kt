@@ -15,11 +15,11 @@ import com.goodfood.app.models.domain.ServerMessage
  * (please keep the subject as 'GoodFood Android Code Suggestion')
  */
 open class BaseResponseDTO(
-    private val status: Int,
-    private val message: String? = null
+    protected val status: Int,
+    protected val message: String? = null
 ) : DomainMapper {
 
     override fun getDomainModel(): LocalModel {
-        return ServerMessage(status, message ?: "")
+        return ServerMessage(message ?: "")
     }
 }

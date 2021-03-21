@@ -4,12 +4,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.goodfood.app.models.domain.ServerMessage
-import com.goodfood.app.networking.NetworkInterface
 import com.goodfood.app.networking.NetworkResponse
 import com.goodfood.app.repositories.AuthRepository
+import com.goodfood.app.repositories.UserRepository
 import com.goodfood.app.ui.common.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 
 
@@ -25,7 +27,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignupViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val userRepository: UserRepository
 ) : BaseViewModel() {
 
     fun navigateToProfilePicSelection() {
@@ -37,9 +40,11 @@ class SignupViewModel @Inject constructor(
     }
 
     val signupData = SignupData(
-        "", "", "",
-        "", "", "",
+        "Lalit", "Hajare", "9876543210",
+        "hajare.lalit@gmail.com", "123Abc", "123Abc",
     )
+
+    private var profilePicFileToUpload: File? = null
 
     private val _validationMessage = MutableLiveData<SignupData.ValidationCode>()
     val validationMessage: LiveData<SignupData.ValidationCode> = _validationMessage
@@ -47,18 +52,46 @@ class SignupViewModel @Inject constructor(
     private val _serverMessage = MutableLiveData<ServerMessage>()
     val serverMessage: LiveData<ServerMessage> = _serverMessage
 
+
+    fun setFileToUpload(file: File) {
+        profilePicFileToUpload = file
+    }
+
     fun submit() {
         val validationCode = signupData.isValid()
-        _validationMessage.postValue(validationCode)
+        if (validationCode != SignupData.ValidationCode.VALIDATED)
+            _validationMessage.postValue(validationCode)
         if (signupData.isValid() == SignupData.ValidationCode.VALIDATED) {
             viewModelScope.launch {
+
+                var userId = ""
+
+                //Submit User Data
+                signupData.loading = true
                 val result = authRepository.signup(signupData)
+                signupData.loading = false
                 if (result is NetworkResponse.NetworkSuccess) {
                     val data = result.data as ServerMessage
+                    userId = data.userId ?: ""
                     _serverMessage.postValue(data)
                 } else {
                     val errorData = (result as NetworkResponse.NetworkError).error
                     _errorData.postValue(errorData)
+                }
+
+                //Upload Image
+                profilePicFileToUpload?.let {
+                    signupData.loading = true
+                    val imageResponse =
+                        userRepository.uploadUserImage(userId, profilePicFileToUpload!!)
+                    signupData.loading = false
+                    if (imageResponse is NetworkResponse.NetworkSuccess) {
+                        val data = imageResponse.data as ServerMessage
+                        _serverMessage.postValue(data)
+                    } else {
+                        val errorData = (imageResponse as NetworkResponse.NetworkError).error
+                        _errorData.postValue(errorData)
+                    }
                 }
             }
         }

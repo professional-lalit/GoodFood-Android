@@ -5,6 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.goodfood.app.interfaces.Navigable
 import com.goodfood.app.models.domain.Error
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 
 /**
@@ -16,6 +18,7 @@ import com.goodfood.app.models.domain.Error
  * also if any suggestions they are welcomed at: `lalit.appsmail@gmail.com`
  * (please keep the subject as 'GoodFood Android Code Suggestion')
  */
+
 open class BaseViewModel : ViewModel() {
 
     protected val _screenToNav = MutableLiveData<Navigable>()

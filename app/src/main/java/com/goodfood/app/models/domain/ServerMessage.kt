@@ -10,6 +10,7 @@ package com.goodfood.app.models.domain
  * also if any suggestions they are welcomed at: `lalit.appsmail@gmail.com`
  * (please keep the subject as 'GoodFood Android Code Suggestion')
  */
-data class ServerMessage(val message: String): LocalModel {
+data class ServerMessage(val message: String) : LocalModel {
     var status: Int? = 0
+    var userId: String? = ""
 }

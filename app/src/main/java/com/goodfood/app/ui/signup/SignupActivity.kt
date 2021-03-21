@@ -4,13 +4,12 @@ import android.Manifest
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.databinding.ViewDataBinding
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.goodfood.app.R
 import com.goodfood.app.common.Constants
-import com.goodfood.app.common.DirectoryManager
 import com.goodfood.app.common.ImageManager
 import com.goodfood.app.databinding.ActivitySignupBinding
 import com.goodfood.app.interfaces.Navigable
@@ -24,7 +23,6 @@ import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.File
 import javax.inject.Inject
 
 
@@ -46,24 +44,16 @@ class SignupActivity : BaseActivity<ActivitySignupBinding, SignupViewModel>() {
     lateinit var dialogManager: DialogManager
 
     @Inject
-    lateinit var directoryManager: DirectoryManager
-
-    @Inject
     lateinit var imageManager: ImageManager
 
-    private var imageFileToBeUploaded: File? = null
-
-    private val signupViewModel by lazy {
-        ViewModelProvider(this)
-            .get(SignupViewModel::class.java)
-    }
+    private val signupViewModel by viewModels<SignupViewModel>()
 
     override fun setUp() {
         binding = ActivitySignupBinding.inflate(layoutInflater)
         viewModel = signupViewModel
         imageManager.setImageLoadedCallback { file ->
-            imageFileToBeUploaded = file
-            val bmp = BitmapFactory.decodeFile(imageFileToBeUploaded!!.absolutePath)
+            viewModel.setFileToUpload(file)
+            val bmp = BitmapFactory.decodeFile(file.absolutePath)
             Glide.with(this)
                 .load(bmp)
                 .circleCrop()
@@ -119,13 +109,14 @@ class SignupActivity : BaseActivity<ActivitySignupBinding, SignupViewModel>() {
                 SignupData.ValidationCode.PASSWORDS_NOT_MATCHING -> {
                     showToast(getString(R.string.passwords_dont_match))
                 }
-                else -> {
-                    showToast("Validated")
-                }
             }
         })
-        viewModel.errorData.observe(this, { })
-        viewModel.serverMessage.observe(this, { })
+        viewModel.errorData.observe(this, {
+            showToast(it.message)
+        })
+        viewModel.serverMessage.observe(this, {
+            showToast(it.message)
+        })
     }
 
     private fun checkPermissionsAndShowDialog() {

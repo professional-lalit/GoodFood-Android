@@ -2,6 +2,7 @@ package com.goodfood.app.common
 
 import android.content.Context
 import dagger.hilt.android.qualifiers.ActivityContext
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -17,7 +18,7 @@ import javax.inject.Singleton
  */
 
 @Singleton
-class Prefs @Inject constructor(private val application: CustomApplication) {
+class Prefs @Inject constructor(@ApplicationContext private val appContext: Context) {
 
     companion object {
         private const val APP_PREFS_NAME = "goodfood_prefs"
@@ -25,7 +26,7 @@ class Prefs @Inject constructor(private val application: CustomApplication) {
     }
 
     private val mPreferences =
-        application.getSharedPreferences(APP_PREFS_NAME, Context.MODE_PRIVATE)
+        appContext.getSharedPreferences(APP_PREFS_NAME, Context.MODE_PRIVATE)
 
     var accessToken: String? = null
         set(value) {
