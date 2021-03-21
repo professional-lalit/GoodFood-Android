@@ -27,7 +27,7 @@ import dagger.hilt.android.qualifiers.ActivityContext
  */
 @Module
 @InstallIn(ActivityComponent::class)
-class ActivityHelper {
+class ActivityHelperModule {
 
     @Provides
     fun provideDialogManager(@ActivityContext context: Context): DialogManager {

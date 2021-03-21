@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import androidx.databinding.ViewDataBinding
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.goodfood.app.R
@@ -123,6 +124,8 @@ class SignupActivity : BaseActivity<ActivitySignupBinding, SignupViewModel>() {
                 }
             }
         })
+        viewModel.errorData.observe(this, { })
+        viewModel.serverMessage.observe(this, { })
     }
 
     private fun checkPermissionsAndShowDialog() {

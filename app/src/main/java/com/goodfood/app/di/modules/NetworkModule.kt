@@ -1,0 +1,90 @@
+package com.goodfood.app.di.modules
+
+import com.goodfood.app.common.Constants
+import com.goodfood.app.common.CustomApplication
+import com.goodfood.app.common.Prefs
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import okhttp3.Interceptor
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.io.IOException
+import java.net.NetworkInterface
+import java.net.SocketTimeoutException
+import java.util.concurrent.TimeUnit
+import javax.inject.Singleton
+
+
+/**
+ * Created by Lalit N. Hajare (Android Developer) on 21/03/21.
+ *
+ * This project is for demonstration purposes. It is highly likely that you must
+ * be seeing this code by clicking the link in my resume.
+ * This code is free and can be reused by anyone,
+ * also if any suggestions they are welcomed at: `lalit.appsmail@gmail.com`
+ * (please keep the subject as 'GoodFood Android Code Suggestion')
+ */
+
+@Module
+@InstallIn(SingletonComponent::class)
+class NetworkModule {
+
+    @Singleton
+    @Provides
+    fun provideAPIClient(prefs: Prefs): OkHttpClient {
+        val logInterceptor = HttpLoggingInterceptor()
+        logInterceptor.level = HttpLoggingInterceptor.Level.BODY
+        return OkHttpClient().newBuilder()
+            .connectTimeout(5, TimeUnit.SECONDS)
+            .writeTimeout(5, TimeUnit.SECONDS)
+            .readTimeout(5, TimeUnit.SECONDS)
+            .addInterceptor(logInterceptor)
+            .addInterceptor(HeaderInterceptor(prefs))
+            .build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideRetrofit(apiClient: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+            .client(apiClient)
+            .baseUrl(Constants.BASE_URL)
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideAPI(retrofit: Retrofit): NetworkInterface {
+        return retrofit.create(NetworkInterface::class.java)
+    }
+
+    /**
+     * This class is used to write headers at run time, when APIs are called
+     */
+    class HeaderInterceptor(val prefs: Prefs) : Interceptor {
+        override fun intercept(chain: Interceptor.Chain): Response {
+            var contentLength = 0L
+            if (chain.request().body != null) {
+                contentLength = chain.request().body!!.contentLength()
+            }
+            val requestBuilder: Request.Builder = chain.request()
+                .newBuilder()
+                .addHeader("Content-Type", "application/json")
+                .addHeader("Content-Length", contentLength.toString())
+            if (prefs.accessToken != null && prefs.accessToken!!.isNotEmpty()) {
+                requestBuilder.addHeader("Authorization", "Bearer " + prefs.accessToken!!)
+            }
+            return chain.proceed(requestBuilder.build())
+        }
+    }
+
+}

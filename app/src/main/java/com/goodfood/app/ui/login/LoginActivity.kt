@@ -11,6 +11,7 @@ import com.goodfood.app.ui.common.BaseViewModel
 import com.goodfood.app.ui.forgot_password.ForgotPasswordActivity
 import com.goodfood.app.ui.signup.SignupActivity
 
+
 class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
 
     private val loginViewModel by lazy {

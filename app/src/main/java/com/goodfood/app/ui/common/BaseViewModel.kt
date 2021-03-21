@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.goodfood.app.interfaces.Navigable
+import com.goodfood.app.models.domain.Error
 
 
 /**
@@ -20,11 +21,14 @@ open class BaseViewModel : ViewModel() {
     protected val _screenToNav = MutableLiveData<Navigable>()
     val screenToNav: LiveData<Navigable> = _screenToNav
 
-    enum class LoginNav: Navigable {
+    protected val _errorData = MutableLiveData<Error>()
+    val errorData: LiveData<Error> = _errorData
+
+    enum class LoginNav : Navigable {
         FORGOT_PWD, SIGNUP, TERMS_AND_COND, PRIVACY
     }
 
-    enum class SignupNav: Navigable {
+    enum class SignupNav : Navigable {
         LOGIN, TERMS_AND_COND, PRIVACY, PROFILE_PIC
     }
 
