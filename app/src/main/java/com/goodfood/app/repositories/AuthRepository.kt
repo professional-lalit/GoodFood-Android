@@ -1,9 +1,12 @@
 package com.goodfood.app.repositories
 
+import com.goodfood.app.common.Prefs
 import com.goodfood.app.models.response_dtos.ErrorResponseDTO
+import com.goodfood.app.models.response_dtos.LoginResponseDTO
 import com.goodfood.app.models.response_dtos.SignupResponseDTO
 import com.goodfood.app.networking.ServerInterface
 import com.goodfood.app.networking.NetworkResponse
+import com.goodfood.app.ui.login.LoginData
 import com.goodfood.app.ui.signup.SignupData
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -26,20 +29,44 @@ import javax.inject.Inject
  * Sign up, Login, Forgot Password, Change Password - APIs & their respective processing
  */
 class AuthRepository @Inject constructor(
-    val serverInterface: ServerInterface
+    private val serverInterface: ServerInterface,
+    private val prefs: Prefs
 ) {
 
-    suspend fun signup(signupData: SignupData): NetworkResponse {
-        val requestDTO = signupData.getSignupRequestDTO()
+    suspend fun signUp(signUpData: SignupData): NetworkResponse {
+        val requestDTO = signUpData.getSignupRequestDTO()
         val response = serverInterface.signup(requestDTO)
         return if (response.code() in 200..210) {
             val signupResponseDTO = Gson().fromJson(
                 Gson().toJson(response.body()),
                 SignupResponseDTO::class.java
             )
-            val serverMessage = signupResponseDTO.getDomainModel()
-            serverMessage.status = response.code()
-            NetworkResponse.NetworkSuccess(serverMessage)
+            val model = signupResponseDTO.getDomainModel()
+            model.status = response.code()
+            prefs.accessToken = signupResponseDTO.token
+            NetworkResponse.NetworkSuccess(model)
+        } else {
+            val type = object : TypeToken<ErrorResponseDTO>() {}.type
+            val errorResponseDTO: ErrorResponseDTO =
+                Gson().fromJson(response.errorBody()!!.charStream(), type)
+            val errorData = errorResponseDTO.getDomainModel()
+            errorData.status = response.code()
+            NetworkResponse.NetworkError(errorData)
+        }
+    }
+
+    suspend fun login(loginData: LoginData): NetworkResponse {
+        val requestDTO = loginData.getLoginRequestDTO()
+        val response = serverInterface.login(requestDTO)
+        return if (response.code() in 200..210) {
+            val loginResponseDTO = Gson().fromJson(
+                Gson().toJson(response.body()),
+                LoginResponseDTO::class.java
+            )
+            val model = loginResponseDTO.getDomainModel()
+            model.status = response.code()
+            prefs.accessToken = loginResponseDTO.token
+            NetworkResponse.NetworkSuccess(model)
         } else {
             val type = object : TypeToken<ErrorResponseDTO>() {}.type
             val errorResponseDTO: ErrorResponseDTO =

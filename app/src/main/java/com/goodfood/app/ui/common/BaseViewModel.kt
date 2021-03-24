@@ -28,7 +28,7 @@ open class BaseViewModel : ViewModel() {
     val errorData: LiveData<Error> = _errorData
 
     enum class LoginNav : Navigable {
-        FORGOT_PWD, SIGNUP, TERMS_AND_COND, PRIVACY
+        FORGOT_PWD, SIGNUP, TERMS_AND_COND, PRIVACY, HOME
     }
 
     enum class SignupNav : Navigable {

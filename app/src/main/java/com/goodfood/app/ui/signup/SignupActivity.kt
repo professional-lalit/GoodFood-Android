@@ -115,6 +115,9 @@ class SignupActivity : BaseActivity<ActivitySignupBinding, SignupViewModel>() {
             showToast(it.message)
         })
         viewModel.serverMessage.observe(this, {
+            showToast(it.message ?: "")
+        })
+        viewModel.imageUploadResponse.observe(this, {
             showToast(it.message)
         })
     }

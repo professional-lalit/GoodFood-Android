@@ -4,12 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.goodfood.app.models.domain.ServerMessage
+import com.goodfood.app.models.response_dtos.SignupResponseDTO
+import com.goodfood.app.models.response_dtos.UploadProfileImageResponseDTO
 import com.goodfood.app.networking.NetworkResponse
 import com.goodfood.app.repositories.AuthRepository
 import com.goodfood.app.repositories.UserRepository
 import com.goodfood.app.ui.common.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
@@ -49,8 +50,11 @@ class SignupViewModel @Inject constructor(
     private val _validationMessage = MutableLiveData<SignupData.ValidationCode>()
     val validationMessage: LiveData<SignupData.ValidationCode> = _validationMessage
 
-    private val _serverMessage = MutableLiveData<ServerMessage>()
-    val serverMessage: LiveData<ServerMessage> = _serverMessage
+    private val _signUpResponse = MutableLiveData<SignupResponseDTO>()
+    val serverMessage: LiveData<SignupResponseDTO> = _signUpResponse
+
+    private val _imageUploadResponse = MutableLiveData<ServerMessage>()
+    val imageUploadResponse: LiveData<ServerMessage> = _imageUploadResponse
 
 
     fun setFileToUpload(file: File) {
@@ -68,12 +72,12 @@ class SignupViewModel @Inject constructor(
 
                 //Submit User Data
                 signupData.loading = true
-                val result = authRepository.signup(signupData)
+                val result = authRepository.signUp(signupData)
                 signupData.loading = false
                 if (result is NetworkResponse.NetworkSuccess) {
-                    val data = result.data as ServerMessage
+                    val data = result.data as SignupResponseDTO
                     userId = data.userId ?: ""
-                    _serverMessage.postValue(data)
+                    _signUpResponse.postValue(data)
                 } else {
                     val errorData = (result as NetworkResponse.NetworkError).error
                     _errorData.postValue(errorData)
@@ -87,7 +91,7 @@ class SignupViewModel @Inject constructor(
                     signupData.loading = false
                     if (imageResponse is NetworkResponse.NetworkSuccess) {
                         val data = imageResponse.data as ServerMessage
-                        _serverMessage.postValue(data)
+                        _imageUploadResponse.postValue(data)
                     } else {
                         val errorData = (imageResponse as NetworkResponse.NetworkError).error
                         _errorData.postValue(errorData)

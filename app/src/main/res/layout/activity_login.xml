@@ -6,6 +6,8 @@
         <variable
             name="viewModel"
             type="com.goodfood.app.ui.login.LoginViewModel" />
+
+        <import type="android.view.View" />
     </data>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -32,6 +34,7 @@
                 style="@style/BasicEditText"
                 android:inputType="textEmailAddress"
                 android:nextFocusDown="@+id/edt_password"
+                android:text="@={viewModel.loginData.email}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -44,6 +47,7 @@
                 android:id="@+id/edt_password"
                 style="@style/BasicEditText"
                 android:inputType="textPassword"
+                android:text="@={viewModel.loginData.password}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -56,12 +60,29 @@
                 android:text="@string/forgot_password_link"
                 android:textColor="@color/teal_700" />
 
-            <Button
-                android:id="@+id/btn_login"
-                style="@style/BasicButton"
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/dimen_size_20"
-                android:text="@string/login" />
+                android:layout_marginTop="@dimen/dimen_size_20">
+
+                <Button
+                    android:id="@+id/btn_login"
+                    style="@style/BasicButton"
+                    android:onClick="@{() -> viewModel.login()}"
+                    android:text="@string/login"
+                    android:visibility="@{viewModel.loginData.loading ? View.GONE : View.VISIBLE}" />
+
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="@{viewModel.loginData.loading ? View.VISIBLE : View.GONE}" />
+
+            </FrameLayout>
+
         </LinearLayout>
 
 

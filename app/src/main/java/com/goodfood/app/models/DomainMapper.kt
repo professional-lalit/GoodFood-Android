@@ -17,6 +17,6 @@ interface DomainMapper {
     /**
      * Maps the model to desired domain model
      */
-    fun getDomainModel(): LocalModel
+    fun getDomainModel(): Any
 
 }

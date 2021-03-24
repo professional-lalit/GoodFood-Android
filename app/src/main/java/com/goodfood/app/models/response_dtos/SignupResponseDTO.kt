@@ -15,14 +15,12 @@ import com.goodfood.app.models.domain.ServerMessage
  * (please keep the subject as 'GoodFood Android Code Suggestion')
  */
 data class SignupResponseDTO(
-    private val message: String,
-    private val userId: String
-) : DomainMapper {
+    val userId: String,
+    val token: String
+) : BaseResponseDTO() {
 
-    override fun getDomainModel(): ServerMessage {
-        val serverMessage = ServerMessage(this.message)
-        serverMessage.userId = userId
-        return serverMessage
+    override fun getDomainModel(): SignupResponseDTO {
+        return this
     }
 
 }
