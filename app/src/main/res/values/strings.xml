@@ -28,4 +28,9 @@
     <string name="please_enter_valid_mobile_number">Please enter valid mobile number</string>
     <string name="password_atleast_6_chars">Password should be atleast 6 characters long</string>
     <string name="please_enter_valid_password">Please enter valid password</string>
+    <string name="home_feed">Home Feed</string>
+    <string name="my_recipes">My Recipes</string>
+    <string name="saved_recipes">Saved Recipes</string>
+    <string name="complaints">Complaints</string>
+    <string name="logout">Log out</string>
 </resources>

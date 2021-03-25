@@ -11,6 +11,7 @@ import com.goodfood.app.interfaces.Navigable
 import com.goodfood.app.ui.common.BaseActivity
 import com.goodfood.app.ui.common.BaseViewModel
 import com.goodfood.app.ui.forgot_password.ForgotPasswordActivity
+import com.goodfood.app.ui.home.HomeActivity
 import com.goodfood.app.ui.signup.SignupActivity
 import com.goodfood.app.utils.Extensions.showToast
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,7 +31,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
             BaseViewModel.LoginNav.SIGNUP -> SignupActivity.openScreen(this)
             BaseViewModel.LoginNav.FORGOT_PWD -> ForgotPasswordActivity.openScreen(this)
             BaseViewModel.LoginNav.HOME -> {
-                ForgotPasswordActivity.openScreen(this)
+                HomeActivity.openScreen(this)
                 finish()
             }
         }

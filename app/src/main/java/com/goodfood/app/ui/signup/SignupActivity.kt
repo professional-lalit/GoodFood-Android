@@ -16,6 +16,7 @@ import com.goodfood.app.interfaces.Navigable
 import com.goodfood.app.ui.common.BaseActivity
 import com.goodfood.app.ui.common.BaseViewModel
 import com.goodfood.app.ui.common.dialogs.DialogManager
+import com.goodfood.app.ui.home.HomeActivity
 import com.goodfood.app.utils.Extensions.showToast
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
@@ -68,6 +69,10 @@ class SignupActivity : BaseActivity<ActivitySignupBinding, SignupViewModel>() {
                 checkPermissionsAndShowDialog()
             }
             BaseViewModel.SignupNav.LOGIN -> {
+                finish()
+            }
+            BaseViewModel.SignupNav.HOME -> {
+                HomeActivity.openScreen(this)
                 finish()
             }
         }

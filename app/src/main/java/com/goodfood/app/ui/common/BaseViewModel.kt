@@ -32,7 +32,7 @@ open class BaseViewModel : ViewModel() {
     }
 
     enum class SignupNav : Navigable {
-        LOGIN, TERMS_AND_COND, PRIVACY, PROFILE_PIC
+        LOGIN, TERMS_AND_COND, PRIVACY, PROFILE_PIC, HOME
     }
 
 }

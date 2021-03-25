@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_home_feed"
+        android:title="@string/home_feed" />
+
+    <item
+        android:id="@+id/action_my_recipes"
+        android:title="@string/my_recipes" />
+
+    <item
+        android:id="@+id/action_saved_recipes"
+        android:title="@string/saved_recipes" />
+
+    <item
+        android:id="@+id/action_complaints"
+        android:title="@string/complaints" />
+
+    <item
+        android:id="@+id/action_logout"
+        android:title="@string/logout" />
+
+</menu>
