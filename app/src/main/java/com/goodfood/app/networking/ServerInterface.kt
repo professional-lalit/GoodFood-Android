@@ -37,4 +37,7 @@ interface ServerInterface {
         @Part profileImage: MultipartBody.Part
     ): Response<Any?>
 
+    @GET("user/me")
+    suspend fun fetchMeDetails(): Response<Any?>
+
 }

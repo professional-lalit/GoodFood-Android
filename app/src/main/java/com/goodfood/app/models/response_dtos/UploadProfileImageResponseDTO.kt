@@ -1,7 +1,6 @@
 package com.goodfood.app.models.response_dtos
 
 import com.goodfood.app.models.DomainMapper
-import com.goodfood.app.models.domain.LocalModel
 import com.goodfood.app.models.domain.ServerMessage
 
 
@@ -19,7 +18,7 @@ data class UploadProfileImageResponseDTO(
     private val profileImageUrl: String? = ""
 ) : DomainMapper {
 
-    override fun getDomainModel(): LocalModel {
+    override fun getDomainModel(): ServerMessage {
         return ServerMessage(message ?: "")
     }
 

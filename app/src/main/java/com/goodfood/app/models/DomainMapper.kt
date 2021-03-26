@@ -1,7 +1,5 @@
 package com.goodfood.app.models
 
-import com.goodfood.app.models.domain.LocalModel
-
 
 /**
  * Created by Lalit N. Hajare (Android Developer) on 19/03/21.

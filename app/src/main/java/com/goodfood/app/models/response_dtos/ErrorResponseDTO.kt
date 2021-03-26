@@ -2,7 +2,6 @@ package com.goodfood.app.models.response_dtos
 
 import com.goodfood.app.models.DomainMapper
 import com.goodfood.app.models.domain.Error
-import com.goodfood.app.models.domain.LocalModel
 
 
 /**

@@ -1,6 +1,8 @@
 package com.goodfood.app.common
 
 import android.content.Context
+import com.goodfood.app.models.domain.User
+import com.google.gson.Gson
 import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
@@ -23,6 +25,7 @@ class Prefs @Inject constructor(@ApplicationContext private val appContext: Cont
     companion object {
         private const val APP_PREFS_NAME = "goodfood_prefs"
         private const val ACCESS_TOKEN = "access_token"
+        private const val USER_MODEL = "user_model"
     }
 
     private val mPreferences =
@@ -35,6 +38,15 @@ class Prefs @Inject constructor(@ApplicationContext private val appContext: Cont
         }
         get() {
             return mPreferences.getString(ACCESS_TOKEN, "")!!
+        }
+
+    var user: User? = null
+        set(value) {
+            field = value
+            mPreferences.edit().putString(USER_MODEL, Gson().toJson(field)).apply()
+        }
+        get() {
+            return Gson().fromJson(mPreferences.getString(USER_MODEL, ""), User::class.java)
         }
 
 }

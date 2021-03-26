@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
 
         <variable
             name="viewModel"
             type="com.goodfood.app.ui.home.HomeViewModel" />
+
+        <variable
+            name="user"
+            type="com.goodfood.app.models.domain.User" />
     </data>
 
     <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -24,10 +28,12 @@
         </RelativeLayout>
 
         <com.google.android.material.navigation.NavigationView
+            android:id="@+id/nav_home"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="start"
             app:headerLayout="@layout/home_drawer_header"
+            app:itemTextAppearance="@style/BasicText"
             app:menu="@menu/home_left_drawer_menu" />
 
     </androidx.drawerlayout.widget.DrawerLayout>

@@ -12,6 +12,6 @@ package com.goodfood.app.models.domain
  */
 data class Error(
     val message: String
-) : LocalModel {
+){
     var status: Int? = 0
 }

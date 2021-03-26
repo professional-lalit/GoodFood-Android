@@ -1,7 +1,6 @@
 package com.goodfood.app.models.response_dtos
 
 import com.goodfood.app.models.DomainMapper
-import com.goodfood.app.models.domain.LocalModel
 import com.goodfood.app.models.domain.ServerMessage
 
 

@@ -1,12 +1,17 @@
 package com.goodfood.app.repositories
 
+import android.service.autofill.UserData
 import android.webkit.MimeTypeMap
+import com.goodfood.app.common.Prefs
+import com.goodfood.app.models.domain.User
 import com.goodfood.app.models.response_dtos.ErrorResponseDTO
 import com.goodfood.app.models.response_dtos.UploadProfileImageResponseDTO
+import com.goodfood.app.models.response_dtos.UserResponseDTO
 import com.goodfood.app.networking.NetworkResponse
 import com.goodfood.app.networking.ServerInterface
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import dagger.hilt.android.scopes.ViewModelScoped
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.MultipartBody.Part.Companion.createFormData
@@ -30,11 +35,13 @@ import javax.inject.Inject
 /**
  * Consists of user specific APIs & operations
  */
+@ViewModelScoped
 class UserRepository @Inject constructor(
-    private val serverInterface: ServerInterface
+    private val serverInterface: ServerInterface,
+    private val prefs: Prefs
 ) {
 
-    // url = file path or whatever suitable URL you want.
+
     private fun getMimeType(file: File): String? {
         var type: String? = null
         val extension = MimeTypeMap.getFileExtensionFromUrl(file.path)
@@ -57,6 +64,26 @@ class UserRepository @Inject constructor(
             )
             val serverMessage = uploadProfileImageResponseDTO.getDomainModel()
             NetworkResponse.NetworkSuccess(serverMessage)
+        } else {
+            val type = object : TypeToken<ErrorResponseDTO>() {}.type
+            val errorResponseDTO: ErrorResponseDTO =
+                Gson().fromJson(response.errorBody()!!.charStream(), type)
+            val errorData = errorResponseDTO.getDomainModel()
+            errorData.status = response.code()
+            NetworkResponse.NetworkError(errorData)
+        }
+    }
+
+    suspend fun fetchMeDetails(): NetworkResponse {
+        val response = serverInterface.fetchMeDetails()
+        return if (response.code() in 200..210) {
+            val userDTO: UserResponseDTO? = Gson().fromJson(
+                Gson().toJson(response.body()),
+                UserResponseDTO::class.java
+            )
+            val user = userDTO?.getDomainModel()
+            prefs.user = user
+            NetworkResponse.NetworkSuccess(user)
         } else {
             val type = object : TypeToken<ErrorResponseDTO>() {}.type
             val errorResponseDTO: ErrorResponseDTO =
