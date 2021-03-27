@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -52,10 +53,28 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.getMeDetails()
+        setUpActionBar()
+        setClickListeners()
+    }
+
+    private fun setUpActionBar() {
+        binding.toolbarHome.title = getString(R.string.explore)
+        setSupportActionBar(binding.toolbarHome)
+    }
+
+    private fun setClickListeners() {
+        binding.navHome.setNavigationItemSelectedListener {
+            if (it.itemId == R.id.action_logout) {
+                viewModel.logout()
+                finish()
+                return@setNavigationItemSelectedListener true
+            }
+            return@setNavigationItemSelectedListener false
+        }
     }
 
     override fun navigateTo(navigable: Navigable) {
-        TODO("Not yet implemented")
+
     }
 
     override fun setUp() {

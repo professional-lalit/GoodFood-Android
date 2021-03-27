@@ -49,4 +49,9 @@ class Prefs @Inject constructor(@ApplicationContext private val appContext: Cont
             return Gson().fromJson(mPreferences.getString(USER_MODEL, ""), User::class.java)
         }
 
+    fun clearPrefs() {
+        user = null
+        accessToken = null
+    }
+
 }

@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.goodfood.app.models.domain.ServerMessage
 import com.goodfood.app.models.response_dtos.SignupResponseDTO
-import com.goodfood.app.models.response_dtos.UploadProfileImageResponseDTO
 import com.goodfood.app.networking.NetworkResponse
 import com.goodfood.app.repositories.AuthRepository
 import com.goodfood.app.repositories.UserRepository
@@ -40,6 +39,10 @@ class SignupViewModel @Inject constructor(
         _screenToNav.postValue(SignupNav.LOGIN)
     }
 
+    private fun navigateToHome() {
+        _screenToNav.postValue(SignupNav.HOME)
+    }
+
     val signupData = SignupData(
         "Lalit", "Hajare", "9876543210",
         "hajare.lalit@gmail.com", "123Abc", "123Abc",
@@ -68,35 +71,49 @@ class SignupViewModel @Inject constructor(
         if (signupData.isValid() == SignupData.ValidationCode.VALIDATED) {
             viewModelScope.launch {
 
-                var userId = ""
-
                 //Submit User Data
-                signupData.loading = true
-                val result = authRepository.signUp(signupData)
-                signupData.loading = false
-                if (result is NetworkResponse.NetworkSuccess) {
-                    val data = result.data as SignupResponseDTO
-                    userId = data.userId ?: ""
-                    _signUpResponse.postValue(data)
-                } else {
-                    val errorData = (result as NetworkResponse.NetworkError).error
-                    _errorData.postValue(errorData)
-                }
+                val userId = uploadUserData()
 
                 //Upload Image
-                profilePicFileToUpload?.let {
-                    signupData.loading = true
-                    val imageResponse =
-                        userRepository.uploadUserImage(userId, profilePicFileToUpload!!)
-                    signupData.loading = false
-                    if (imageResponse is NetworkResponse.NetworkSuccess) {
-                        val data = imageResponse.data as ServerMessage
-                        _imageUploadResponse.postValue(data)
-                    } else {
-                        val errorData = (imageResponse as NetworkResponse.NetworkError).error
-                        _errorData.postValue(errorData)
+                userId?.let {
+                    profilePicFileToUpload?.let {
+                        uploadUserImage(userId)
                     }
                 }
+            }
+        }
+    }
+
+    private suspend fun uploadUserData(): String? {
+        val userId: String?
+        signupData.loading = true
+        val result = authRepository.signUp(signupData)
+        signupData.loading = false
+        if (result is NetworkResponse.NetworkSuccess) {
+            val data = result.data as SignupResponseDTO
+            userId = data.userId ?: ""
+            _signUpResponse.postValue(data)
+        } else {
+            userId = null
+            val errorData = (result as NetworkResponse.NetworkError).error
+            _errorData.postValue(errorData)
+        }
+        return userId
+    }
+
+    private suspend fun uploadUserImage(userId: String) {
+        profilePicFileToUpload?.let {
+            signupData.loading = true
+            val imageResponse =
+                userRepository.uploadUserImage(userId, profilePicFileToUpload!!)
+            signupData.loading = false
+            if (imageResponse is NetworkResponse.NetworkSuccess) {
+                val data = imageResponse.data as ServerMessage
+                _imageUploadResponse.postValue(data)
+                navigateToHome()
+            } else {
+                val errorData = (imageResponse as NetworkResponse.NetworkError).error
+                _errorData.postValue(errorData)
             }
         }
     }

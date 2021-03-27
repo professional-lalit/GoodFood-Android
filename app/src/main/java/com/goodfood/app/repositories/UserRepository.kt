@@ -94,4 +94,8 @@ class UserRepository @Inject constructor(
         }
     }
 
+    fun logout(){
+        prefs.clearPrefs()
+    }
+
 }

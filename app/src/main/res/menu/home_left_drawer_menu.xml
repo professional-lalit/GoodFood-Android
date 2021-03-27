@@ -2,8 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/action_home_feed"
-        android:title="@string/home_feed" />
+        android:id="@+id/action_explore"
+        android:icon="@drawable/ic_explore"
+        android:title="@string/explore" />
 
     <item
         android:id="@+id/action_my_recipes"

@@ -38,7 +38,10 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
     }
 
     override fun setObservers() {
-        viewModel.loginResponse.observe(this, Observer { response ->
+        viewModel.errorData.observe(this, {
+            showToast(it.message)
+        })
+        viewModel.loginResponse.observe(this, { response ->
             if (response.userId.isNotEmpty()) {
                 showToast(response.message ?: "Login successful")
             }

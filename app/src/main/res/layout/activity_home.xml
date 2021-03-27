@@ -25,13 +25,23 @@
             android:layout_height="match_parent"
             android:background="@color/dialog_bg">
 
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar_home"
+                android:layout_width="match_parent"
+                app:titleTextAppearance="@style/BasicText"
+                android:layout_height="@dimen/action_bar_height"
+                android:background="@color/teal_700"
+                app:titleTextColor="@color/white" />
+
         </RelativeLayout>
 
         <com.google.android.material.navigation.NavigationView
             android:id="@+id/nav_home"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"
+            android:layout_marginTop="@dimen/action_bar_height"
             app:headerLayout="@layout/home_drawer_header"
             app:itemTextAppearance="@style/BasicText"
             app:menu="@menu/home_left_drawer_menu" />
