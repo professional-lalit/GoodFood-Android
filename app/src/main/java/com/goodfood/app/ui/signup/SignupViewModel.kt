@@ -32,15 +32,15 @@ class SignupViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     fun navigateToProfilePicSelection() {
-        _screenToNav.postValue(SignupNav.PROFILE_PIC)
+        _screenToNav.postValue(Navigables.PROFILE_PIC)
     }
 
     fun navigateToLogin() {
-        _screenToNav.postValue(SignupNav.LOGIN)
+        _screenToNav.postValue(Navigables.LOGIN)
     }
 
     private fun navigateToHome() {
-        _screenToNav.postValue(SignupNav.HOME)
+        _screenToNav.postValue(Navigables.HOME)
     }
 
     val signupData = SignupData(

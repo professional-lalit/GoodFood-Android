@@ -77,23 +77,27 @@ class UserRepository @Inject constructor(
     suspend fun fetchMeDetails(): NetworkResponse {
         val localUser = prefs.user
         val response = serverInterface.fetchMeDetails()
-        return if (response.code() in 200..210) {
-            val userDTO: UserResponseDTO? = Gson().fromJson(
-                Gson().toJson(response.body()),
-                UserResponseDTO::class.java
-            )
-            val user = userDTO?.getDomainModel()
-            prefs.user = user
-            NetworkResponse.NetworkSuccess(user)
-        } else if (localUser != null) {
-            NetworkResponse.NetworkSuccess(localUser)
-        } else {
-            val type = object : TypeToken<ErrorResponseDTO>() {}.type
-            val errorResponseDTO: ErrorResponseDTO =
-                Gson().fromJson(response.errorBody()!!.charStream(), type)
-            val errorData = errorResponseDTO.getDomainModel()
-            errorData.status = response.code()
-            NetworkResponse.NetworkError(errorData)
+        return when {
+            response.code() in 200..210 -> {
+                val userDTO: UserResponseDTO? = Gson().fromJson(
+                    Gson().toJson(response.body()),
+                    UserResponseDTO::class.java
+                )
+                val user = userDTO?.getDomainModel()
+                prefs.user = user
+                NetworkResponse.NetworkSuccess(user)
+            }
+            localUser != null -> {
+                NetworkResponse.NetworkSuccess(localUser)
+            }
+            else -> {
+                val type = object : TypeToken<ErrorResponseDTO>() {}.type
+                val errorResponseDTO: ErrorResponseDTO =
+                    Gson().fromJson(response.errorBody()!!.charStream(), type)
+                val errorData = errorResponseDTO.getDomainModel()
+                errorData.status = response.code()
+                NetworkResponse.NetworkError(errorData)
+            }
         }
     }
 

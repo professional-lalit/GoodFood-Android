@@ -17,6 +17,16 @@
         android:title="@string/saved_recipes" />
 
     <item
+        android:id="@+id/action_purchased_recipes"
+        android:icon="@drawable/ic_purchase"
+        android:title="@string/purchased_recipes" />
+
+    <item
+        android:id="@+id/action_payment_history"
+        android:icon="@drawable/ic_wallet"
+        android:title="@string/payment_history" />
+
+    <item
         android:icon="@drawable/ic_bad_review"
         android:id="@+id/action_complaints"
         android:title="@string/complaints" />

@@ -43,9 +43,9 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
 
     override fun navigateTo(navigable: Navigable) {
         when (navigable) {
-            BaseViewModel.LoginNav.SIGNUP -> SignupActivity.openScreen(this)
-            BaseViewModel.LoginNav.FORGOT_PWD -> ForgotPasswordActivity.openScreen(this)
-            BaseViewModel.LoginNav.HOME -> {
+            BaseViewModel.Navigables.SIGNUP -> SignupActivity.openScreen(this)
+            BaseViewModel.Navigables.FORGOT_PWD -> ForgotPasswordActivity.openScreen(this)
+            BaseViewModel.Navigables.HOME -> {
                 HomeActivity.openScreen(this)
                 finish()
             }

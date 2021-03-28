@@ -65,13 +65,13 @@ class SignupActivity : BaseActivity<ActivitySignupBinding, SignupViewModel>() {
 
     override fun navigateTo(navigable: Navigable) {
         when (navigable) {
-            BaseViewModel.SignupNav.PROFILE_PIC -> {
+            BaseViewModel.Navigables.PROFILE_PIC -> {
                 checkPermissionsAndShowDialog()
             }
-            BaseViewModel.SignupNav.LOGIN -> {
+            BaseViewModel.Navigables.LOGIN -> {
                 finish()
             }
-            BaseViewModel.SignupNav.HOME -> {
+            BaseViewModel.Navigables.HOME -> {
                 HomeActivity.openScreen(this)
                 finish()
             }

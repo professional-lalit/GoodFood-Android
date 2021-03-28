@@ -37,4 +37,8 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="logout_confirm_msg">Are you sure, you want to logout?</string>
+    <string name="purchased_recipes">Purchased Recipes</string>
+    <string name="payment_history">Payment History</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

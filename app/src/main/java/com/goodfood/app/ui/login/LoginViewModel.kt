@@ -29,15 +29,15 @@ class LoginViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     fun navigateToSignUp() {
-        _screenToNav.postValue(LoginNav.SIGNUP)
+        _screenToNav.postValue(Navigables.SIGNUP)
     }
 
     fun navigateToForgotPassword() {
-        _screenToNav.postValue(LoginNav.FORGOT_PWD)
+        _screenToNav.postValue(Navigables.FORGOT_PWD)
     }
 
     fun navigateToHome() {
-        _screenToNav.postValue(LoginNav.HOME)
+        _screenToNav.postValue(Navigables.HOME)
     }
 
     val loginData = LoginData("hajare.lalit@gmail.com", "123@Abc")
