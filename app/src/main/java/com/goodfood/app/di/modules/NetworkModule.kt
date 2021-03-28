@@ -3,20 +3,24 @@ package com.goodfood.app.di.modules
 import com.goodfood.app.common.Constants
 import com.goodfood.app.common.CustomApplication
 import com.goodfood.app.common.Prefs
+import com.goodfood.app.models.response_dtos.ErrorResponseDTO
 import com.goodfood.app.networking.ServerInterface
+import com.google.gson.Gson
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import okhttp3.Interceptor
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
+import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
+import okhttp3.ResponseBody.Companion.toResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
+import org.json.JSONObject
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
+import java.net.ConnectException
 import java.net.NetworkInterface
 import java.net.SocketTimeoutException
 import java.util.concurrent.TimeUnit
@@ -81,7 +85,23 @@ class NetworkModule {
             if (prefs.accessToken != null && prefs.accessToken!!.isNotEmpty()) {
                 requestBuilder.addHeader("Authorization", "Bearer " + prefs.accessToken!!)
             }
-            return chain.proceed(requestBuilder.build())
+            return try {
+                chain.proceed(requestBuilder.build())
+            } catch (ex: ConnectException) {
+                createResponse(requestBuilder.build())
+            }
+        }
+
+        private fun createResponse(request: Request): Response {
+            val errorBody = ErrorResponseDTO(null, "Could not connect to server")
+            return Response.Builder()
+                .code(408)
+                .request(request)
+                .protocol(Protocol.HTTP_1_0)
+                .message("Please check internet connection")
+                .body(
+                    Gson().toJson(errorBody).toResponseBody("application/json".toMediaTypeOrNull())
+                ).build()
         }
     }
 
