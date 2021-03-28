@@ -44,6 +44,7 @@ class HomeViewModel @Inject constructor(
 
     fun logout(){
         userRepository.logout()
+        _screenToNav.postValue(Navigables.LOGIN)
     }
 
 }

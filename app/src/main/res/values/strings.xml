@@ -34,4 +34,7 @@
     <string name="complaints">Complaints</string>
     <string name="logout">Log out</string>
     <string name="explore">Explore</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="logout_confirm_msg">Are you sure, you want to logout?</string>
 </resources>

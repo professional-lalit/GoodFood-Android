@@ -4,6 +4,7 @@ import com.goodfood.app.common.Constants
 import com.goodfood.app.common.CustomApplication
 import com.goodfood.app.common.Prefs
 import com.goodfood.app.models.response_dtos.ErrorResponseDTO
+import com.goodfood.app.networking.HeaderInterceptor
 import com.goodfood.app.networking.ServerInterface
 import com.google.gson.Gson
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
@@ -42,7 +43,7 @@ import javax.inject.Singleton
 class NetworkModule {
 
     @Provides
-    fun provideAPIClient(prefs: Prefs): OkHttpClient {
+    fun provideAPIClient(headerInterceptor: HeaderInterceptor): OkHttpClient {
         val logInterceptor = HttpLoggingInterceptor()
         logInterceptor.level = HttpLoggingInterceptor.Level.BODY
         return OkHttpClient().newBuilder()
@@ -50,7 +51,7 @@ class NetworkModule {
             .writeTimeout(5, TimeUnit.SECONDS)
             .readTimeout(5, TimeUnit.SECONDS)
             .addInterceptor(logInterceptor)
-            .addInterceptor(HeaderInterceptor(prefs))
+            .addInterceptor(headerInterceptor)
             .build()
     }
 
@@ -67,42 +68,6 @@ class NetworkModule {
     @Provides
     fun provideAPI(retrofit: Retrofit): ServerInterface {
         return retrofit.create(ServerInterface::class.java)
-    }
-
-    /**
-     * This class is used to write headers at run time, when APIs are called
-     */
-    class HeaderInterceptor(val prefs: Prefs) : Interceptor {
-        override fun intercept(chain: Interceptor.Chain): Response {
-            var contentLength = 0L
-            if (chain.request().body != null) {
-                contentLength = chain.request().body!!.contentLength()
-            }
-            val requestBuilder: Request.Builder = chain.request()
-                .newBuilder()
-                .addHeader("Content-Type", "application/json")
-                .addHeader("Content-Length", contentLength.toString())
-            if (prefs.accessToken != null && prefs.accessToken!!.isNotEmpty()) {
-                requestBuilder.addHeader("Authorization", "Bearer " + prefs.accessToken!!)
-            }
-            return try {
-                chain.proceed(requestBuilder.build())
-            } catch (ex: ConnectException) {
-                createResponse(requestBuilder.build())
-            }
-        }
-
-        private fun createResponse(request: Request): Response {
-            val errorBody = ErrorResponseDTO(null, "Could not connect to server")
-            return Response.Builder()
-                .code(408)
-                .request(request)
-                .protocol(Protocol.HTTP_1_0)
-                .message("Please check internet connection")
-                .body(
-                    Gson().toJson(errorBody).toResponseBody("application/json".toMediaTypeOrNull())
-                ).build()
-        }
     }
 
 }

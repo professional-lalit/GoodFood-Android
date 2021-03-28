@@ -1,8 +1,10 @@
 package com.goodfood.app.ui.login
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.goodfood.app.R
@@ -18,6 +20,19 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
+
+    companion object {
+
+        fun <B : ViewDataBinding, VM : BaseViewModel, T : BaseActivity<B, VM>> openScreen(
+            activity: T,
+            bundle: Bundle? = null
+        ) {
+            val intent = Intent(activity, LoginActivity::class.java)
+            bundle?.let { intent.putExtras(bundle) }
+            activity.startActivity(intent)
+        }
+
+    }
 
     private val loginViewModel by viewModels<LoginViewModel>()
 

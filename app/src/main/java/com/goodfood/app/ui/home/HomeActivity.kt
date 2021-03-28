@@ -1,35 +1,22 @@
 package com.goodfood.app.ui.home
 
 import android.content.Intent
-import android.graphics.drawable.Drawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MenuItem
-import android.view.View
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.activity.viewModels
+import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import androidx.lifecycle.Observer
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import com.goodfood.app.R
-import com.goodfood.app.common.ImageLoader
 import com.goodfood.app.databinding.ActivityHomeBinding
-import com.goodfood.app.databinding.ActivitySignupBinding
 import com.goodfood.app.databinding.HomeDrawerHeaderBinding
 import com.goodfood.app.interfaces.Navigable
 import com.goodfood.app.ui.common.BaseActivity
 import com.goodfood.app.ui.common.BaseViewModel
-import com.goodfood.app.ui.signup.SignupActivity
-import com.goodfood.app.ui.signup.SignupViewModel
+import com.goodfood.app.ui.common.dialogs.DialogManager
+import com.goodfood.app.ui.login.LoginActivity
 import com.goodfood.app.utils.Extensions.showToast
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
@@ -50,11 +37,14 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
 
     }
 
+    @Inject
+    lateinit var dialogManager: DialogManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.getMeDetails()
         setUpActionBar()
-        setClickListeners()
+        setViews()
     }
 
     private fun setUpActionBar() {
@@ -62,19 +52,31 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
         setSupportActionBar(binding.toolbarHome)
     }
 
-    private fun setClickListeners() {
+    private fun setViews() {
         binding.navHome.setNavigationItemSelectedListener {
             if (it.itemId == R.id.action_logout) {
-                viewModel.logout()
-                finish()
-                return@setNavigationItemSelectedListener true
+                showLogoutDialog()
             }
-            return@setNavigationItemSelectedListener false
+            binding.drawerHome.closeDrawer(GravityCompat.START, true)
+            return@setNavigationItemSelectedListener true
+        }
+    }
+
+    private fun showLogoutDialog() {
+        dialogManager.showLogoutDialog(supportFragmentManager) { isToBeLoggedOut ->
+            if (isToBeLoggedOut) {
+                viewModel.logout()
+            }
         }
     }
 
     override fun navigateTo(navigable: Navigable) {
-
+        when (navigable) {
+            BaseViewModel.Navigables.LOGIN -> {
+                LoginActivity.openScreen(this)
+                finish()
+            }
+        }
     }
 
     override fun setUp() {

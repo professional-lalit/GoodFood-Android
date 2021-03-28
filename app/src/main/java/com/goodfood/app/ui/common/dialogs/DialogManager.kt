@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import com.goodfood.app.common.Constants
+import com.goodfood.app.databinding.DialogLogoutBinding
 import com.goodfood.app.databinding.DialogProfilePicSelectionBinding
 import dagger.hilt.android.qualifiers.ActivityContext
 import javax.inject.Inject
@@ -44,6 +45,21 @@ class DialogManager constructor(private val context: Context) {
             dialogFragment!!.dismiss()
         }
         dialogFragment = CustomDialogFragment(binding)
+        dialogFragment!!.show(fragmentManager, CustomDialogFragment.TAG)
+    }
+
+    fun showLogoutDialog(fragmentManager: FragmentManager, callback: (Boolean) -> Unit) {
+        val binding = DialogLogoutBinding.inflate(LayoutInflater.from(context))
+        binding.btnNo.setOnClickListener {
+            callback.invoke(false)
+            dialogFragment!!.dismiss()
+        }
+        binding.btnYes.setOnClickListener {
+            callback.invoke(true)
+            dialogFragment!!.dismiss()
+        }
+        dialogFragment = CustomDialogFragment(binding)
+        dialogFragment!!.isCancelable = false
         dialogFragment!!.show(fragmentManager, CustomDialogFragment.TAG)
     }
 

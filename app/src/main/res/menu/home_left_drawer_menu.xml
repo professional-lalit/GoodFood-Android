@@ -3,22 +3,26 @@
 
     <item
         android:id="@+id/action_explore"
-        android:icon="@drawable/ic_explore"
+        android:icon="@drawable/ic_search"
         android:title="@string/explore" />
 
     <item
         android:id="@+id/action_my_recipes"
+        android:icon="@drawable/ic_whisk"
         android:title="@string/my_recipes" />
 
     <item
         android:id="@+id/action_saved_recipes"
+        android:icon="@drawable/ic_save"
         android:title="@string/saved_recipes" />
 
     <item
+        android:icon="@drawable/ic_bad_review"
         android:id="@+id/action_complaints"
         android:title="@string/complaints" />
 
     <item
+        android:icon="@drawable/ic_logout"
         android:id="@+id/action_logout"
         android:title="@string/logout" />
 

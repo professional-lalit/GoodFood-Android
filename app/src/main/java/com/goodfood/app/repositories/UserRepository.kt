@@ -75,6 +75,7 @@ class UserRepository @Inject constructor(
     }
 
     suspend fun fetchMeDetails(): NetworkResponse {
+        val localUser = prefs.user
         val response = serverInterface.fetchMeDetails()
         return if (response.code() in 200..210) {
             val userDTO: UserResponseDTO? = Gson().fromJson(
@@ -84,6 +85,8 @@ class UserRepository @Inject constructor(
             val user = userDTO?.getDomainModel()
             prefs.user = user
             NetworkResponse.NetworkSuccess(user)
+        } else if (localUser != null) {
+            NetworkResponse.NetworkSuccess(localUser)
         } else {
             val type = object : TypeToken<ErrorResponseDTO>() {}.type
             val errorResponseDTO: ErrorResponseDTO =
@@ -94,7 +97,7 @@ class UserRepository @Inject constructor(
         }
     }
 
-    fun logout(){
+    fun logout() {
         prefs.clearPrefs()
     }
 
