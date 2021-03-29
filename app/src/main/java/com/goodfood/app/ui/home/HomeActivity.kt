@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import androidx.fragment.app.Fragment
 import com.goodfood.app.R
 import com.goodfood.app.databinding.ActivityHomeBinding
 import com.goodfood.app.databinding.HomeDrawerHeaderBinding
@@ -16,20 +17,18 @@ import com.goodfood.app.ui.common.BaseViewModel
 import com.goodfood.app.ui.common.dialogs.DialogManager
 import com.goodfood.app.ui.home.fragments.ExploreFragment
 import com.goodfood.app.ui.home.fragments.MyRecipesFragment
-import com.goodfood.app.ui.home.fragments.PaymentHistoryFragment
+import com.goodfood.app.ui.home.fragments.PurchasedRecipesFragment
 import com.goodfood.app.ui.login.LoginActivity
 import com.goodfood.app.utils.Extensions.showToast
+import com.ncapdevi.fragnav.FragNavController
+import com.ncapdevi.fragnav.FragNavTransactionOptions
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
 
-    private val homeViewModel by viewModels<HomeViewModel>()
-    private lateinit var drawerHeaderBinding: HomeDrawerHeaderBinding
-
     companion object {
-
         fun <B : ViewDataBinding, VM : BaseViewModel, T : BaseActivity<B, VM>> openScreen(
             activity: T,
             bundle: Bundle? = null
@@ -38,17 +37,24 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
             bundle?.let { intent.putExtras(bundle) }
             activity.startActivity(intent)
         }
-
     }
+
+    private val homeViewModel by viewModels<HomeViewModel>()
+    private lateinit var drawerHeaderBinding: HomeDrawerHeaderBinding
 
     @Inject
     lateinit var dialogManager: DialogManager
 
+    private val fragNavController: FragNavController =
+        FragNavController(supportFragmentManager, R.id.container)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         viewModel.getMeDetails()
         setUpActionBar()
         setViews()
+        setUpFragNav(savedInstanceState)
     }
 
     private fun setUpActionBar() {
@@ -59,41 +65,56 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
     }
 
     private fun setViews() {
-        supportFragmentManager.addOnBackStackChangedListener {
-            if (supportFragmentManager.fragments.size > 2) {
-                supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_left_arrow)
-            } else if (supportFragmentManager.fragments.size == 2) {
-                supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_drawer_menu)
+        fragNavController.transactionListener = object : FragNavController.TransactionListener {
+            override fun onFragmentTransaction(
+                fragment: Fragment?,
+                transactionType: FragNavController.TransactionType
+            ) {
+                when (fragNavController.currentFrag) {
+                    is ExploreFragment -> supportActionBar?.title = getString(R.string.explore)
+                    is MyRecipesFragment -> supportActionBar?.title = getString(R.string.my_recipes)
+                    is PurchasedRecipesFragment -> supportActionBar?.title =
+                        getString(R.string.purchased_recipes)
+                }
+                if (fragNavController.isRootFragment) {
+                    supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_drawer_menu)
+                } else {
+                    supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_left_arrow)
+                }
+            }
+
+            override fun onTabTransaction(fragment: Fragment?, index: Int) {
+
             }
         }
+
         binding.navHome.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.action_logout -> showLogoutDialog()
                 R.id.action_explore -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.container, ExploreFragment())
-                        .commit()
+                    fragNavController.switchTab(0)
+                    supportActionBar?.title = getString(R.string.explore)
                 }
                 R.id.action_my_recipes -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.container, MyRecipesFragment())
-                        .commit()
+                    fragNavController.switchTab(1)
+                    supportActionBar?.title = getString(R.string.my_recipes)
                 }
-                R.id.action_payment_history -> {
-                    supportFragmentManager.beginTransaction()
-                        .add(R.id.container, PaymentHistoryFragment())
-                        .addToBackStack(PaymentHistoryFragment.TAG)
-                        .commit()
+                R.id.action_purchased_recipes -> {
+                    fragNavController.pushFragment(PurchasedRecipesFragment())
                 }
             }
             binding.drawerHome.closeDrawer(GravityCompat.START, true)
             return@setNavigationItemSelectedListener true
         }
+    }
 
-        supportFragmentManager.beginTransaction()
-            .add(R.id.container, ExploreFragment())
-            .addToBackStack(ExploreFragment.TAG)
-            .commit()
+    private fun setUpFragNav(savedInstanceState: Bundle?) {
+        val fragments = listOf(
+            ExploreFragment(),
+            MyRecipesFragment()
+        )
+        fragNavController.rootFragments = fragments
+        fragNavController.initialize(0, savedInstanceState)
     }
 
     private fun showLogoutDialog() {
@@ -133,19 +154,12 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
     }
 
     private fun handleBackLogic() {
-        if (supportFragmentManager.fragments.size == 2) {
+        if (fragNavController.isRootFragment) {
             if (!binding.drawerHome.isDrawerOpen(GravityCompat.START)) {
                 binding.drawerHome.openDrawer(GravityCompat.START)
             }
-        } else if (supportFragmentManager.fragments.size > 2) {
-            val fragment =
-                supportFragmentManager.fragments[supportFragmentManager.fragments.size - 2]
-            supportFragmentManager.beginTransaction()
-                .remove(fragment)
-                .commit()
-            supportFragmentManager.popBackStackImmediate()
         } else {
-            super.onBackPressed()
+            fragNavController.popFragment()
         }
     }
 
@@ -157,5 +171,6 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
             drawerHeaderBinding.user = user
         })
     }
+
 
 }
