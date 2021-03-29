@@ -2,6 +2,7 @@ package com.goodfood.app.ui.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
@@ -15,9 +16,7 @@ import com.goodfood.app.interfaces.Navigable
 import com.goodfood.app.ui.common.BaseActivity
 import com.goodfood.app.ui.common.BaseViewModel
 import com.goodfood.app.ui.common.dialogs.DialogManager
-import com.goodfood.app.ui.home.fragments.ExploreFragment
-import com.goodfood.app.ui.home.fragments.MyRecipesFragment
-import com.goodfood.app.ui.home.fragments.PurchasedRecipesFragment
+import com.goodfood.app.ui.home.fragments.*
 import com.goodfood.app.ui.login.LoginActivity
 import com.goodfood.app.utils.Extensions.showToast
 import com.ncapdevi.fragnav.FragNavController
@@ -70,12 +69,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
                 fragment: Fragment?,
                 transactionType: FragNavController.TransactionType
             ) {
-                when (fragNavController.currentFrag) {
-                    is ExploreFragment -> supportActionBar?.title = getString(R.string.explore)
-                    is MyRecipesFragment -> supportActionBar?.title = getString(R.string.my_recipes)
-                    is PurchasedRecipesFragment -> supportActionBar?.title =
-                        getString(R.string.purchased_recipes)
-                }
+                updateToolbarTitle()
                 if (fragNavController.isRootFragment) {
                     supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_drawer_menu)
                 } else {
@@ -84,24 +78,25 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
             }
 
             override fun onTabTransaction(fragment: Fragment?, index: Int) {
-
+                updateToolbarTitle()
             }
         }
 
         binding.navHome.setNavigationItemSelectedListener {
             when (it.itemId) {
+                R.id.action_explore ->
+                    fragNavController.switchTab(BaseViewModel.Navigables.EXPLORE.index!!)
+                R.id.action_my_recipes ->
+                    fragNavController.switchTab(BaseViewModel.Navigables.MY_RECIPES.index!!)
+                R.id.action_saved_recipes ->
+                    fragNavController.switchTab(BaseViewModel.Navigables.SAVED_RECIPES.index!!)
+                R.id.action_purchased_recipes ->
+                    fragNavController.switchTab(BaseViewModel.Navigables.PURCHASED_RECIPES.index!!)
+                R.id.action_payment_history ->
+                    fragNavController.switchTab(BaseViewModel.Navigables.PAYMENT_HISTORY.index!!)
+                R.id.action_complaints ->
+                    fragNavController.switchTab(BaseViewModel.Navigables.COMPLAINTS.index!!)
                 R.id.action_logout -> showLogoutDialog()
-                R.id.action_explore -> {
-                    fragNavController.switchTab(0)
-                    supportActionBar?.title = getString(R.string.explore)
-                }
-                R.id.action_my_recipes -> {
-                    fragNavController.switchTab(1)
-                    supportActionBar?.title = getString(R.string.my_recipes)
-                }
-                R.id.action_purchased_recipes -> {
-                    fragNavController.pushFragment(PurchasedRecipesFragment())
-                }
             }
             binding.drawerHome.closeDrawer(GravityCompat.START, true)
             return@setNavigationItemSelectedListener true
@@ -110,8 +105,12 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
 
     private fun setUpFragNav(savedInstanceState: Bundle?) {
         val fragments = listOf(
-            ExploreFragment(),
-            MyRecipesFragment()
+            ExploreFragment.newInstance(),
+            MyRecipesFragment.newInstance(),
+            SavedRecipesFragment.newInstance(),
+            PurchasedRecipesFragment.newInstance(),
+            PaymentHistoryFragment.newInstance(),
+            ComplaintsFragment.newInstance()
         )
         fragNavController.rootFragments = fragments
         fragNavController.initialize(0, savedInstanceState)
@@ -122,6 +121,23 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
             if (isToBeLoggedOut) {
                 viewModel.logout()
             }
+        }
+    }
+
+    private fun updateToolbarTitle() {
+        when (fragNavController.currentFrag) {
+            is ExploreFragment ->
+                supportActionBar?.title = getString(R.string.explore)
+            is MyRecipesFragment ->
+                supportActionBar?.title = getString(R.string.my_recipes)
+            is SavedRecipesFragment ->
+                supportActionBar?.title = getString(R.string.saved_recipes)
+            is PurchasedRecipesFragment ->
+                supportActionBar?.title = getString(R.string.purchased_recipes)
+            is PaymentHistoryFragment ->
+                supportActionBar?.title = getString(R.string.payment_history)
+            is ComplaintsFragment ->
+                supportActionBar?.title = getString(R.string.complaints)
         }
     }
 

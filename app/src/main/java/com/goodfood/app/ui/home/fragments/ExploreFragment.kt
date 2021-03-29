@@ -11,7 +11,11 @@ import com.goodfood.app.databinding.FragmentExploreBinding
 class ExploreFragment : Fragment() {
 
     companion object {
-        const val TAG = "ExploreFragment"
+        fun newInstance(bundle: Bundle? = null): ExploreFragment {
+            val fragment = ExploreFragment()
+            fragment.arguments = bundle
+            return fragment
+        }
     }
 
     override fun onCreateView(

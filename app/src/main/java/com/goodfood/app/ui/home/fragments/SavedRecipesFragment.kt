@@ -10,6 +10,15 @@ import com.goodfood.app.databinding.FragmentSavedRecipesBinding
 
 
 class SavedRecipesFragment : Fragment() {
+
+    companion object {
+        fun newInstance(bundle: Bundle? = null): SavedRecipesFragment {
+            val fragment = SavedRecipesFragment()
+            fragment.arguments = bundle
+            return fragment
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

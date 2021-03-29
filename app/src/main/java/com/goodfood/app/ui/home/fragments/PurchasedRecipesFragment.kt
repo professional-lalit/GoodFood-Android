@@ -9,6 +9,15 @@ import com.goodfood.app.R
 import com.goodfood.app.databinding.FragmentPurchasedRecipesBinding
 
 class PurchasedRecipesFragment : Fragment() {
+
+    companion object {
+        fun newInstance(bundle: Bundle? = null): PurchasedRecipesFragment {
+            val fragment = PurchasedRecipesFragment()
+            fragment.arguments = bundle
+            return fragment
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

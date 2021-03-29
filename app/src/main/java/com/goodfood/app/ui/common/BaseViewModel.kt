@@ -27,11 +27,11 @@ open class BaseViewModel : ViewModel() {
     protected val _errorData = MutableLiveData<Error>()
     val errorData: LiveData<Error> = _errorData
 
-    enum class Navigables : Navigable {
+    enum class Navigables(val index: Int? = 0) : Navigable {
         FORGOT_PWD, SIGNUP, TERMS_AND_COND, PRIVACY, HOME, LOGIN, PROFILE_PIC,
 
         //Drawer menu screens
-        EXPLORE, MY_RECIPES, SAVED_RECIPES, PURCHASED_RECIPES, PAYMENT_HISTORY,
-        COMPLAINTS
+        EXPLORE(0), MY_RECIPES(1), SAVED_RECIPES(2),
+        PURCHASED_RECIPES(3), PAYMENT_HISTORY(4), COMPLAINTS(5)
     }
 }

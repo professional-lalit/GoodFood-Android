@@ -12,7 +12,11 @@ import com.goodfood.app.databinding.FragmentMyRecipesBinding
 class MyRecipesFragment : Fragment() {
 
     companion object {
-        const val TAG = "MyRecipesFragment"
+        fun newInstance(bundle: Bundle? = null): MyRecipesFragment {
+            val fragment = MyRecipesFragment()
+            fragment.arguments = bundle
+            return fragment
+        }
     }
 
     override fun onCreateView(

@@ -11,6 +11,15 @@ import com.goodfood.app.databinding.FragmentExploreBinding
 
 
 class ComplaintsFragment : Fragment() {
+
+    companion object {
+        fun newInstance(bundle: Bundle? = null): ComplaintsFragment {
+            val fragment = ComplaintsFragment()
+            fragment.arguments = bundle
+            return fragment
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

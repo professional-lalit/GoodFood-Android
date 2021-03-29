@@ -11,7 +11,11 @@ import com.goodfood.app.databinding.FragmentPaymentHistoryBinding
 class PaymentHistoryFragment : Fragment() {
 
     companion object {
-        const val TAG = "PaymentHistoryFragment"
+        fun newInstance(bundle: Bundle? = null): PaymentHistoryFragment {
+            val fragment = PaymentHistoryFragment()
+            fragment.arguments = bundle
+            return fragment
+        }
     }
 
     override fun onCreateView(
