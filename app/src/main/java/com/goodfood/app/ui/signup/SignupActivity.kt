@@ -12,6 +12,7 @@ import com.goodfood.app.R
 import com.goodfood.app.common.Constants
 import com.goodfood.app.common.ImageManager
 import com.goodfood.app.databinding.ActivitySignupBinding
+import com.goodfood.app.events.ClickEventMessage
 import com.goodfood.app.interfaces.Navigable
 import com.goodfood.app.ui.common.BaseActivity
 import com.goodfood.app.ui.common.BaseViewModel
@@ -160,6 +161,10 @@ class SignupActivity : BaseActivity<ActivitySignupBinding, SignupViewModel>() {
                 imageManager.initGalleryFlow()
             }
         }
+    }
+
+    override fun onClickEvent(event: ClickEventMessage) {
+
     }
 
 }

@@ -4,7 +4,6 @@ import android.view.View
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyModel
 import com.goodfood.app.R
-import com.goodfood.app.databinding.ItemRecipeBinding
 
 
 /**
@@ -24,7 +23,7 @@ data class Recipe(
 ) : EpoxyModel<View>() {
 
     override fun getDefaultLayout(): Int {
-        return R.layout.item_recipe
+        return R.layout.item_recipe_data
     }
 
     override fun bind(view: View) {

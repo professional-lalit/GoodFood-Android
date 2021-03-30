@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import com.goodfood.app.R
 import com.goodfood.app.databinding.ActivityHomeBinding
 import com.goodfood.app.databinding.HomeDrawerHeaderBinding
+import com.goodfood.app.events.ClickEventMessage
 import com.goodfood.app.interfaces.Navigable
 import com.goodfood.app.ui.common.BaseActivity
 import com.goodfood.app.ui.common.BaseViewModel
@@ -21,6 +22,8 @@ import com.goodfood.app.ui.login.LoginActivity
 import com.goodfood.app.utils.Extensions.showToast
 import com.ncapdevi.fragnav.FragNavController
 import dagger.hilt.android.AndroidEntryPoint
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -185,6 +188,11 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
         homeViewModel.user.observe(this, { user ->
             drawerHeaderBinding.user = user
         })
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    override fun onClickEvent(event: ClickEventMessage) {
+
     }
 
 

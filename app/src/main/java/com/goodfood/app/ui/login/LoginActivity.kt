@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.goodfood.app.R
 import com.goodfood.app.databinding.ActivityLoginBinding
+import com.goodfood.app.events.ClickEventMessage
 import com.goodfood.app.interfaces.Navigable
 import com.goodfood.app.ui.common.BaseActivity
 import com.goodfood.app.ui.common.BaseViewModel
@@ -61,6 +62,10 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
                 showToast(response.message ?: "Login successful")
             }
         })
+    }
+
+    override fun onClickEvent(event: ClickEventMessage) {
+
     }
 
 }

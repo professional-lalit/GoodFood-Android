@@ -7,13 +7,19 @@
     <data>
 
         <variable
-            name="recipe"
+            name="data"
             type="com.goodfood.app.models.domain.Recipe" />
+
+        <variable
+            name="itemClickListener"
+            type="com.goodfood.app.interfaces.IClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="@{(view) -> itemClickListener.onClick(view, data)}"
         android:paddingStart="@dimen/dimen_size_20">
 
 
@@ -28,7 +34,7 @@
             android:src="@drawable/dark_landscape_placeholder"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:setImage="@{recipe.recipePoster}" />
+            app:setImage="@{data.recipePoster}" />
 
         <FrameLayout
             android:layout_width="wrap_content"
@@ -45,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_marginEnd="@dimen/dimen_size_20"
             android:fontFamily="@font/montserrat_bold"
-            android:text="@{recipe.recipeTitle}"
+            android:text="@{data.recipeTitle}"
             android:textSize="@dimen/text_size_18"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/img_recipe_poster"
@@ -59,7 +65,7 @@
             android:ellipsize="end"
             android:fontFamily="@font/montserrat_regular"
             android:maxLines="3"
-            android:text="@{recipe.recipeBrief}"
+            android:text="@{data.recipeBrief}"
             android:textColor="@color/faint_grey_text"
             android:textSize="@dimen/text_size_15"
             app:layout_constraintStart_toStartOf="parent"

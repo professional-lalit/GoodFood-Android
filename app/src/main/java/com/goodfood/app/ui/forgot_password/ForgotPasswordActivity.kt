@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.goodfood.app.R
 import com.goodfood.app.databinding.ActivityForgotPasswordBinding
 import com.goodfood.app.databinding.ActivitySignupBinding
+import com.goodfood.app.events.ClickEventMessage
 import com.goodfood.app.interfaces.Navigable
 import com.goodfood.app.ui.common.BaseActivity
 import com.goodfood.app.ui.common.BaseViewModel
@@ -44,6 +45,10 @@ class ForgotPasswordActivity :
     }
 
     override fun setObservers() {
+
+    }
+
+    override fun onClickEvent(event: ClickEventMessage) {
 
     }
 }
