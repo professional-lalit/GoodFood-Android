@@ -2,7 +2,6 @@ package com.goodfood.app.ui.home
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
@@ -17,10 +16,10 @@ import com.goodfood.app.ui.common.BaseActivity
 import com.goodfood.app.ui.common.BaseViewModel
 import com.goodfood.app.ui.common.dialogs.DialogManager
 import com.goodfood.app.ui.home.fragments.*
+import com.goodfood.app.ui.home.fragments.explore.ExploreFragment
 import com.goodfood.app.ui.login.LoginActivity
 import com.goodfood.app.utils.Extensions.showToast
 import com.ncapdevi.fragnav.FragNavController
-import com.ncapdevi.fragnav.FragNavTransactionOptions
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

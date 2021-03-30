@@ -9,5 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="dialog_bg">#f1f2f6</color>
 
+    <color name="faint_grey_text">#bdc3c7</color>
+
     <color name="transparent">#00000000</color>
 </resources>

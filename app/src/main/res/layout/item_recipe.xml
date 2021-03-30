@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="recipe"
+            type="com.goodfood.app.models.domain.Recipe" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/dimen_size_20">
+
+
+        <ImageView
+            android:id="@+id/img_recipe_poster"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_size_200"
+            android:layout_marginTop="@dimen/dimen_size_20"
+            android:layout_marginEnd="@dimen/dimen_size_20"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/dark_landscape_placeholder"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:setImage="@{recipe.recipePoster}" />
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <include layout="@layout/layout_discount_tag" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/txt_recipe_title"
+            style="@style/BasicText"
+            android:layout_width="match_parent"
+            android:layout_marginEnd="@dimen/dimen_size_20"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="@{recipe.recipeTitle}"
+            android:textSize="@dimen/text_size_18"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/img_recipe_poster"
+            tools:text="@string/lorem_title" />
+
+        <TextView
+            android:id="@+id/txt_recipe_brief"
+            style="@style/BasicText"
+            android:layout_width="match_parent"
+            android:layout_marginEnd="@dimen/dimen_size_20"
+            android:ellipsize="end"
+            android:fontFamily="@font/montserrat_regular"
+            android:maxLines="3"
+            android:text="@{recipe.recipeBrief}"
+            android:textColor="@color/faint_grey_text"
+            android:textSize="@dimen/text_size_15"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_recipe_title"
+            tools:text="@string/lorem_brief" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
+
