@@ -10,7 +10,10 @@ package com.goodfood.app.events
  * also if any suggestions they are welcomed at: `lalit.appsmail@gmail.com`
  * (please keep the subject as 'GoodFood Android Code Suggestion')
  */
-open class Message(
-    val eventId: Int? = 0,
-    open val payload: Any?
-)
+object EventConstants {
+
+    enum class Event(val id: Int) {
+        OPEN_CREATE_RECIPE_SCREEN(1)
+    }
+
+}

@@ -18,8 +18,22 @@ import com.goodfood.app.R
 object ImageLoader {
 
     @JvmStatic
-    @BindingAdapter("app:setImage")
+    @BindingAdapter("app:loadImage")
     fun loadImage(imageView: ImageView, url: String?) {
+        url?.let {
+            if (it.isNotEmpty()) {
+                Glide.with(imageView.context)
+                    .load(it)
+                    .placeholder(R.drawable.ic_profile_placeholder)
+                    .circleCrop()
+                    .into(imageView)
+            }
+        }
+    }
+
+    @JvmStatic
+    @BindingAdapter("app:setImage")
+    fun setImage(imageView: ImageView, url: String?) {
         url?.let {
             if (it.isNotEmpty()) {
                 Glide.with(imageView.context)

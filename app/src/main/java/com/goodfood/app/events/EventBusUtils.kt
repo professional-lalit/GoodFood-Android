@@ -14,10 +14,10 @@ import org.greenrobot.eventbus.EventBus
  * (please keep the subject as 'GoodFood Android Code Suggestion')
  */
 
-fun sendClickEvent(@IdRes viewId: Int, payload: Any?) {
-    EventBus.getDefault().post(ClickEventMessage(viewId, payload))
+fun sendClickEvent(@IdRes viewId: Int, payload: Any? = null) {
+    EventBus.getDefault().post(ClickEventMessage(viewId = viewId, payload = payload))
 }
 
-fun sendEvent(payload: Any?) {
-    EventBus.getDefault().post(Message(payload))
+fun sendEvent(eventId: Int, payload: Any? = null) {
+    EventBus.getDefault().post(Message(eventId = eventId, payload = payload))
 }

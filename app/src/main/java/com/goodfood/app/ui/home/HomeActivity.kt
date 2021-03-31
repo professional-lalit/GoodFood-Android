@@ -8,19 +8,24 @@ import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import com.goodfood.app.R
 import com.goodfood.app.databinding.ActivityHomeBinding
 import com.goodfood.app.databinding.HomeDrawerHeaderBinding
 import com.goodfood.app.events.ClickEventMessage
+import com.goodfood.app.events.EventConstants
+import com.goodfood.app.events.Message
 import com.goodfood.app.interfaces.Navigable
 import com.goodfood.app.ui.common.BaseActivity
 import com.goodfood.app.ui.common.BaseViewModel
 import com.goodfood.app.ui.common.dialogs.DialogManager
 import com.goodfood.app.ui.home.fragments.*
+import com.goodfood.app.ui.home.fragments.create_recipe.CreateRecipeFragment
 import com.goodfood.app.ui.home.fragments.explore.ExploreFragment
 import com.goodfood.app.ui.login.LoginActivity
 import com.goodfood.app.utils.Extensions.showToast
 import com.ncapdevi.fragnav.FragNavController
+import com.ncapdevi.fragnav.FragNavTransactionOptions
 import dagger.hilt.android.AndroidEntryPoint
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -42,6 +47,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
 
     private val homeViewModel by viewModels<HomeViewModel>()
     private lateinit var drawerHeaderBinding: HomeDrawerHeaderBinding
+
+    private var backPressTime: Long = 0L
 
     @Inject
     lateinit var dialogManager: DialogManager
@@ -161,24 +168,26 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
-                handleBackLogic()
+                if (fragNavController.isRootFragment) {
+                    if (!binding.drawerHome.isDrawerOpen(GravityCompat.START)) {
+                        binding.drawerHome.openDrawer(GravityCompat.START)
+                    }
+                } else {
+                    fragNavController.popFragment()
+                }
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
     override fun onBackPressed() {
-        handleBackLogic()
-    }
-
-    private fun handleBackLogic() {
-        if (fragNavController.isRootFragment) {
-            if (!binding.drawerHome.isDrawerOpen(GravityCompat.START)) {
-                binding.drawerHome.openDrawer(GravityCompat.START)
-            }
+        if (backPressTime + 2000 > System.currentTimeMillis()) {
+            super.onBackPressed()
+            finish()
         } else {
-            fragNavController.popFragment()
+            showToast(getString(R.string.please_again_press_back_to_exit))
         }
+        backPressTime = System.currentTimeMillis()
     }
 
     override fun setObservers() {
@@ -193,6 +202,20 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
     @Subscribe(threadMode = ThreadMode.MAIN)
     override fun onClickEvent(event: ClickEventMessage) {
 
+    }
+
+    override fun onEvent(event: Message) {
+        when (event.eventId) {
+            EventConstants.Event.OPEN_CREATE_RECIPE_SCREEN.id -> {
+                with(FragNavTransactionOptions.newBuilder()) {
+                    enterAnimation = R.anim.enter_from_right
+                    exitAnimation = R.anim.exit_to_left
+                    popEnterAnimation = R.anim.enter_from_left
+                    popExitAnimation = R.anim.exit_to_right
+                    fragNavController.pushFragment(CreateRecipeFragment.newInstance(), build())
+                }
+            }
+        }
     }
 
 

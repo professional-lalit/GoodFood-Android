@@ -13,6 +13,7 @@ import com.goodfood.app.common.Constants
 import com.goodfood.app.common.ImageManager
 import com.goodfood.app.databinding.ActivitySignupBinding
 import com.goodfood.app.events.ClickEventMessage
+import com.goodfood.app.events.Message
 import com.goodfood.app.interfaces.Navigable
 import com.goodfood.app.ui.common.BaseActivity
 import com.goodfood.app.ui.common.BaseViewModel
@@ -25,6 +26,8 @@ import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import dagger.hilt.android.AndroidEntryPoint
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import javax.inject.Inject
 
 
@@ -166,5 +169,6 @@ class SignupActivity : BaseActivity<ActivitySignupBinding, SignupViewModel>() {
     override fun onClickEvent(event: ClickEventMessage) {
 
     }
+
 
 }

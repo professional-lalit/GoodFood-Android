@@ -32,7 +32,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/action_bar_height"
                 android:background="@color/teal_700"
-                app:titleTextAppearance="@style/BasicText"
+                app:titleTextAppearance="@style/ToolbarTitleText"
                 app:titleTextColor="@color/white" />
 
             <androidx.fragment.app.FragmentContainerView

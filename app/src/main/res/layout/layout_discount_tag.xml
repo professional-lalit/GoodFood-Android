@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="discount"
+            type="Integer" />
+    </data>
 
     <RelativeLayout
         android:layout_width="@dimen/dimen_size_50"
@@ -11,16 +18,16 @@
             android:id="@+id/img_discount_tag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_ribbon_discount" />
+            android:src="@drawable/ic_tag" />
 
         <TextView
             style="@style/BasicText"
-            android:rotation="-45"
-            android:layout_marginTop="@dimen/dimen_size_10"
-            android:layout_marginStart="@dimen/dimen_size_10"
+            android:layout_centerInParent="true"
             android:fontFamily="@font/montserrat_bold"
+            android:rotation="45"
             android:textColor="@color/white"
-            android:textSize="@dimen/text_size_10"
+            android:textSize="@dimen/text_size_15"
+            app:setDiscount="@{discount}"
             tools:text="20%" />
 
     </RelativeLayout>

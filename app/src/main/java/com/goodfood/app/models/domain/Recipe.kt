@@ -19,23 +19,5 @@ data class Recipe(
     val recipeTitle: String,
     val recipeBrief: String,
     val recipePoster: String? = null,
-    val discount: String
-) : EpoxyModel<View>() {
-
-    override fun getDefaultLayout(): Int {
-        return R.layout.item_recipe_data
-    }
-
-    override fun bind(view: View) {
-        super.bind(view)
-        val txtTitle = view.findViewById<TextView>(R.id.txt_recipe_title)
-        txtTitle.text = recipeTitle
-    }
-
-    override fun unbind(view: View) {
-        super.unbind(view)
-        val txtTitle = view.findViewById<TextView>(R.id.txt_recipe_title)
-        txtTitle.text = ""
-    }
-
-}
+    val discount: Int? = 0
+)

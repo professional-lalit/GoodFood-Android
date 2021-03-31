@@ -15,4 +15,4 @@ import androidx.annotation.IdRes
 data class ClickEventMessage(
     @IdRes val viewId: Int,
     override val payload: Any?
-) : Message(payload)
+) : Message(eventId = 0, payload = payload)

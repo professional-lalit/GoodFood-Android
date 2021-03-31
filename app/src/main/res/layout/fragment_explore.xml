@@ -3,11 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/dialog_bg"
     tools:context=".ui.home.fragments.explore.ExploreFragment">
 
     <com.airbnb.epoxy.EpoxyRecyclerView
         android:id="@+id/recycler_recipes"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/dimen_size_10"
+        android:layout_marginEnd="@dimen/dimen_size_10"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/dimen_size_20" />
 
 </RelativeLayout>

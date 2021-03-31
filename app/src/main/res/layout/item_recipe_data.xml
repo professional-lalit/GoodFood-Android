@@ -2,6 +2,7 @@
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -15,63 +16,67 @@
             type="com.goodfood.app.interfaces.IClickListener" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_root"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{(view) -> itemClickListener.onClick(view, data)}"
-        android:paddingStart="@dimen/dimen_size_20">
+        android:layout_marginTop="@dimen/dimen_size_20"
+        app:cardCornerRadius="@dimen/dimen_size_5">
 
-
-        <ImageView
-            android:id="@+id/img_recipe_poster"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_root"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_size_200"
-            android:layout_marginTop="@dimen/dimen_size_20"
-            android:layout_marginEnd="@dimen/dimen_size_20"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY"
-            android:src="@drawable/dark_landscape_placeholder"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:setImage="@{data.recipePoster}" />
-
-        <FrameLayout
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:background="@color/white"
+            android:onClick="@{(view) -> itemClickListener.onClick(view, data)}">
 
-            <include layout="@layout/layout_discount_tag" />
-        </FrameLayout>
 
-        <TextView
-            android:id="@+id/txt_recipe_title"
-            style="@style/BasicText"
-            android:layout_width="match_parent"
-            android:layout_marginEnd="@dimen/dimen_size_20"
-            android:fontFamily="@font/montserrat_bold"
-            android:text="@{data.recipeTitle}"
-            android:textSize="@dimen/text_size_18"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_recipe_poster"
-            tools:text="@string/lorem_title" />
+            <ImageView
+                android:id="@+id/img_recipe_poster"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_size_200"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/dark_landscape_placeholder"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:loadImage="@{data.recipePoster}" />
 
-        <TextView
-            android:id="@+id/txt_recipe_brief"
-            style="@style/BasicText"
-            android:layout_width="match_parent"
-            android:layout_marginEnd="@dimen/dimen_size_20"
-            android:ellipsize="end"
-            android:fontFamily="@font/montserrat_regular"
-            android:maxLines="3"
-            android:text="@{data.recipeBrief}"
-            android:textColor="@color/faint_grey_text"
-            android:textSize="@dimen/text_size_15"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_recipe_title"
-            tools:text="@string/lorem_brief" />
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <include
+                    layout="@layout/layout_discount_tag"
+                    bind:discount="@{data.discount}" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/txt_recipe_title"
+                style="@style/BasicText"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="@{data.recipeTitle}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/img_recipe_poster"
+                tools:text="@string/lorem_title" />
+
+            <TextView
+                android:id="@+id/txt_recipe_brief"
+                style="@style/BasicText"
+                android:layout_width="match_parent"
+                android:ellipsize="end"
+                android:fontFamily="@font/montserrat_regular"
+                android:maxLines="3"
+                android:text="@{data.recipeBrief}"
+                android:textColor="@color/faint_grey_text"
+                android:textSize="@dimen/text_size_12"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txt_recipe_title"
+                tools:text="@string/lorem_brief" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
 </layout>
 

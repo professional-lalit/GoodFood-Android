@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.goodfood.app.R
 import com.goodfood.app.databinding.ActivityLoginBinding
 import com.goodfood.app.events.ClickEventMessage
+import com.goodfood.app.events.Message
 import com.goodfood.app.interfaces.Navigable
 import com.goodfood.app.ui.common.BaseActivity
 import com.goodfood.app.ui.common.BaseViewModel
@@ -18,6 +19,8 @@ import com.goodfood.app.ui.home.HomeActivity
 import com.goodfood.app.ui.signup.SignupActivity
 import com.goodfood.app.utils.Extensions.showToast
 import dagger.hilt.android.AndroidEntryPoint
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 @AndroidEntryPoint
 class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
@@ -67,5 +70,6 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>() {
     override fun onClickEvent(event: ClickEventMessage) {
 
     }
+
 
 }
