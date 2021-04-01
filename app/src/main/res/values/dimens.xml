@@ -7,6 +7,7 @@
     <dimen name="appbar_padding_top">8dp</dimen>
     <dimen name="action_bar_height">48dp</dimen>
 
+    <dimen name="dimen_size_0_5">.5dp</dimen>
     <dimen name="text_size_10">10sp</dimen>
     <dimen name="text_size_18">18sp</dimen>
     <dimen name="text_size_20">20sp</dimen>
@@ -37,5 +38,6 @@
     <dimen name="text_size_8">8sp</dimen>
     <dimen name="dimen_size_8">8dp</dimen>
     <dimen name="text_size_12">12sp</dimen>
+    <dimen name="text_size_13">13sp</dimen>
 
 </resources>

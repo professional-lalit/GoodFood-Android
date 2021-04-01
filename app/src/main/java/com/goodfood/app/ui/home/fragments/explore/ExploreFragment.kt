@@ -2,20 +2,17 @@ package com.goodfood.app.ui.home.fragments.explore
 
 import android.os.Bundle
 import android.view.*
-import androidx.fragment.app.Fragment
 import android.widget.Toast
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.goodfood.app.R
+import com.goodfood.app.common.Constants
 import com.goodfood.app.databinding.FragmentExploreBinding
 import com.goodfood.app.events.ClickEventMessage
 import com.goodfood.app.events.EventConstants
-import com.goodfood.app.events.Message
 import com.goodfood.app.events.sendEvent
+import com.goodfood.app.models.domain.BooleanQuestion
+import com.goodfood.app.models.domain.Inspiration
 import com.goodfood.app.models.domain.Recipe
 import com.goodfood.app.ui.common.BaseFragment
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 
 class ExploreFragment : BaseFragment() {
 
@@ -55,13 +52,50 @@ class ExploreFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val recipes = mutableListOf<Recipe>()
-        repeat(5) {
-            recipes.add(Recipe("Recipe $it", getString(R.string.lorem_brief), "", 15))
-        }
+        val list = mutableListOf<Any>()
 
-        val controller = RecipeController()
-        controller.setData(recipes)
+        list.add(
+            Recipe(
+                "Easy Breakfast Recipe -Nutri Vegetable Roastie",
+                getString(R.string.lorem_brief),
+                "${Constants.BASE_URL}recipe_images/veg-roastie.jpg",
+                15
+            )
+        )
+
+        list.add(
+            Recipe(
+                "New snack recipe | No Oven, No Maida, No baking powder & Soda | Easy&Simple Puff pastry | Snacks",
+                getString(R.string.lorem_brief),
+                "${Constants.BASE_URL}recipe_images/cheeze-puff.jpg",
+                0
+            )
+        )
+
+        list.add(
+            Recipe(
+                "Crispy Balls - Instant Snack to be made in 5 mins - Sooji/Semolina Snacks",
+                getString(R.string.lorem_brief),
+                "${Constants.BASE_URL}recipe_images/spicey-balls.jpg",
+                20
+            )
+        )
+
+        list.add(
+            Inspiration(
+                "When you eat food with your family and friends, it always tastes better!",
+                "${Constants.BASE_URL}recipe_images/inspiration.jpg"
+            )
+        )
+
+        list.add(
+            BooleanQuestion(
+                "Do you like fast food? Do want to learn the skills for Burgers, Pizzas, Fried Ribs, Chicken Breast?"
+            )
+        )
+
+        val controller = ExploreListController()
+        controller.setData(list)
         binding.recyclerRecipes.setController(controller)
     }
 

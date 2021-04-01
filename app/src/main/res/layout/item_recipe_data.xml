@@ -34,13 +34,12 @@
                 android:id="@+id/img_recipe_poster"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dimen_size_200"
-                android:adjustViewBounds="true"
-                android:scaleType="fitXY"
+                android:scaleType="centerCrop"
                 android:src="@drawable/dark_landscape_placeholder"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:loadImage="@{data.recipePoster}" />
+                app:setImage="@{data.recipePoster}" />
 
             <FrameLayout
                 android:layout_width="wrap_content"

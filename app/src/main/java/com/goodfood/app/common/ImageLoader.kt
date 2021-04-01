@@ -1,8 +1,16 @@
 package com.goodfood.app.common
 
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
+import android.os.Build
+import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import com.goodfood.app.R
 
 
@@ -38,11 +46,11 @@ object ImageLoader {
             if (it.isNotEmpty()) {
                 Glide.with(imageView.context)
                     .load(it)
-                    .placeholder(R.drawable.ic_profile_placeholder)
-                    .circleCrop()
+                    .placeholder(R.drawable.dark_landscape_placeholder)
                     .into(imageView)
             }
         }
     }
+
 
 }

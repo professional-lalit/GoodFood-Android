@@ -5,9 +5,13 @@ import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 import com.goodfood.app.events.ClickEventMessage
 import com.goodfood.app.events.sendClickEvent
+import com.goodfood.app.inspirationalData
 import com.goodfood.app.interfaces.IClickListener
+import com.goodfood.app.models.domain.BooleanQuestion
+import com.goodfood.app.models.domain.Inspiration
 import com.goodfood.app.models.domain.Recipe
 import com.goodfood.app.recipeData
+import com.goodfood.app.surveyData
 import org.greenrobot.eventbus.EventBus
 
 
@@ -20,11 +24,29 @@ import org.greenrobot.eventbus.EventBus
  * also if any suggestions they are welcomed at: `lalit.appsmail@gmail.com`
  * (please keep the subject as 'GoodFood Android Code Suggestion')
  */
-class RecipeController : TypedEpoxyController<List<Recipe>>() {
+class ExploreListController : TypedEpoxyController<List<Any>>() {
 
-    override fun buildModels(data: List<Recipe>?) {
-        data?.forEach {
-            addRecipe(it)
+    override fun buildModels(data: List<Any>) {
+        data.forEach {
+            when (it) {
+                is Recipe -> addRecipe(it)
+                is BooleanQuestion -> addBooleanQuestion(it)
+                is Inspiration -> addInspiration(it)
+            }
+        }
+    }
+
+    private fun addInspiration(itemData: Inspiration) {
+        inspirationalData {
+            id(itemData.hashCode())
+            data((itemData))
+        }
+    }
+
+    private fun addBooleanQuestion(itemData: BooleanQuestion) {
+        surveyData {
+            id(itemData.hashCode())
+            data(itemData)
         }
     }
 

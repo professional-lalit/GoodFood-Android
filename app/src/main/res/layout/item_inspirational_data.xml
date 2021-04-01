@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="data"
+            type="com.goodfood.app.models.domain.Inspiration" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_size_20"
+        app:cardCornerRadius="@dimen/dimen_size_5">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_size_200">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_size_200"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                app:setImage="@{data.backgroundImageUrl}"
+                tools:src="@drawable/dark_landscape_placeholder" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/gradient_black_overlay" />
+
+            <TextView
+                style="@style/BasicText"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="@dimen/dimen_size_5"
+                android:text="@{data.quote}"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_15"
+                tools:text="@string/lorem_title" />
+
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+</layout>

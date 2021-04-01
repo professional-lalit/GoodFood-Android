@@ -48,4 +48,12 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="create_recipe">Create Recipe</string>
+    <string name="title">Title</string>
+    <string name="short_desc">Short Description</string>
+    <string name="full_description">Full Description</string>
+    <string name="photos">Photos</string>
+    <string name="add_photo">Add Photo</string>
+    <string name="add_video">Add Video</string>
+    <string name="videos">Videos</string>
+    <string name="optional_survey">Optional Survey</string>
 </resources>

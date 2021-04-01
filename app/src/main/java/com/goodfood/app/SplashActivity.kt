@@ -21,7 +21,6 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
 
         Handler(mainLooper).postDelayed({
-
             if(prefs.accessToken?.isNotEmpty() == true){
                 val intent = Intent(this, HomeActivity::class.java)
                 startActivity(intent)

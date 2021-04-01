@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="data"
+            type="com.goodfood.app.models.domain.BooleanQuestion" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_size_20"
+        app:cardCornerRadius="@dimen/dimen_size_5">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/yellow_01"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="@dimen/dimen_size_20">
+
+            <TextView
+                style="@style/BasicText"
+                android:layout_width="match_parent"
+                android:text="@string/optional_survey"
+                android:textSize="@dimen/text_size_8" />
+
+            <TextView
+                android:id="@+id/txt_question"
+                style="@style/BasicText"
+                android:text="@{data.question}"
+                android:textSize="@dimen/text_size_15"
+                tools:text="Do you like fast food? Do want to learn the skills for Burgers, Pizzas, Fried Ribs, Chicken Breast?" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_size_0_5"
+                android:layout_marginTop="@dimen/dimen_size_20"
+                android:background="@color/faint_grey_text" />
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimen_size_20"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rb_yes"
+                    style="@style/BasicText"
+                    android:layout_marginEnd="@dimen/dimen_size_50"
+                    android:text="@string/yes"
+                    android:textSize="@dimen/text_size_13" />
+
+                <RadioButton
+                    android:id="@+id/rb_no"
+                    style="@style/BasicText"
+                    android:text="@string/no"
+                    android:textSize="@dimen/text_size_13" />
+
+            </RadioGroup>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

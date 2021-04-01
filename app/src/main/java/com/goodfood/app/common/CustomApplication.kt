@@ -1,6 +1,7 @@
 package com.goodfood.app.common
 
 import android.app.Application
+import android.util.DisplayMetrics
 import dagger.hilt.android.HiltAndroidApp
 
 
@@ -15,10 +16,15 @@ import dagger.hilt.android.HiltAndroidApp
  */
 
 @HiltAndroidApp
-class CustomApplication: Application() {
+class CustomApplication : Application() {
+
+    companion object {
+        private lateinit var mInstance: CustomApplication
+    }
 
     override fun onCreate() {
         super.onCreate()
+        mInstance = this
     }
 
 }

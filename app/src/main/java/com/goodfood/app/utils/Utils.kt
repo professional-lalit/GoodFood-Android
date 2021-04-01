@@ -1,6 +1,8 @@
 package com.goodfood.app.utils
 
+import android.util.DisplayMetrics
 import android.util.Patterns
+import com.goodfood.app.common.CustomApplication
 
 
 /**

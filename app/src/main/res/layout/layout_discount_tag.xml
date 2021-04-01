@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="discount"
             type="Integer" />
@@ -12,7 +14,8 @@
 
     <RelativeLayout
         android:layout_width="@dimen/dimen_size_50"
-        android:layout_height="@dimen/dimen_size_50">
+        android:layout_height="@dimen/dimen_size_50"
+        android:visibility="@{discount == 0 ? View.GONE : View.VISIBLE}">
 
         <ImageView
             android:id="@+id/img_discount_tag"
