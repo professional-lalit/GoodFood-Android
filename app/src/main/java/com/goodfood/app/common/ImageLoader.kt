@@ -1,16 +1,9 @@
 package com.goodfood.app.common
 
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
-import android.os.Build
-import android.view.ViewGroup
+import android.net.Uri
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.target.SimpleTarget
-import com.bumptech.glide.request.transition.Transition
 import com.goodfood.app.R
 
 
@@ -49,6 +42,17 @@ object ImageLoader {
                     .placeholder(R.drawable.dark_landscape_placeholder)
                     .into(imageView)
             }
+        }
+    }
+
+    @JvmStatic
+    @BindingAdapter("app:loadImageFile")
+    fun setImageFile(imageView: ImageView, uri: String?) {
+        if (uri?.isNotEmpty() == true) {
+            Glide.with(imageView.context)
+                .load(Uri.parse(uri))
+                .placeholder(R.drawable.dark_landscape_placeholder)
+                .into(imageView)
         }
     }
 

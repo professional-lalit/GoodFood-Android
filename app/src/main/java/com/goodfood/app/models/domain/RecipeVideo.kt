@@ -14,6 +14,6 @@ import android.net.Uri
  */
 data class RecipeVideo(
     private val videoUri: Uri? = null,
-    private val uploadState: MediaUploadState,
-    private val isActionItem: Boolean
+    var state: MediaState,
+    val isActionItem: Boolean
 )

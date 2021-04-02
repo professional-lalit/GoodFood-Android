@@ -3,6 +3,7 @@ package com.goodfood.app.utils
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.goodfood.app.ui.common.BaseActivity
+import com.goodfood.app.ui.common.BaseFragment
 
 
 /**
@@ -18,6 +19,10 @@ object Extensions {
 
     fun AppCompatActivity.showToast(msg: String) {
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+    }
+
+    fun BaseFragment.showToast(msg: String) {
+        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
     }
 
 }

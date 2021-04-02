@@ -3,9 +3,7 @@ package com.goodfood.app.common
 import android.content.Context
 import android.os.Environment
 import android.util.Log
-import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.File
-import javax.inject.Inject
 
 
 /**
@@ -25,10 +23,11 @@ class DirectoryManager constructor(private val context: Context) {
 
     companion object {
         private var PROFILE_IMAGE_DIRECTORY_PATH = "MULTIMEDIA/PROFILE/IMAGES"
+        private var CREATE_RECIPE_IMAGE_DIRECTORY_PATH = "MULTIMEDIA/RECIPE/CREATE/IMAGES"
         private var PROFILE_PIC_FILE_NAME = "profile_pic.jpg"
     }
 
-    private fun getStoragePath(): File {
+    private fun getProfileImagesStoragePath(): File {
         return if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()) {
             File(context.getExternalFilesDir(null), PROFILE_IMAGE_DIRECTORY_PATH)
         } else {
@@ -36,13 +35,21 @@ class DirectoryManager constructor(private val context: Context) {
         }
     }
 
-    fun createImageFile() {
-        val file = getStoragePath()
+    private fun getRecipeImagesStoragePath(): File {
+        return if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()) {
+            File(context.getExternalFilesDir(null), CREATE_RECIPE_IMAGE_DIRECTORY_PATH)
+        } else {
+            File(context.filesDir, CREATE_RECIPE_IMAGE_DIRECTORY_PATH)
+        }
+    }
+
+    fun createProfileImageFile() {
+        val file = getProfileImagesStoragePath()
         if (!file.exists()) {
             file.mkdirs()
         }
         val imgFile = File(file, "profile_pic.jpg")
-        if(imgFile.exists()){
+        if (imgFile.exists()) {
             imgFile.delete()
         }
         imgFile.createNewFile()
@@ -50,7 +57,24 @@ class DirectoryManager constructor(private val context: Context) {
     }
 
     fun getProfileImageFile(): File {
-        return File("${getStoragePath()}/${PROFILE_PIC_FILE_NAME}")
+        return File("${getProfileImagesStoragePath()}/${PROFILE_PIC_FILE_NAME}")
+    }
+
+    fun createRecipeImageFile(desiredFileName: String) {
+        val file = getRecipeImagesStoragePath()
+        if (!file.exists()) {
+            file.mkdirs()
+        }
+        val imgFile = File(file, "$desiredFileName.jpg")
+        if (imgFile.exists()) {
+            imgFile.delete()
+        }
+        imgFile.createNewFile()
+        Log.d(javaClass.simpleName, "file created at: ${imgFile.absolutePath}")
+    }
+
+    fun getRecipeImageFile(fileName: String): File {
+        return File("${getRecipeImagesStoragePath()}/${fileName}")
     }
 
 

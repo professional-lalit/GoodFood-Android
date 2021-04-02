@@ -1,6 +1,9 @@
-package com.goodfood.app.models.domain
+package com.goodfood.app.ui.home.fragments.create_recipe
 
-import android.net.Uri
+import com.goodfood.app.models.domain.RecipePhoto
+import com.goodfood.app.models.domain.RecipeVideo
+import com.goodfood.app.ui.common.BaseViewModel
+import java.io.File
 
 
 /**
@@ -12,8 +15,9 @@ import android.net.Uri
  * also if any suggestions they are welcomed at: `lalit.appsmail@gmail.com`
  * (please keep the subject as 'GoodFood Android Code Suggestion')
  */
-data class RecipePhoto(
-    var imgUri: Uri? = null,
-    var state: MediaState,
-    val isActionItem: Boolean
-){}
+class CreateRecipeViewModel: BaseViewModel() {
+
+    private val photosMap = mapOf<RecipePhoto, File>()
+    private val videosMap = mapOf<RecipeVideo, File>()
+
+}

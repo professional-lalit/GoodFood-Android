@@ -6,14 +6,12 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.databinding.ViewDataBinding
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.goodfood.app.R
 import com.goodfood.app.common.Constants
-import com.goodfood.app.common.ImageManager
+import com.goodfood.app.common.multimedia_managers.ProfileImageManager
 import com.goodfood.app.databinding.ActivitySignupBinding
 import com.goodfood.app.events.ClickEventMessage
-import com.goodfood.app.events.Message
 import com.goodfood.app.interfaces.Navigable
 import com.goodfood.app.ui.common.BaseActivity
 import com.goodfood.app.ui.common.BaseViewModel
@@ -26,8 +24,6 @@ import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import dagger.hilt.android.AndroidEntryPoint
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import javax.inject.Inject
 
 
@@ -49,14 +45,14 @@ class SignupActivity : BaseActivity<ActivitySignupBinding, SignupViewModel>() {
     lateinit var dialogManager: DialogManager
 
     @Inject
-    lateinit var imageManager: ImageManager
+    lateinit var profileImageManager: ProfileImageManager
 
     private val signupViewModel by viewModels<SignupViewModel>()
 
     override fun setUp() {
         binding = ActivitySignupBinding.inflate(layoutInflater)
         viewModel = signupViewModel
-        imageManager.setImageLoadedCallback { file ->
+        profileImageManager.setImageLoadedCallback { file ->
             viewModel.setFileToUpload(file)
             val bmp = BitmapFactory.decodeFile(file.absolutePath)
             Glide.with(this)
@@ -159,9 +155,9 @@ class SignupActivity : BaseActivity<ActivitySignupBinding, SignupViewModel>() {
     private fun showProfileImageDialog() {
         dialogManager.showProfilePicDialog(supportFragmentManager) { selection ->
             if (selection == Constants.CAMERA_SELECTED) {
-                imageManager.initCameraFlow()
+                profileImageManager.initCameraFlow()
             } else {
-                imageManager.initGalleryFlow()
+                profileImageManager.initGalleryFlow()
             }
         }
     }

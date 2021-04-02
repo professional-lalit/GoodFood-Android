@@ -1,24 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <variable
             name="data"
             type="com.goodfood.app.models.domain.RecipePhoto" />
+
+        <variable
+            name="clickListener"
+            type="com.goodfood.app.interfaces.IClickListener" />
     </data>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="@dimen/dimen_size_50"
-        android:layout_height="@dimen/dimen_size_50">
+        android:layout_width="@dimen/dimen_size_100"
+        android:layout_height="@dimen/dimen_size_100"
+        android:layout_margin="@dimen/dimen_size_5">
 
         <ImageView
-            app:setActionItemIcon="@{data}"
             android:id="@+id/img_recipe_photo"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:onClick="@{(view) -> clickListener.onClick(view, data)}"
+            android:scaleType="centerCrop"
+            app:loadImageFile="@{data.imgUri.toString()}"
+            app:setActionItemIcon="@{data}"
             tools:src="@drawable/ic_camera" />
 
     </RelativeLayout>

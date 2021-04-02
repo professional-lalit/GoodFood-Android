@@ -10,6 +10,6 @@ package com.goodfood.app.models.domain
  * also if any suggestions they are welcomed at: `lalit.appsmail@gmail.com`
  * (please keep the subject as 'GoodFood Android Code Suggestion')
  */
-enum class MediaUploadState {
-    NOT_UPLOADING, UPLOADING, UPLOADED
+enum class MediaState {
+    NOT_UPLOADING, MEDIA_TO_BE_SET, UPLOADING, UPLOADED
 }

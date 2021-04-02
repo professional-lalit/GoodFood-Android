@@ -3,7 +3,8 @@ package com.goodfood.app.di.modules
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import com.goodfood.app.common.DirectoryManager
-import com.goodfood.app.common.ImageManager
+import com.goodfood.app.common.multimedia_managers.ProfileImageManager
+import com.goodfood.app.common.multimedia_managers.RecipeMultimediaManager
 import com.goodfood.app.ui.common.dialogs.DialogManager
 import dagger.Module
 import dagger.Provides
@@ -40,10 +41,18 @@ class ActivityHelperModule {
     }
 
     @Provides
-    fun provideImageManager(
+    fun provideProfileImageManager(
         @ActivityContext context: Context,
         directoryManager: DirectoryManager
-    ): ImageManager {
-        return ImageManager(context as AppCompatActivity, directoryManager)
+    ): ProfileImageManager {
+        return ProfileImageManager(context as AppCompatActivity, directoryManager)
+    }
+
+    @Provides
+    fun provideRecipeImageManager(
+        @ActivityContext context: Context,
+        directoryManager: DirectoryManager
+    ): RecipeMultimediaManager {
+        return RecipeMultimediaManager(context as AppCompatActivity, directoryManager)
     }
 }

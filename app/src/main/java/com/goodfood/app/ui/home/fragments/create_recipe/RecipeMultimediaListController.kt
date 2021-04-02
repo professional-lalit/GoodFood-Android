@@ -1,6 +1,10 @@
 package com.goodfood.app.ui.home.fragments.create_recipe
 
+import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
+import com.goodfood.app.events.sendClickEvent
+import com.goodfood.app.interfaces.IClickListener
+import com.goodfood.app.models.domain.MediaState
 import com.goodfood.app.models.domain.RecipePhoto
 import com.goodfood.app.models.domain.RecipeVideo
 import com.goodfood.app.recipePhotoData
@@ -35,6 +39,14 @@ class RecipeMultimediaListController : TypedEpoxyController<List<Any>>() {
         recipePhotoData {
             id(itemData.hashCode())
             data(itemData)
+            clickListener(object : IClickListener {
+                override fun onClick(view: View, model: Any?) {
+                    sendClickEvent(viewId = view.id, model)
+                    if (!itemData.isActionItem) {
+                        itemData.state = MediaState.MEDIA_TO_BE_SET
+                    }
+                }
+            })
         }
     }
 
@@ -42,6 +54,14 @@ class RecipeMultimediaListController : TypedEpoxyController<List<Any>>() {
         recipeVideoData {
             id(itemData.hashCode())
             data(itemData)
+            clickListener(object : IClickListener {
+                override fun onClick(view: View, model: Any?) {
+                    sendClickEvent(viewId = view.id, model)
+                    if (!itemData.isActionItem) {
+                        itemData.state = MediaState.MEDIA_TO_BE_SET
+                    }
+                }
+            })
         }
     }
 

@@ -8,8 +8,9 @@ import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import com.goodfood.app.R
+import com.goodfood.app.common.multimedia_managers.ProfileImageManager
+import com.goodfood.app.common.multimedia_managers.RecipeMultimediaManager
 import com.goodfood.app.databinding.ActivityHomeBinding
 import com.goodfood.app.databinding.HomeDrawerHeaderBinding
 import com.goodfood.app.events.ClickEventMessage
@@ -52,6 +53,9 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
 
     @Inject
     lateinit var dialogManager: DialogManager
+
+    @Inject
+    lateinit var recipeMultimediaManager: RecipeMultimediaManager
 
     private val fragNavController: FragNavController =
         FragNavController(supportFragmentManager, R.id.container)
