@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="data"
+            type="com.goodfood.app.models.domain.RecipeVideo" />
+    </data>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="@dimen/dimen_size_50"
+        android:layout_height="@dimen/dimen_size_50">
+
+        <ImageView
+            android:id="@+id/img_recipe_video"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:setActionItemIcon="@{data}"
+            tools:src="@drawable/ic_movie_clapper" />
+
+    </RelativeLayout>
+
+</layout>
