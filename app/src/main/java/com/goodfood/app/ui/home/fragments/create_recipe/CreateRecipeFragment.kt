@@ -84,9 +84,6 @@ class CreateRecipeFragment : BaseFragment() {
             if (photoItemToBeSet != null) {
                 photoItemToBeSet.imgUri = Uri.fromFile(file)
                 photoItemToBeSet.state = MediaState.NOT_UPLOADING
-                recipePhotoListController.addInterceptor {models ->
-                    recipePhotoListController.requestModelBuild()
-                }
             } else {
                 val photoItemToAdd =
                     RecipePhoto(
@@ -94,8 +91,8 @@ class CreateRecipeFragment : BaseFragment() {
                         false
                     )
                 photos.add(0, photoItemToAdd)
-                recipePhotoListController.setData(photos)
             }
+            recipePhotoListController.setData(photos)
             dialogManager.closeDialog()
         }
     }
