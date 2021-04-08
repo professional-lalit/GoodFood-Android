@@ -29,7 +29,6 @@
             android:background="@color/white"
             android:onClick="@{(view) -> itemClickListener.onClick(view, data)}">
 
-
             <ImageView
                 android:id="@+id/img_recipe_poster"
                 android:layout_width="match_parent"

@@ -40,7 +40,7 @@ class HeaderInterceptor @Inject constructor(val prefs: Prefs) : Interceptor {
             .newBuilder()
             .addHeader("Content-Type", "application/json")
             .addHeader("Content-Length", contentLength.toString())
-        if (prefs.accessToken != null && prefs.accessToken!!.isNotEmpty()) {
+        if (prefs.accessToken?.isNotEmpty() == true) {
             requestBuilder.addHeader("Authorization", "Bearer " + prefs.accessToken!!)
         }
         return try {

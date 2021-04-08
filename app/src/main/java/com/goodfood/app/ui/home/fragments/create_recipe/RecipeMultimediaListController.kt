@@ -1,7 +1,13 @@
 package com.goodfood.app.ui.home.fragments.create_recipe
 
 import android.view.View
+import androidx.databinding.ViewDataBinding
+import com.airbnb.epoxy.DataBindingEpoxyModel
+import com.airbnb.epoxy.EpoxyModel
+import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.TypedEpoxyController
+import com.goodfood.app.R
+import com.goodfood.app.databinding.ItemRecipePhotoDataBinding
 import com.goodfood.app.events.sendClickEvent
 import com.goodfood.app.interfaces.IClickListener
 import com.goodfood.app.models.domain.MediaState
@@ -36,18 +42,19 @@ class RecipeMultimediaListController : TypedEpoxyController<List<Any>>() {
     }
 
     private fun addPhoto(itemData: RecipePhoto) {
-        recipePhotoData {
-            id(itemData.hashCode())
-            data(itemData)
-            clickListener(object : IClickListener {
-                override fun onClick(view: View, model: Any?) {
-                    sendClickEvent(viewId = view.id, model)
-                    if (!itemData.isActionItem) {
-                        itemData.state = MediaState.MEDIA_TO_BE_SET
-                    }
+        val model = RecipePhotoModel_().id(itemData.hashCode())
+        model.recipePhoto = itemData
+        model.clickListener = object : IClickListener {
+            override fun onClick(view: View, model: Any?) {
+                sendClickEvent(viewId = view.id, model)
+                if (!itemData.isActionItem) {
+                    itemData.state = MediaState.MEDIA_TO_BE_SET
+                }else{
+                    itemData.state = MediaState.NOT_UPLOADING
                 }
-            })
+            }
         }
+        model.addTo(this)
     }
 
     private fun addVideo(itemData: RecipeVideo) {
@@ -64,6 +71,20 @@ class RecipeMultimediaListController : TypedEpoxyController<List<Any>>() {
             })
         }
     }
+}
 
+@EpoxyModelClass
+abstract class RecipePhotoModel() : DataBindingEpoxyModel() {
+    var recipePhoto: RecipePhoto? = null
+    var clickListener: IClickListener? = null
 
+    override fun getDefaultLayout(): Int {
+        return R.layout.item_recipe_photo_data
+    }
+
+    override fun setDataBindingVariables(binding: ViewDataBinding?) {
+        binding as ItemRecipePhotoDataBinding
+        binding.data = recipePhoto
+        binding.clickListener = clickListener
+    }
 }

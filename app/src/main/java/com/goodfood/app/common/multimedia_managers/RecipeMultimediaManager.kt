@@ -32,6 +32,10 @@ class RecipeMultimediaManager constructor(
 
     var desiredRecipeImageFileName = ""
 
+    init {
+        directoryManager.clearSavedData()
+    }
+
     override val cameraResult =
         context.registerForActivityResult(CameraActivityContract()) { result ->
             val file = directoryManager.getRecipeImageFile(desiredRecipeImageFileName)

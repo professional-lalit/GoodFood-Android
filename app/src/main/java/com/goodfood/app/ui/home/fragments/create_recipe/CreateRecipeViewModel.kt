@@ -3,7 +3,9 @@ package com.goodfood.app.ui.home.fragments.create_recipe
 import com.goodfood.app.models.domain.RecipePhoto
 import com.goodfood.app.models.domain.RecipeVideo
 import com.goodfood.app.ui.common.BaseViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import java.io.File
+import javax.inject.Inject
 
 
 /**
@@ -15,7 +17,8 @@ import java.io.File
  * also if any suggestions they are welcomed at: `lalit.appsmail@gmail.com`
  * (please keep the subject as 'GoodFood Android Code Suggestion')
  */
-class CreateRecipeViewModel: BaseViewModel() {
+@HiltViewModel
+class CreateRecipeViewModel @Inject constructor(): BaseViewModel() {
 
     private val photosMap = mapOf<RecipePhoto, File>()
     private val videosMap = mapOf<RecipeVideo, File>()

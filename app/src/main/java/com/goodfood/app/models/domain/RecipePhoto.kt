@@ -16,4 +16,4 @@ data class RecipePhoto(
     var imgUri: Uri? = null,
     var state: MediaState,
     val isActionItem: Boolean
-){}
+)

@@ -80,19 +80,22 @@ class CreateRecipeFragment : BaseFragment() {
 
             val photoItemToBeSet = photos.find { recipePhoto ->
                 recipePhoto.state == MediaState.MEDIA_TO_BE_SET
-            }
+            }?.copy()
             if (photoItemToBeSet != null) {
+                val index = photos.indexOf(photoItemToBeSet)
                 photoItemToBeSet.imgUri = Uri.fromFile(file)
                 photoItemToBeSet.state = MediaState.NOT_UPLOADING
+                recipePhotoListController.setData(photos)
             } else {
                 val photoItemToAdd =
                     RecipePhoto(
-                        Uri.fromFile(file), MediaState.NOT_UPLOADING,
+                        Uri.fromFile(file),
+                        MediaState.NOT_UPLOADING,
                         false
                     )
                 photos.add(0, photoItemToAdd)
+                recipePhotoListController.setData(photos)
             }
-            recipePhotoListController.setData(photos)
             dialogManager.closeDialog()
         }
     }
@@ -137,7 +140,7 @@ class CreateRecipeFragment : BaseFragment() {
         val itemData = event.payload
         when (event.viewId) {
             R.id.img_recipe_photo -> {
-                val fileName = "RECIPE_IMG_${photos.indexOf(itemData)}.jpg"
+                val fileName = "RECIPE_IMG_${photos.indexOf(itemData)}"
                 checkPermissionsAndShowDialog(fileName)
             }
             R.id.img_recipe_video -> {

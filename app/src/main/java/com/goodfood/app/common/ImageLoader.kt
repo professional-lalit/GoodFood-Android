@@ -1,10 +1,12 @@
 package com.goodfood.app.common
 
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.goodfood.app.R
+import java.io.File
 
 
 /**
@@ -49,8 +51,10 @@ object ImageLoader {
     @BindingAdapter("app:loadImageFile")
     fun setImageFile(imageView: ImageView, uri: String?) {
         if (uri?.isNotEmpty() == true) {
+            val fileUri = Uri.parse(uri)
+            val bmp = BitmapFactory.decodeFile(fileUri.path)
             Glide.with(imageView.context)
-                .load(Uri.parse(uri))
+                .load(bmp)
                 .placeholder(R.drawable.dark_landscape_placeholder)
                 .into(imageView)
         }

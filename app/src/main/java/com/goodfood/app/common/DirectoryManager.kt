@@ -2,7 +2,11 @@ package com.goodfood.app.common
 
 import android.content.Context
 import android.os.Environment
+import android.os.FileUtils
 import android.util.Log
+import dagger.hilt.android.scopes.ActivityScoped
+import dagger.hilt.android.scopes.FragmentScoped
+import dagger.hilt.android.scopes.ViewModelScoped
 import java.io.File
 
 
@@ -19,6 +23,7 @@ import java.io.File
 /**
  * Manages all the low level file handling, typically for an activity
  */
+
 class DirectoryManager constructor(private val context: Context) {
 
     companion object {
@@ -74,7 +79,21 @@ class DirectoryManager constructor(private val context: Context) {
     }
 
     fun getRecipeImageFile(fileName: String): File {
-        return File("${getRecipeImagesStoragePath()}/${fileName}")
+        return File("${getRecipeImagesStoragePath()}/${fileName}.jpg")
+    }
+
+    fun clearSavedData() {
+        deleteRecursive(getRecipeImagesStoragePath())
+    }
+
+    private fun deleteRecursive(file: File) {
+        val dir = getRecipeImagesStoragePath()
+        if (file.isDirectory) {
+            for (childFile in file.listFiles()) {
+                deleteRecursive(childFile)
+            }
+        }
+        file.delete()
     }
 
 

@@ -75,6 +75,7 @@ abstract class BaseMultimediaManager(open val context: Context, open val directo
             output.write(buffer, 0, n)
             count += n.toLong()
         }
+        output.flush()
         return count
     }
 
