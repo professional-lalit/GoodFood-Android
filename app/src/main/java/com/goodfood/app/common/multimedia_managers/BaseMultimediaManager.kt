@@ -27,10 +27,10 @@ import java.io.OutputStream
  * also if any suggestions they are welcomed at: `lalit.appsmail@gmail.com`
  * (please keep the subject as 'GoodFood Android Code Suggestion')
  */
-abstract class BaseMultimediaManager(open val context: Context, open val directoryManager: DirectoryManager) {
+abstract class BaseMultimediaManager(open val directoryManager: DirectoryManager) {
 
-    protected abstract val cameraResult: ActivityResultLauncher<Uri>
-    protected abstract val galleryResult: ActivityResultLauncher<Any?>
+    protected abstract val cameraResult: ActivityResultLauncher<Uri>?
+    protected abstract val galleryResult: ActivityResultLauncher<Any?>?
 
     class CameraActivityContract : ActivityResultContract<Uri, Any?>() {
 

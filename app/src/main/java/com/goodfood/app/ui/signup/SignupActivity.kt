@@ -52,7 +52,7 @@ class SignupActivity : BaseActivity<ActivitySignupBinding, SignupViewModel>() {
     override fun setUp() {
         binding = ActivitySignupBinding.inflate(layoutInflater)
         viewModel = signupViewModel
-        profileImageManager.setImageLoadedCallback { file ->
+        profileImageManager.setImageLoadedCallback() { file ->
             viewModel.setFileToUpload(file)
             val bmp = BitmapFactory.decodeFile(file.absolutePath)
             Glide.with(this)

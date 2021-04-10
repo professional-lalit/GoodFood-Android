@@ -1,6 +1,7 @@
 package com.goodfood.app.ui.home.fragments.create_recipe
 
 import android.Manifest
+import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.goodfood.app.R
 import com.goodfood.app.common.Constants
+import com.goodfood.app.common.multimedia_managers.RecipeMultimediaManager
 import com.goodfood.app.databinding.FragmentCreateRecipeBinding
 import com.goodfood.app.events.ClickEventMessage
 import com.goodfood.app.models.domain.MediaState
@@ -20,6 +22,7 @@ import com.goodfood.app.models.domain.RecipeVideo
 import com.goodfood.app.ui.common.BaseFragment
 import com.goodfood.app.ui.common.dialogs.DialogManager
 import com.goodfood.app.ui.home.HomeActivity
+import com.goodfood.app.utils.ActivityLifeObserver
 import com.goodfood.app.utils.Extensions.showToast
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
@@ -34,6 +37,9 @@ class CreateRecipeFragment : BaseFragment() {
 
     @Inject
     lateinit var dialogManager: DialogManager
+
+    @Inject
+    lateinit var recipeMultimediaManager: RecipeMultimediaManager
 
     private lateinit var binding: FragmentCreateRecipeBinding
 
@@ -72,30 +78,16 @@ class CreateRecipeFragment : BaseFragment() {
         setViews()
 
         setUpListControllers()
+
+        setUpImageFileCallbackAndRegisterResults()
+    }
+
+    override fun onActivityCreated() {
+
     }
 
     private fun setViews() {
-        (requireActivity() as HomeActivity).recipeMultimediaManager.setImageLoadedCallback { file ->
-            val photoItemToBeSet = photos.find { recipePhoto ->
-                recipePhoto.state == MediaState.MEDIA_TO_BE_SET
-            }
-            if (photoItemToBeSet != null) {
-                photoItemToBeSet.imgUri = Uri.fromFile(file)
-                photoItemToBeSet.state = MediaState.NOT_UPLOADING
-                recipePhotoListController.setData(photos)
-            } else {
-                val photoItemToAdd =
-                    RecipePhoto(
-                        Uri.fromFile(file),
-                        MediaState.NOT_UPLOADING,
-                        false
-                    )
-                photos.add(0, photoItemToAdd)
-                recipePhotoListController.setData(photos)
-            }
-            dialogManager.closeDialog()
-        }
-        binding.imgPickPhoto.setOnClickListener {
+        binding.btnPickPhoto.setOnClickListener {
             checkPermissionsAndShowDialog()
         }
     }
@@ -135,10 +127,33 @@ class CreateRecipeFragment : BaseFragment() {
     private fun showImageDialog() {
         dialogManager.showProfilePicDialog(childFragmentManager) { selection ->
             if (selection == Constants.CAMERA_SELECTED) {
-                (requireActivity() as HomeActivity).recipeMultimediaManager.initCameraFlow()
+                recipeMultimediaManager.initCameraFlow()
             } else {
-                (requireActivity() as HomeActivity).recipeMultimediaManager.initGalleryFlow()
+                recipeMultimediaManager.initGalleryFlow()
             }
+        }
+    }
+
+    private fun setUpImageFileCallbackAndRegisterResults() {
+        recipeMultimediaManager.setImageLoadedCallback() { file ->
+            val photoItemToBeSet = photos.find { recipePhoto ->
+                recipePhoto.state == MediaState.MEDIA_TO_BE_SET
+            }
+            if (photoItemToBeSet != null) {
+                photoItemToBeSet.imgUri = Uri.fromFile(file)
+                photoItemToBeSet.state = MediaState.NOT_UPLOADING
+                recipePhotoListController.setData(photos)
+            } else {
+                val photoItemToAdd =
+                    RecipePhoto(
+                        Uri.fromFile(file),
+                        MediaState.NOT_UPLOADING,
+                        false
+                    )
+                photos.add(0, photoItemToAdd)
+                recipePhotoListController.setData(photos)
+            }
+            dialogManager.closeDialog()
         }
     }
 
@@ -156,7 +171,7 @@ class CreateRecipeFragment : BaseFragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        (requireActivity() as HomeActivity).recipeMultimediaManager.deleteCreateRecipeImageFiles()
+        recipeMultimediaManager.deleteCreateRecipeImageFiles()
     }
 
 }

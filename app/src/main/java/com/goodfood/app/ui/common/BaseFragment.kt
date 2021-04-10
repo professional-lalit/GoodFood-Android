@@ -1,7 +1,9 @@
 package com.goodfood.app.ui.common
 
+import android.content.Context
 import androidx.fragment.app.Fragment
 import com.goodfood.app.events.ClickEventMessage
+import com.goodfood.app.utils.ActivityLifeObserver
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -18,6 +20,13 @@ import org.greenrobot.eventbus.ThreadMode
  */
 abstract class BaseFragment : Fragment() {
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        requireActivity().lifecycle.addObserver(ActivityLifeObserver {
+            onActivityCreated()
+        })
+    }
+
     override fun onStart() {
         super.onStart()
         EventBus.getDefault().register(this)
@@ -32,4 +41,6 @@ abstract class BaseFragment : Fragment() {
     open fun onClickEvent(event: ClickEventMessage){
 
     }
+
+    abstract fun onActivityCreated()
 }

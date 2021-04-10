@@ -49,6 +49,10 @@ class ExploreFragment : BaseFragment() {
         return binding.root
     }
 
+    override fun onActivityCreated() {
+
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

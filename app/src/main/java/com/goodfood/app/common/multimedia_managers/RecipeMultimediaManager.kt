@@ -1,13 +1,16 @@
 package com.goodfood.app.common.multimedia_managers
 
+import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
+import androidx.fragment.app.FragmentActivity
 import com.goodfood.app.common.DirectoryManager
 import com.goodfood.app.utils.GenericFileProvider
+import dagger.hilt.android.qualifiers.ActivityContext
 import java.io.File
 
 
@@ -21,14 +24,11 @@ import java.io.File
  * (please keep the subject as 'GoodFood Android Code Suggestion')
  */
 class RecipeMultimediaManager constructor(
-    context: AppCompatActivity,
+    private val context: AppCompatActivity,
     directoryManager: DirectoryManager
-) : BaseMultimediaManager(context, directoryManager) {
+) : BaseMultimediaManager(directoryManager) {
 
     private var imageLoadedCallback: ((File) -> Unit)? = null
-    fun setImageLoadedCallback(imageLoadedCallback: (File) -> Unit) {
-        this.imageLoadedCallback = imageLoadedCallback
-    }
 
     override val cameraResult =
         context.registerForActivityResult(CameraActivityContract()) { result ->
@@ -46,6 +46,11 @@ class RecipeMultimediaManager constructor(
                 imageLoadedCallback?.invoke(file)
             }
         }
+
+    fun setImageLoadedCallback(imageLoadedCallback: (File) -> Unit) {
+        this.imageLoadedCallback = imageLoadedCallback
+    }
+
 
     override fun copyFile(resultUri: Uri, file: File?) {
         val inputStream = context.contentResolver.openInputStream(resultUri)!!
@@ -73,7 +78,7 @@ class RecipeMultimediaManager constructor(
         galleryResult.launch(null)
     }
 
-    fun deleteCreateRecipeImageFiles(){
+    fun deleteCreateRecipeImageFiles() {
         directoryManager.deleteAllSavedCreateRecipeImages()
     }
 

@@ -63,18 +63,17 @@
                     android:id="@+id/recycler_recipe_photos"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:nestedScrollingEnabled="false"
                     android:layout_marginTop="@dimen/dimen_size_10"
-                    tools:listitem="@layout/item_recipe_photo_data"
+                    android:nestedScrollingEnabled="false"
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     app:spanCount="3" />
 
-                <ImageView
-                    android:id="@+id/img_pick_photo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <Button
+                    android:id="@+id/btn_pick_photo"
+                    style="@style/BasicButton"
+                    android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/dimen_size_10"
-                    android:src="@drawable/ic_camera" />
+                    android:text="@string/add_photo" />
 
             </LinearLayout>
 
@@ -100,14 +99,17 @@
                     android:id="@+id/recycler_recipe_videos"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dimen_size_10" />
-
-                <ImageView
-                    android:id="@+id/img_pick_video"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dimen_size_10"
-                    android:src="@drawable/ic_movie_clapper" />
+                    android:nestedScrollingEnabled="false"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:spanCount="3" />
+
+                <Button
+                    android:id="@+id/btn_pick_video"
+                    style="@style/BasicButton"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/dimen_size_10"
+                    android:text="@string/add_video" />
             </LinearLayout>
 
         </LinearLayout>

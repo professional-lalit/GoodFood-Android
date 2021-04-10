@@ -11,6 +11,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.android.qualifiers.ActivityContext
+import dagger.hilt.android.qualifiers.ApplicationContext
 
 
 /**
@@ -55,4 +56,5 @@ class ActivityHelperModule {
     ): RecipeMultimediaManager {
         return RecipeMultimediaManager(context as AppCompatActivity, directoryManager)
     }
+
 }

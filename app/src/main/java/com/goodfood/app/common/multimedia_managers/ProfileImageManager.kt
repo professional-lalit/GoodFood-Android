@@ -1,5 +1,6 @@
 package com.goodfood.app.common.multimedia_managers
 
+import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -20,18 +21,13 @@ import java.io.File
  * (please keep the subject as 'GoodFood Android Code Suggestion')
  */
 class ProfileImageManager constructor(
-    context: AppCompatActivity,
+    val context: AppCompatActivity,
     directoryManager: DirectoryManager
-) : BaseMultimediaManager(context, directoryManager) {
-
-    private var imageLoadedCallback: ((File) -> Unit)? = null
-    fun setImageLoadedCallback(imageLoadedCallback: (File) -> Unit) {
-        this.imageLoadedCallback = imageLoadedCallback
-    }
+) : BaseMultimediaManager(directoryManager) {
 
     override val cameraResult =
         context.registerForActivityResult(CameraActivityContract()) { result ->
-            val file = directoryManager.getProfileImageFile()
+            val file = File("ABCD")
             Log.d(javaClass.simpleName, "FILE SIZE: ${file.length()}")
             Log.d(javaClass.simpleName, "FILE PATH: ${file.absolutePath}")
             imageLoadedCallback?.invoke(file)
@@ -40,12 +36,19 @@ class ProfileImageManager constructor(
     override val galleryResult =
         context.registerForActivityResult(GalleryActivityContract()) { resultUri ->
             if (resultUri != null) {
-                directoryManager.createProfileImageFile()
-                copyFile(resultUri)
-                val file = directoryManager.getProfileImageFile()
+                val file = directoryManager.createRecipeImageFile()
+                copyFile(resultUri, file)
                 imageLoadedCallback?.invoke(file)
             }
         }
+
+
+    private var imageLoadedCallback: ((File) -> Unit)? = null
+
+    fun setImageLoadedCallback(imageLoadedCallback: (File) -> Unit) {
+        this.imageLoadedCallback = imageLoadedCallback
+    }
+
 
     override fun copyFile(resultUri: Uri, file: File?) {
         val inputStream = context.contentResolver.openInputStream(resultUri)!!
@@ -69,11 +72,11 @@ class ProfileImageManager constructor(
             GenericFileProvider::class.java.canonicalName ?: "",
             imgFile
         )
-        cameraResult.launch(photoURI)
+        cameraResult?.launch(photoURI)
     }
 
     fun initGalleryFlow() {
-        galleryResult.launch(null)
+        galleryResult?.launch(null)
     }
 
 }
