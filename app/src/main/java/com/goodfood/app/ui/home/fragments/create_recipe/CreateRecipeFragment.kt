@@ -38,7 +38,6 @@ class CreateRecipeFragment : BaseFragment() {
     @Inject
     lateinit var dialogManager: DialogManager
 
-    @Inject
     lateinit var recipeMultimediaManager: RecipeMultimediaManager
 
     private lateinit var binding: FragmentCreateRecipeBinding
@@ -59,6 +58,7 @@ class CreateRecipeFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        recipeMultimediaManager = (requireActivity() as HomeActivity).recipeMultimediaManager
         (requireActivity() as AppCompatActivity).supportActionBar?.title =
             getString(R.string.create_recipe)
     }
