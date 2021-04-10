@@ -65,24 +65,21 @@ class DirectoryManager constructor(private val context: Context) {
         return File("${getProfileImagesStoragePath()}/${PROFILE_PIC_FILE_NAME}")
     }
 
-    fun createRecipeImageFile(desiredFileName: String) {
+    fun createRecipeImageFile(): File {
         val file = getRecipeImagesStoragePath()
         if (!file.exists()) {
             file.mkdirs()
         }
-        val imgFile = File(file, "$desiredFileName.jpg")
+        val imgFile = File(file, "${System.currentTimeMillis()}.jpg")
         if (imgFile.exists()) {
             imgFile.delete()
         }
         imgFile.createNewFile()
         Log.d(javaClass.simpleName, "file created at: ${imgFile.absolutePath}")
+        return imgFile
     }
 
-    fun getRecipeImageFile(fileName: String): File {
-        return File("${getRecipeImagesStoragePath()}/${fileName}.jpg")
-    }
-
-    fun clearSavedData() {
+    fun deleteAllSavedCreateRecipeImages() {
         deleteRecursive(getRecipeImagesStoragePath())
     }
 

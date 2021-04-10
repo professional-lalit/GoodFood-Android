@@ -3,7 +3,6 @@ package com.goodfood.app.ui.home.fragments.create_recipe
 import android.view.View
 import androidx.databinding.ViewDataBinding
 import com.airbnb.epoxy.DataBindingEpoxyModel
-import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.TypedEpoxyController
 import com.goodfood.app.R
@@ -13,7 +12,6 @@ import com.goodfood.app.interfaces.IClickListener
 import com.goodfood.app.models.domain.MediaState
 import com.goodfood.app.models.domain.RecipePhoto
 import com.goodfood.app.models.domain.RecipeVideo
-import com.goodfood.app.recipePhotoData
 import com.goodfood.app.recipeVideoData
 
 
@@ -43,13 +41,16 @@ class RecipeMultimediaListController : TypedEpoxyController<List<Any>>() {
 
     private fun addPhoto(itemData: RecipePhoto) {
         val model = RecipePhotoModel_().id(itemData.hashCode())
+        model.spanSizeOverride { totalSpanCount, position, itemCount ->
+            totalSpanCount / 3
+        }
         model.recipePhoto = itemData
         model.clickListener = object : IClickListener {
             override fun onClick(view: View, model: Any?) {
                 sendClickEvent(viewId = view.id, model)
                 if (!itemData.isActionItem) {
                     itemData.state = MediaState.MEDIA_TO_BE_SET
-                }else{
+                } else {
                     itemData.state = MediaState.NOT_UPLOADING
                 }
             }
@@ -74,7 +75,7 @@ class RecipeMultimediaListController : TypedEpoxyController<List<Any>>() {
 }
 
 @EpoxyModelClass
-abstract class RecipePhotoModel() : DataBindingEpoxyModel() {
+abstract class RecipePhotoModel : DataBindingEpoxyModel() {
     var recipePhoto: RecipePhoto? = null
     var clickListener: IClickListener? = null
 

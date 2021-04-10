@@ -30,15 +30,9 @@ class RecipeMultimediaManager constructor(
         this.imageLoadedCallback = imageLoadedCallback
     }
 
-    var desiredRecipeImageFileName = ""
-
-    init {
-        directoryManager.clearSavedData()
-    }
-
     override val cameraResult =
         context.registerForActivityResult(CameraActivityContract()) { result ->
-            val file = directoryManager.getRecipeImageFile(desiredRecipeImageFileName)
+            val file = File("ABCD")
             Log.d(javaClass.simpleName, "FILE SIZE: ${file.length()}")
             Log.d(javaClass.simpleName, "FILE PATH: ${file.absolutePath}")
             imageLoadedCallback?.invoke(file)
@@ -47,18 +41,15 @@ class RecipeMultimediaManager constructor(
     override val galleryResult =
         context.registerForActivityResult(GalleryActivityContract()) { resultUri ->
             if (resultUri != null) {
-                directoryManager.createRecipeImageFile(desiredRecipeImageFileName)
-                copyFile(resultUri)
-                val file = directoryManager.getRecipeImageFile(desiredRecipeImageFileName)
+                val file = directoryManager.createRecipeImageFile()
+                copyFile(resultUri, file)
                 imageLoadedCallback?.invoke(file)
             }
         }
 
-    override fun copyFile(resultUri: Uri) {
+    override fun copyFile(resultUri: Uri, file: File?) {
         val inputStream = context.contentResolver.openInputStream(resultUri)!!
-        val outputStream = context.contentResolver.openOutputStream(
-            directoryManager.getRecipeImageFile(desiredRecipeImageFileName).toUri()
-        )!!
+        val outputStream = context.contentResolver.openOutputStream(file?.toUri()!!)!!
         try {
             copy(inputStream, outputStream)
             inputStream.close()
@@ -68,10 +59,8 @@ class RecipeMultimediaManager constructor(
         }
     }
 
-    fun initCameraFlow(desiredFileName: String) {
-        desiredRecipeImageFileName = desiredFileName
-        directoryManager.createRecipeImageFile(desiredFileName)
-        val imgFile = directoryManager.getRecipeImageFile(desiredFileName)
+    fun initCameraFlow() {
+        val imgFile = directoryManager.createRecipeImageFile()
         val photoURI: Uri = FileProvider.getUriForFile(
             context,
             GenericFileProvider::class.java.canonicalName ?: "",
@@ -80,9 +69,12 @@ class RecipeMultimediaManager constructor(
         cameraResult.launch(photoURI)
     }
 
-    fun initGalleryFlow(desiredFileName: String) {
-        desiredRecipeImageFileName = desiredFileName
+    fun initGalleryFlow() {
         galleryResult.launch(null)
+    }
+
+    fun deleteCreateRecipeImageFiles(){
+        directoryManager.deleteAllSavedCreateRecipeImages()
     }
 
 

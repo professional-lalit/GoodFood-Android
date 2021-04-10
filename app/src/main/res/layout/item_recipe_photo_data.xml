@@ -15,20 +15,28 @@
     </data>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="@dimen/dimen_size_100"
-        android:layout_height="@dimen/dimen_size_100"
-        android:layout_margin="@dimen/dimen_size_5">
+        android:layout_width="match_parent"
+        android:layout_margin="@dimen/dimen_size_5"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_photo_frame" />
 
         <ImageView
             android:id="@+id/img_recipe_photo"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="@dimen/dimen_size_90"
+            android:layout_height="@dimen/dimen_size_75"
+            android:layout_centerInParent="true"
             android:adjustViewBounds="true"
             android:onClick="@{(view) -> clickListener.onClick(view, data)}"
             android:scaleType="centerCrop"
             app:loadImageFile="@{data.imgUri.toString()}"
             app:setActionItemIcon="@{data}"
-            tools:src="@drawable/ic_camera" />
+            tools:src="@drawable/ic_profile_placeholder" />
 
     </RelativeLayout>
 

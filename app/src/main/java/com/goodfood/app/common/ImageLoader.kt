@@ -5,6 +5,8 @@ import android.net.Uri
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.goodfood.app.R
 import java.io.File
 
@@ -41,6 +43,10 @@ object ImageLoader {
             if (it.isNotEmpty()) {
                 Glide.with(imageView.context)
                     .load(it)
+                    .apply(
+                        RequestOptions().skipMemoryCache(true)
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    )
                     .placeholder(R.drawable.dark_landscape_placeholder)
                     .into(imageView)
             }
@@ -55,6 +61,10 @@ object ImageLoader {
             val bmp = BitmapFactory.decodeFile(fileUri.path)
             Glide.with(imageView.context)
                 .load(bmp)
+                .apply(
+                    RequestOptions().skipMemoryCache(true)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                )
                 .placeholder(R.drawable.dark_landscape_placeholder)
                 .into(imageView)
         }

@@ -12,6 +12,7 @@ import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import com.goodfood.app.common.DirectoryManager
 import com.goodfood.app.utils.GenericFileProvider
+import java.io.File
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
@@ -64,7 +65,7 @@ abstract class BaseMultimediaManager(open val context: Context, open val directo
         }
     }
 
-    protected abstract fun copyFile(resultUri: Uri)
+    protected abstract fun copyFile(resultUri: Uri, file: File? = null)
 
     @Throws(IOException::class)
     protected fun copy(input: InputStream, output: OutputStream): Long {

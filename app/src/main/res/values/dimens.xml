@@ -39,5 +39,12 @@
     <dimen name="dimen_size_8">8dp</dimen>
     <dimen name="text_size_12">12sp</dimen>
     <dimen name="text_size_13">13sp</dimen>
+    <dimen name="dimen_size_160">160dp</dimen>
+    <dimen name="dimen_size_25">25dp</dimen>
+    <dimen name="dimen_size_70">70dp</dimen>
+    <dimen name="dimen_size_90">90dp</dimen>
+    <dimen name="dimen_size_85">85dp</dimen>
+    <dimen name="dimen_size_110">110dp</dimen>
+    <dimen name="dimen_size_75">75dp</dimen>
 
 </resources>

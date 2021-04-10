@@ -47,7 +47,7 @@ class ProfileImageManager constructor(
             }
         }
 
-    override fun copyFile(resultUri: Uri) {
+    override fun copyFile(resultUri: Uri, file: File?) {
         val inputStream = context.contentResolver.openInputStream(resultUri)!!
         val outputStream = context.contentResolver.openOutputStream(
             directoryManager.getProfileImageFile().toUri()
