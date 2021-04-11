@@ -13,7 +13,8 @@ package com.goodfood.app.events
 object EventConstants {
 
     enum class Event(val id: Int) {
-        OPEN_CREATE_RECIPE_SCREEN(1)
+        OPEN_CREATE_RECIPE_SCREEN(1),
+        COPYING_VIDEO_FILE(2)
     }
 
 }

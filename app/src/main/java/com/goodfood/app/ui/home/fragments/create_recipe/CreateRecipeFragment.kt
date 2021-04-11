@@ -3,6 +3,8 @@ package com.goodfood.app.ui.home.fragments.create_recipe
 import android.Manifest
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,14 +14,18 @@ import com.goodfood.app.common.Constants
 import com.goodfood.app.common.multimedia_managers.RecipeMultimediaManager
 import com.goodfood.app.databinding.FragmentCreateRecipeBinding
 import com.goodfood.app.events.ClickEventMessage
+import com.goodfood.app.events.EventConstants
+import com.goodfood.app.events.Message
 import com.goodfood.app.models.domain.MediaState
 import com.goodfood.app.models.domain.RecipePhoto
 import com.goodfood.app.models.domain.RecipeVideo
 import com.goodfood.app.ui.common.BaseFragment
 import com.goodfood.app.ui.common.dialogs.DialogManager
+import com.goodfood.app.ui.common.dialogs.NotificationBottomDialog
 import com.goodfood.app.ui.home.HomeActivity
 import com.goodfood.app.utils.Extensions.showToast
 import com.goodfood.app.utils.Utils
+import com.google.android.material.snackbar.Snackbar
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -28,8 +34,10 @@ import com.karumi.dexter.listener.multi.MultiplePermissionsListener
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+
 @AndroidEntryPoint
 class CreateRecipeFragment : BaseFragment() {
+
 
     @Inject
     lateinit var dialogManager: DialogManager
@@ -87,7 +95,7 @@ class CreateRecipeFragment : BaseFragment() {
             checkPermissionsAndShowDialog("CREATE_RECIPE_IMG_0")
         }
         binding.btnPickVideo.setOnClickListener {
-            recipeMultimediaManager.initVideoRecordFlow("CREATE_RECIPE_VID_0")
+            showVideoDialog("CREATE_RECIPE_VID_0")
         }
     }
 
@@ -133,6 +141,16 @@ class CreateRecipeFragment : BaseFragment() {
         }
     }
 
+    private fun showVideoDialog(desiredFileName: String) {
+        dialogManager.showProfilePicDialog(childFragmentManager) { selection ->
+            if (selection == Constants.CAMERA_SELECTED) {
+                recipeMultimediaManager.initVideoRecordFlow(desiredFileName)
+            } else {
+                recipeMultimediaManager.initVideoGalleryPickFlow(desiredFileName)
+            }
+        }
+    }
+
     private fun setUpFileCallbacks() {
         recipeMultimediaManager.setImageLoadedCallback { file ->
             val photoItemToBeSet = photos.find { recipePhoto ->
@@ -154,13 +172,14 @@ class CreateRecipeFragment : BaseFragment() {
             dialogManager.closeDialog()
         }
         recipeMultimediaManager.setVideoLoadedCallback { file ->
+            dismissFileCopyNotification()
             val videoItemToBeSet = videos.find { recipeVideo ->
                 recipeVideo.state == MediaState.MEDIA_TO_BE_SET
             }
             if (videoItemToBeSet != null) {
                 videoItemToBeSet.videoBmp = Utils.getVideoFrame(file)
                 videoItemToBeSet.state = MediaState.NOT_UPLOADING
-                recipeVideoListController.setData(photos)
+                recipeVideoListController.setData(videos)
             } else {
                 val videoItemToAdd =
                     RecipeVideo(
@@ -169,6 +188,26 @@ class CreateRecipeFragment : BaseFragment() {
                     )
                 videos.add(0, videoItemToAdd)
                 recipeVideoListController.setData(videos)
+            }
+        }
+    }
+
+    private fun dismissFileCopyNotification() {
+        Handler(Looper.getMainLooper()).postDelayed({
+            val fragment = childFragmentManager.findFragmentByTag(NotificationBottomDialog.TAG)
+            if (fragment is NotificationBottomDialog? && fragment?.isVisible == true) {
+                fragment?.dismiss()
+            }
+        }, 1000L)
+    }
+
+    override fun onEvent(event: Message) {
+        super.onEvent(event)
+        when (event.eventId) {
+            EventConstants.Event.COPYING_VIDEO_FILE.id -> {
+                NotificationBottomDialog
+                    .getInstance(getString(R.string.copying_file_plz_wt))
+                    .show(childFragmentManager, NotificationBottomDialog.TAG)
             }
         }
     }
@@ -182,13 +221,18 @@ class CreateRecipeFragment : BaseFragment() {
             }
             R.id.img_recipe_video -> {
                 val recipeVideo = event.payload as RecipeVideo
-                recipeMultimediaManager.initVideoRecordFlow(
-                    "CREATE_RECIPE_VID_${
-                        videos.indexOf(
-                            recipeVideo
-                        )
-                    }"
-                )
+                showVideoDialog("CREATE_RECIPE_VID_${videos.indexOf(recipeVideo)}")
+            }
+            R.id.img_delete -> {
+                if (event.payload is RecipeVideo) {
+                    val recipeVideo = event.payload
+                    videos.remove(recipeVideo)
+                    recipeVideoListController.setData(videos)
+                } else if (event.payload is RecipePhoto) {
+                    val recipePhoto = event.payload
+                    photos.remove(recipePhoto)
+                    recipePhotoListController.setData(photos)
+                }
             }
         }
     }

@@ -21,18 +21,18 @@
 
         <ImageView
             android:id="@+id/img_recipe_video"
-            android:layout_width="@dimen/dimen_size_90"
-            android:layout_height="@dimen/dimen_size_90"
+            android:layout_width="@dimen/dimen_size_120"
+            android:layout_height="@dimen/dimen_size_120"
             android:layout_centerInParent="true"
             android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
             android:onClick="@{(view) -> clickListener.onClick(view, data)}"
+            android:scaleType="centerCrop"
             app:loadBmp="@{data.videoBmp}"
             tools:src="@drawable/dark_landscape_placeholder" />
 
         <ImageView
-            android:layout_width="@dimen/dimen_size_90"
-            android:layout_height="@dimen/dimen_size_90"
+            android:layout_width="@dimen/dimen_size_120"
+            android:layout_height="@dimen/dimen_size_120"
             android:layout_centerInParent="true"
             android:src="@drawable/gradient_black_overlay" />
 
@@ -41,6 +41,15 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:src="@drawable/ic_vid_play" />
+
+        <ImageView
+            android:id="@+id/img_delete"
+            android:onClick="@{(view) -> clickListener.onClick(view, data)}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="@dimen/dimen_size_5"
+            android:src="@drawable/ic_close" />
 
     </RelativeLayout>
 

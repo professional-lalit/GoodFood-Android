@@ -1,12 +1,17 @@
 package com.goodfood.app.common.multimedia_managers
 
 import android.net.Uri
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
+import androidx.lifecycle.lifecycleScope
 import com.goodfood.app.common.DirectoryManager
 import com.goodfood.app.utils.GenericFileProvider
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.File
 
 
@@ -32,12 +37,29 @@ class ProfileImageManager constructor(
             imageLoadedCallback?.invoke(file)
         }
 
-    override val galleryResult =
-        context.registerForActivityResult(GalleryActivityContract()) { resultUri ->
+    override val galleryImageResult =
+        context.registerForActivityResult(GalleryActivityForImageContract()) { resultUri ->
             if (resultUri != null) {
-                val file = directoryManager.createProfileImageFile()
-                copyFile(resultUri, file)
-                imageLoadedCallback?.invoke(file)
+                context.lifecycleScope.launch(Dispatchers.IO) {
+                    val file = directoryManager.createProfileImageFile()
+                    copyFile(resultUri, file)
+                    Handler(Looper.getMainLooper()).post {
+                        imageLoadedCallback?.invoke(file)
+                    }
+                }
+            }
+        }
+
+    override val galleryVideoResult =
+        context.registerForActivityResult(GalleryActivityForVideoContract()) { resultUri ->
+            if (resultUri != null) {
+                context.lifecycleScope.launch(Dispatchers.IO) {
+                    val file = directoryManager.createRecipeVideoFile("profile_vid")
+                    copyFile(resultUri, file)
+                    Handler(Looper.getMainLooper()).post {
+                        imageLoadedCallback?.invoke(file)
+                    }
+                }
             }
         }
 
@@ -49,7 +71,7 @@ class ProfileImageManager constructor(
     }
 
 
-    override fun copyFile(resultUri: Uri, file: File?) {
+    override suspend fun copyFile(resultUri: Uri, file: File?) {
         val inputStream = context.contentResolver.openInputStream(resultUri)!!
         val outputStream = context.contentResolver.openOutputStream(
             directoryManager.getProfileImageFile().toUri()
@@ -75,7 +97,7 @@ class ProfileImageManager constructor(
     }
 
     fun initGalleryFlow() {
-        galleryResult.launch(null)
+        galleryImageResult.launch(null)
     }
 
 }

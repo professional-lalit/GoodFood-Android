@@ -4,18 +4,25 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
+import androidx.lifecycle.lifecycleScope
+import com.goodfood.app.R
 import com.goodfood.app.common.DirectoryManager
-import com.goodfood.app.ui.home.fragments.create_recipe.CreateRecipeFragment
+import com.goodfood.app.events.EventConstants
+import com.goodfood.app.events.sendEvent
 import com.goodfood.app.ui.video.CameraApi1Activity
 import com.goodfood.app.ui.video.CameraApi2Activity
-import com.goodfood.app.ui.video.VideoViewActivity
+import com.goodfood.app.utils.Extensions.showToast
 import com.goodfood.app.utils.GenericFileProvider
 import com.goodfood.app.utils.Utils
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.File
 
 
@@ -45,12 +52,30 @@ class RecipeMultimediaManager constructor(
             imageLoadedCallback?.invoke(file)
         }
 
-    override val galleryResult =
-        context.registerForActivityResult(GalleryActivityContract()) { resultUri ->
+    override val galleryImageResult =
+        context.registerForActivityResult(GalleryActivityForImageContract()) { resultUri ->
             if (resultUri != null) {
-                val file = directoryManager.createRecipeImageFile(desiredFileName!!)
-                copyFile(resultUri, file)
-                imageLoadedCallback?.invoke(file)
+                context.lifecycleScope.launch(Dispatchers.IO) {
+                    val file = directoryManager.createRecipeImageFile(desiredFileName!!)
+                    copyFile(resultUri, file)
+                    Handler(Looper.getMainLooper()).post {
+                        imageLoadedCallback?.invoke(file)
+                    }
+                }
+            }
+        }
+
+    override val galleryVideoResult =
+        context.registerForActivityResult(GalleryActivityForVideoContract()) { resultUri ->
+            if (resultUri != null) {
+                sendEvent(EventConstants.Event.COPYING_VIDEO_FILE.id, desiredFileName!!)
+                context.lifecycleScope.launch(Dispatchers.IO) {
+                    val file = directoryManager.createRecipeVideoFile(desiredFileName!!)
+                    copyFile(resultUri, file)
+                    Handler(Looper.getMainLooper()).post {
+                        videoLoadedCallback?.invoke(file)
+                    }
+                }
             }
         }
 
@@ -91,7 +116,7 @@ class RecipeMultimediaManager constructor(
     }
 
 
-    override fun copyFile(resultUri: Uri, file: File?) {
+    override suspend fun copyFile(resultUri: Uri, file: File?) {
         val inputStream = context.contentResolver.openInputStream(resultUri)!!
         val outputStream = context.contentResolver.openOutputStream(file?.toUri()!!)!!
         try {
@@ -116,12 +141,17 @@ class RecipeMultimediaManager constructor(
 
     fun initGalleryFlow(desiredFileName: String) {
         this.desiredFileName = desiredFileName
-        galleryResult.launch(null)
+        galleryImageResult.launch(null)
     }
 
     fun initVideoRecordFlow(desiredFileName: String) {
         this.desiredFileName = desiredFileName
         recordVideoLauncherResult.launch(this.desiredFileName)
+    }
+
+    fun initVideoGalleryPickFlow(desiredFileName: String) {
+        this.desiredFileName = desiredFileName
+        galleryVideoResult.launch(this.desiredFileName)
     }
 
     fun deleteCreateRecipeImageFiles() {

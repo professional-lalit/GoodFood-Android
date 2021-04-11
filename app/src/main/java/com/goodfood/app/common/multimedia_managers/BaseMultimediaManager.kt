@@ -30,7 +30,8 @@ import java.io.OutputStream
 abstract class BaseMultimediaManager(open val directoryManager: DirectoryManager) {
 
     protected abstract val cameraResult: ActivityResultLauncher<Uri>?
-    protected abstract val galleryResult: ActivityResultLauncher<Any?>?
+    protected abstract val galleryImageResult: ActivityResultLauncher<Any?>?
+    protected abstract val galleryVideoResult: ActivityResultLauncher<Any?>?
 
     class CameraActivityContract : ActivityResultContract<Uri, Any?>() {
 
@@ -48,7 +49,7 @@ abstract class BaseMultimediaManager(open val directoryManager: DirectoryManager
         }
     }
 
-    class GalleryActivityContract : ActivityResultContract<Any?, Uri?>() {
+    class GalleryActivityForImageContract : ActivityResultContract<Any?, Uri?>() {
 
         override fun createIntent(context: Context, input: Any?): Intent {
             val galleryIntent = Intent()
@@ -65,7 +66,24 @@ abstract class BaseMultimediaManager(open val directoryManager: DirectoryManager
         }
     }
 
-    protected abstract fun copyFile(resultUri: Uri, file: File? = null)
+    class GalleryActivityForVideoContract : ActivityResultContract<Any?, Uri?>() {
+
+        override fun createIntent(context: Context, input: Any?): Intent {
+            val galleryIntent = Intent()
+            galleryIntent.type = "video/*"
+            galleryIntent.action = Intent.ACTION_GET_CONTENT
+            return galleryIntent
+        }
+
+        override fun parseResult(resultCode: Int, intent: Intent?): Uri? {
+            val data = intent?.data
+            return if (resultCode == Activity.RESULT_OK && data != null) {
+                data
+            } else null
+        }
+    }
+
+    protected abstract suspend fun copyFile(resultUri: Uri, file: File? = null)
 
     @Throws(IOException::class)
     protected fun copy(input: InputStream, output: OutputStream): Long {

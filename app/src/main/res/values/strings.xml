@@ -62,4 +62,5 @@
     <string name="battery_status">Battery Status</string>
     <string name="stop">Stop</string>
     <string name="plz_try_again_sorry_abt_incv">Please try again sorry about inconvenience</string>
+    <string name="copying_file_plz_wt">Copying the file please wait…</string>
 </resources>

@@ -3,6 +3,7 @@ package com.goodfood.app.ui.common
 import android.content.Context
 import androidx.fragment.app.Fragment
 import com.goodfood.app.events.ClickEventMessage
+import com.goodfood.app.events.Message
 import com.goodfood.app.utils.ActivityLifeObserver
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -39,6 +40,11 @@ abstract class BaseFragment : Fragment() {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     open fun onClickEvent(event: ClickEventMessage){
+
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    open fun onEvent(event: Message){
 
     }
 
