@@ -30,12 +30,12 @@
 
                 <RadioButton
                     android:id="@+id/rb_camera"
-                    style="@style/BasicText"
+                    style="@style/BasicRadioButton"
                     android:text="@string/camera" />
 
                 <RadioButton
                     android:id="@+id/rb_gallery"
-                    style="@style/BasicText"
+                    style="@style/BasicRadioButton"
                     android:layout_marginTop="@dimen/dimen_size_10"
                     android:text="@string/gallery" />
 

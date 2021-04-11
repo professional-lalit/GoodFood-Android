@@ -63,7 +63,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel.getMeDetails()
+//        viewModel.getMeDetails()
         setUpActionBar()
         setViews()
         setUpFragNav(savedInstanceState)

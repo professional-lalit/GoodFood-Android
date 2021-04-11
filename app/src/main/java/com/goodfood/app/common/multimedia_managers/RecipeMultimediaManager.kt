@@ -12,13 +12,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
-import com.goodfood.app.R
 import com.goodfood.app.common.DirectoryManager
 import com.goodfood.app.events.EventConstants
 import com.goodfood.app.events.sendEvent
 import com.goodfood.app.ui.video.CameraApi1Activity
 import com.goodfood.app.ui.video.CameraApi2Activity
-import com.goodfood.app.utils.Extensions.showToast
 import com.goodfood.app.utils.GenericFileProvider
 import com.goodfood.app.utils.Utils
 import kotlinx.coroutines.Dispatchers
@@ -154,8 +152,8 @@ class RecipeMultimediaManager constructor(
         galleryVideoResult.launch(this.desiredFileName)
     }
 
-    fun deleteCreateRecipeImageFiles() {
-        directoryManager.deleteAllSavedCreateRecipeImages()
+    fun deleteCreateRecipeMultimedia() {
+        directoryManager.deleteAllSavedCreateRecipeMultimedia()
     }
 
 

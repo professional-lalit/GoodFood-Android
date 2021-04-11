@@ -113,8 +113,9 @@ class DirectoryManager constructor(private val context: Context) {
         return imgFile
     }
 
-    fun deleteAllSavedCreateRecipeImages() {
+    fun deleteAllSavedCreateRecipeMultimedia() {
         deleteRecursive(getRecipeImagesStoragePath())
+        deleteRecursive(getRecipeVideosStoragePath())
     }
 
     private fun deleteRecursive(file: File) {

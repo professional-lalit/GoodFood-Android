@@ -25,7 +25,6 @@ import com.goodfood.app.ui.common.dialogs.NotificationBottomDialog
 import com.goodfood.app.ui.home.HomeActivity
 import com.goodfood.app.utils.Extensions.showToast
 import com.goodfood.app.utils.Utils
-import com.google.android.material.snackbar.Snackbar
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -239,7 +238,7 @@ class CreateRecipeFragment : BaseFragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        recipeMultimediaManager.deleteCreateRecipeImageFiles()
+        recipeMultimediaManager.deleteCreateRecipeMultimedia()
     }
 
 }
