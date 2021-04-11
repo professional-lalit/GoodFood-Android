@@ -56,4 +56,10 @@
     <string name="add_video">Add Video</string>
     <string name="videos">Videos</string>
     <string name="optional_survey">Optional Survey</string>
+    <string name="unable_to_record">Unable to record</string>
+    <string name="saving_video_plz_wt">Saving video please wait</string>
+    <string name="start">Start</string>
+    <string name="battery_status">Battery Status</string>
+    <string name="stop">Stop</string>
+    <string name="plz_try_again_sorry_abt_incv">Please try again sorry about inconvenience</string>
 </resources>

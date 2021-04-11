@@ -30,6 +30,8 @@ android {
         versionCode 1
         versionName "1.0"
 
+        buildConfigField "int", "VIDEO_BITRATE_DIVISOR", videoBitRateDivisor
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

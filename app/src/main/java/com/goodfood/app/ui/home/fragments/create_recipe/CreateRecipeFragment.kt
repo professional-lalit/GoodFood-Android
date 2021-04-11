@@ -1,6 +1,7 @@
 package com.goodfood.app.ui.home.fragments.create_recipe
 
 import android.Manifest
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,7 +19,10 @@ import com.goodfood.app.models.domain.RecipeVideo
 import com.goodfood.app.ui.common.BaseFragment
 import com.goodfood.app.ui.common.dialogs.DialogManager
 import com.goodfood.app.ui.home.HomeActivity
+import com.goodfood.app.ui.video.CameraApi1Activity
+import com.goodfood.app.ui.video.CameraApi2Activity
 import com.goodfood.app.utils.Extensions.showToast
+import com.goodfood.app.utils.Utils
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -84,6 +88,9 @@ class CreateRecipeFragment : BaseFragment() {
     private fun setViews() {
         binding.btnPickPhoto.setOnClickListener {
             checkPermissionsAndShowDialog("")
+        }
+        binding.btnPickVideo.setOnClickListener {
+            openVideoRecordScreen()
         }
     }
 
@@ -151,6 +158,16 @@ class CreateRecipeFragment : BaseFragment() {
             dialogManager.closeDialog()
         }
     }
+
+    fun openVideoRecordScreen() {
+        val intent: Intent = if (Utils.isCameraApi2Supported(activity as AppCompatActivity)) {
+            Intent(activity, CameraApi2Activity::class.java)
+        } else {
+            Intent(activity, CameraApi1Activity::class.java)
+        }
+        startActivity(intent)
+    }
+
 
     override fun onClickEvent(event: ClickEventMessage) {
         super.onClickEvent(event)

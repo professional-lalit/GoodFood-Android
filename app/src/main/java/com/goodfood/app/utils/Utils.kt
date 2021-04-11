@@ -1,7 +1,13 @@
 package com.goodfood.app.utils
 
+import android.content.Context
+import android.hardware.camera2.CameraCharacteristics
+import android.hardware.camera2.CameraManager
+import android.media.CamcorderProfile
 import android.util.DisplayMetrics
+import android.util.Log
 import android.util.Patterns
+import androidx.appcompat.app.AppCompatActivity
 import com.goodfood.app.common.CustomApplication
 
 
@@ -32,5 +38,42 @@ object Utils {
         return password.length >= 6
     }
 
+    fun getProfile(): CamcorderProfile {
+        return when {
+            CamcorderProfile.hasProfile(CamcorderProfile.QUALITY_1080P) -> {
+                CamcorderProfile.get(CamcorderProfile.QUALITY_1080P)
+            }
+            CamcorderProfile.hasProfile(CamcorderProfile.QUALITY_720P) -> {
+                CamcorderProfile.get(CamcorderProfile.QUALITY_720P)
+            }
+            CamcorderProfile.hasProfile(CamcorderProfile.QUALITY_480P) -> {
+                CamcorderProfile.get(CamcorderProfile.QUALITY_480P)
+            }
+            else -> {
+                CamcorderProfile.get(CamcorderProfile.QUALITY_HIGH)
+            }
+        }
+    }
+
+    fun isCameraApi2Supported(activity: AppCompatActivity): Boolean {
+        try {
+            val manager: CameraManager =
+                activity.getSystemService(Context.CAMERA_SERVICE) as CameraManager
+            for (cameraId in manager.cameraIdList) {
+                val chars: CameraCharacteristics =
+                    manager.getCameraCharacteristics(cameraId)
+                val facing = chars.get(CameraCharacteristics.LENS_FACING)
+                if (facing != null && facing == CameraCharacteristics.LENS_FACING_BACK) {
+                    val camApi2SupportLevel =
+                        chars.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL)
+                    if (camApi2SupportLevel in CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_FULL..CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL_3)
+                        return true
+                }
+            }
+        } catch (ex: Exception) {
+            Log.e(javaClass.simpleName, ex.localizedMessage ?: "")
+        }
+        return false
+    }
 
 }

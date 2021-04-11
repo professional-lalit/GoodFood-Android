@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
@@ -16,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GoodFood.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.home.HomeActivity"></activity>
+        <activity android:name=".ui.home.HomeActivity"/>
         <activity android:name=".ui.forgot_password.ForgotPasswordActivity" />
         <activity android:name=".ui.common.BaseActivity" />
         <activity android:name=".ui.signup.SignupActivity" />
@@ -29,6 +30,18 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".ui.video.CameraApi1Activity"
+            android:configChanges="orientation"
+            android:screenOrientation="reverseLandscape" />
+
+        <activity
+            android:name=".ui.video.CameraApi2Activity"
+            android:configChanges="orientation"
+            android:screenOrientation="reverseLandscape" />
+
+        <activity android:name=".ui.video.VideoViewActivity" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.goodfood.app.utils.GenericFileProvider"
@@ -36,7 +49,7 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
+                android:resource="@xml/file_paths" />
         </provider>
     </application>
 
