@@ -35,7 +35,6 @@
             android:onClick="@{(view) -> clickListener.onClick(view, data)}"
             android:scaleType="centerCrop"
             app:loadImageFile="@{data.imgUri.toString()}"
-            app:setActionItemIcon="@{data}"
             tools:src="@drawable/ic_profile_placeholder" />
 
     </RelativeLayout>

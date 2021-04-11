@@ -54,17 +54,21 @@ class RecipeMultimediaManager constructor(
             }
         }
 
-    class VideoRecordContract : ActivityResultContract<Any?, File?>() {
-        override fun createIntent(context: Context, input: Any?): Intent {
+    class VideoRecordContract : ActivityResultContract<String, File?>() {
+        override fun createIntent(context: Context, input: String): Intent {
             return if (Utils.isCameraApi2Supported(context as AppCompatActivity)) {
-                Intent(context, CameraApi2Activity::class.java)
+                Intent(context, CameraApi2Activity::class.java).apply {
+                    putExtra("filename", input)
+                }
             } else {
-                Intent(context, CameraApi1Activity::class.java)
+                Intent(context, CameraApi1Activity::class.java).apply {
+                    putExtra("filename", input)
+                }
             }
         }
 
         override fun parseResult(resultCode: Int, intent: Intent?): File? {
-            val data = intent?.getSerializableExtra("file") as File
+            val data = intent?.getSerializableExtra("file") as File?
             return if (resultCode == Activity.RESULT_OK) {
                 data
             } else null
@@ -75,7 +79,6 @@ class RecipeMultimediaManager constructor(
         context.registerForActivityResult(VideoRecordContract()) { file ->
             file?.let {
                 videoLoadedCallback?.invoke(it)
-//                VideoViewActivity.startActivity(context, it)
             }
         }
 
@@ -116,8 +119,9 @@ class RecipeMultimediaManager constructor(
         galleryResult.launch(null)
     }
 
-    fun initVideoRecordFlow() {
-        recordVideoLauncherResult.launch(null)
+    fun initVideoRecordFlow(desiredFileName: String) {
+        this.desiredFileName = desiredFileName
+        recordVideoLauncherResult.launch(this.desiredFileName)
     }
 
     fun deleteCreateRecipeImageFiles() {

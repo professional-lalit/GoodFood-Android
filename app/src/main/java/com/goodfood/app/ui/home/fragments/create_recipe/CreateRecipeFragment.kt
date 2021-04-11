@@ -84,10 +84,10 @@ class CreateRecipeFragment : BaseFragment() {
 
     private fun setViews() {
         binding.btnPickPhoto.setOnClickListener {
-            checkPermissionsAndShowDialog("")
+            checkPermissionsAndShowDialog("CREATE_RECIPE_IMG_0")
         }
         binding.btnPickVideo.setOnClickListener {
-            openVideoRecordScreen()
+            recipeMultimediaManager.initVideoRecordFlow("CREATE_RECIPE_VID_0")
         }
     }
 
@@ -160,7 +160,7 @@ class CreateRecipeFragment : BaseFragment() {
             if (videoItemToBeSet != null) {
                 videoItemToBeSet.videoBmp = Utils.getVideoFrame(file)
                 videoItemToBeSet.state = MediaState.NOT_UPLOADING
-                recipePhotoListController.setData(photos)
+                recipeVideoListController.setData(photos)
             } else {
                 val videoItemToAdd =
                     RecipeVideo(
@@ -173,10 +173,6 @@ class CreateRecipeFragment : BaseFragment() {
         }
     }
 
-    private fun openVideoRecordScreen() {
-        recipeMultimediaManager.initVideoRecordFlow()
-    }
-
     override fun onClickEvent(event: ClickEventMessage) {
         super.onClickEvent(event)
         when (event.viewId) {
@@ -185,7 +181,14 @@ class CreateRecipeFragment : BaseFragment() {
                 checkPermissionsAndShowDialog("CREATE_RECIPE_IMG_${photos.indexOf(recipePhoto)}")
             }
             R.id.img_recipe_video -> {
-                openVideoRecordScreen()
+                val recipeVideo = event.payload as RecipeVideo
+                recipeMultimediaManager.initVideoRecordFlow(
+                    "CREATE_RECIPE_VID_${
+                        videos.indexOf(
+                            recipeVideo
+                        )
+                    }"
+                )
             }
         }
     }

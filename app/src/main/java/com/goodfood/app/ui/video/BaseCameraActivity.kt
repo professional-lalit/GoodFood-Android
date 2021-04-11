@@ -38,6 +38,8 @@ open class BaseCameraActivity : AppCompatActivity() {
 
     protected var cameraUsecase: ICameraUsecase? = null
     protected var videoFile: File? = null
+    private var videoFileName: String? = null
+
     var isRecordingVideo = false
 
     @Inject
@@ -68,10 +70,7 @@ open class BaseCameraActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //Mute the mic
-        val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
-        audioManager.isMicrophoneMute = true
-
+        videoFileName = intent.getStringExtra("filename")
         isActive = true
         mLifecycleRegistry = LifecycleRegistry(this)
         mLifecycleRegistry!!.currentState = Lifecycle.State.CREATED
@@ -80,10 +79,14 @@ open class BaseCameraActivity : AppCompatActivity() {
         checkPerms()
     }
 
-    protected fun initializeFiles() {
-        videoFile = directoryManager.createRecipeVideoFile(
-            "RECIPE_VID_${System.currentTimeMillis()}"
-        )
+    private fun initializeFiles() {
+        videoFile = if (videoFileName?.isNotEmpty() == true) {
+            directoryManager.createRecipeVideoFile(videoFileName!!)
+        } else {
+            directoryManager.createRecipeVideoFile(
+                "RECIPE_VID_${System.currentTimeMillis()}"
+            )
+        }
     }
 
     override fun onDestroy() {

@@ -16,6 +16,7 @@ class CameraApi2Activity : BaseCameraActivity(),
 
     private lateinit var binding: ActivityCameraApi2Binding
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityCameraApi2Binding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
