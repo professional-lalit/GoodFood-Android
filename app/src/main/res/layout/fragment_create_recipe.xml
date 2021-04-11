@@ -24,7 +24,11 @@
 
             <EditText
                 android:id="@+id/edt_recipe_title"
-                style="@style/BasicEditText" />
+                style="@style/BasicEditText"
+                android:background="@drawable/edt_bg_form"
+                android:gravity="top"
+                android:lines="2"
+                android:singleLine="false" />
 
             <TextView
                 style="@style/BasicText"
@@ -34,6 +38,8 @@
             <EditText
                 android:id="@+id/edt_recipe_brief"
                 style="@style/BasicEditText"
+                android:background="@drawable/edt_bg_form"
+                android:gravity="top"
                 android:lines="4"
                 android:singleLine="false" />
 
@@ -45,6 +51,8 @@
             <EditText
                 android:id="@+id/edt_recipe_description"
                 style="@style/BasicEditText"
+                android:background="@drawable/edt_bg_form"
+                android:gravity="top"
                 android:lines="10"
                 android:singleLine="false" />
 
@@ -68,12 +76,19 @@
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     app:spanCount="3" />
 
-                <Button
+                <ImageButton
                     android:id="@+id/btn_pick_photo"
                     style="@style/BasicButton"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/dimen_size_10"
-                    android:text="@string/add_photo" />
+                    android:background="@drawable/ic_recipe_camera" />
+
+                <TextView
+                    style="@style/BasicText"
+                    android:layout_gravity="center_horizontal"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:text="@string/add_photo"
+                    android:textSize="@dimen/text_size_12" />
 
             </LinearLayout>
 
@@ -104,12 +119,19 @@
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     app:spanCount="3" />
 
-                <Button
+                <ImageButton
                     android:id="@+id/btn_pick_video"
                     style="@style/BasicButton"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/dimen_size_10"
-                    android:text="@string/add_video" />
+                    android:background="@drawable/ic_recipe_vid_camera" />
+
+                <TextView
+                    style="@style/BasicText"
+                    android:layout_gravity="center_horizontal"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:text="@string/add_video"
+                    android:textSize="@dimen/text_size_12" />
             </LinearLayout>
 
         </LinearLayout>
