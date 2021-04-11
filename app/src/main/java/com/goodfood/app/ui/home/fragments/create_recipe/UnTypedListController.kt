@@ -20,7 +20,7 @@ import com.goodfood.app.recipeVideoData
  * also if any suggestions they are welcomed at: `lalit.appsmail@gmail.com`
  * (please keep the subject as 'GoodFood Android Code Suggestion')
  */
-class UnTypedListController: EpoxyController() {
+class UnTypedListController : EpoxyController() {
 
     var list: MutableList<RecipePhoto>? = null
         set(value) {
@@ -45,9 +45,7 @@ class UnTypedListController: EpoxyController() {
             clickListener(object : IClickListener {
                 override fun onClick(view: View, model: Any?) {
                     sendClickEvent(viewId = view.id, model)
-                    if (!itemData.isActionItem) {
-                        itemData.state = MediaState.MEDIA_TO_BE_SET
-                    }
+                    itemData.state = MediaState.MEDIA_TO_BE_SET
                 }
             })
         }

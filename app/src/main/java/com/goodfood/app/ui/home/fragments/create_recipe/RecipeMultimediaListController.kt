@@ -48,11 +48,7 @@ class RecipeMultimediaListController : TypedEpoxyController<List<Any>>() {
         model.clickListener = object : IClickListener {
             override fun onClick(view: View, model: Any?) {
                 sendClickEvent(viewId = view.id, model)
-                if (!itemData.isActionItem) {
-                    itemData.state = MediaState.MEDIA_TO_BE_SET
-                } else {
-                    itemData.state = MediaState.NOT_UPLOADING
-                }
+                itemData.state = MediaState.MEDIA_TO_BE_SET
             }
         }
         model.addTo(this)
@@ -65,9 +61,7 @@ class RecipeMultimediaListController : TypedEpoxyController<List<Any>>() {
             clickListener(object : IClickListener {
                 override fun onClick(view: View, model: Any?) {
                     sendClickEvent(viewId = view.id, model)
-                    if (!itemData.isActionItem) {
-                        itemData.state = MediaState.MEDIA_TO_BE_SET
-                    }
+                    itemData.state = MediaState.MEDIA_TO_BE_SET
                 }
             })
         }

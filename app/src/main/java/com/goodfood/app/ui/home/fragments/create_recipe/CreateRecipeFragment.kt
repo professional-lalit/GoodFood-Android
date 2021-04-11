@@ -143,8 +143,7 @@ class CreateRecipeFragment : BaseFragment() {
                 val photoItemToAdd =
                     RecipePhoto(
                         Uri.fromFile(file),
-                        MediaState.NOT_UPLOADING,
-                        false
+                        MediaState.NOT_UPLOADING
                     )
                 photos.add(0, photoItemToAdd)
                 recipePhotoListController.setData(photos)
