@@ -1,6 +1,5 @@
 package com.goodfood.app.common.multimedia_managers
 
-import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -27,7 +26,7 @@ class ProfileImageManager constructor(
 
     override val cameraResult =
         context.registerForActivityResult(CameraActivityContract()) { result ->
-            val file = File("ABCD")
+            val file = directoryManager.getProfileImageFile()
             Log.d(javaClass.simpleName, "FILE SIZE: ${file.length()}")
             Log.d(javaClass.simpleName, "FILE PATH: ${file.absolutePath}")
             imageLoadedCallback?.invoke(file)
@@ -36,7 +35,7 @@ class ProfileImageManager constructor(
     override val galleryResult =
         context.registerForActivityResult(GalleryActivityContract()) { resultUri ->
             if (resultUri != null) {
-                val file = directoryManager.createRecipeImageFile()
+                val file = directoryManager.createProfileImageFile()
                 copyFile(resultUri, file)
                 imageLoadedCallback?.invoke(file)
             }
@@ -72,11 +71,11 @@ class ProfileImageManager constructor(
             GenericFileProvider::class.java.canonicalName ?: "",
             imgFile
         )
-        cameraResult?.launch(photoURI)
+        cameraResult.launch(photoURI)
     }
 
     fun initGalleryFlow() {
-        galleryResult?.launch(null)
+        galleryResult.launch(null)
     }
 
 }

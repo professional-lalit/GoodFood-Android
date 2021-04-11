@@ -2,12 +2,10 @@ package com.goodfood.app.common
 
 import android.content.Context
 import android.os.Environment
-import android.os.FileUtils
 import android.util.Log
-import dagger.hilt.android.scopes.ActivityScoped
-import dagger.hilt.android.scopes.FragmentScoped
-import dagger.hilt.android.scopes.ViewModelScoped
 import java.io.File
+import java.util.*
+import kotlin.Comparator
 
 
 /**
@@ -48,7 +46,7 @@ class DirectoryManager constructor(private val context: Context) {
         }
     }
 
-    fun createProfileImageFile() {
+    fun createProfileImageFile(): File {
         val file = getProfileImagesStoragePath()
         if (!file.exists()) {
             file.mkdirs()
@@ -59,24 +57,34 @@ class DirectoryManager constructor(private val context: Context) {
         }
         imgFile.createNewFile()
         Log.d(javaClass.simpleName, "file created at: ${imgFile.absolutePath}")
+        return imgFile
     }
 
     fun getProfileImageFile(): File {
         return File("${getProfileImagesStoragePath()}/${PROFILE_PIC_FILE_NAME}")
     }
 
-    fun createRecipeImageFile(): File {
+    fun createRecipeImageFile(desiredFileName: String): File {
         val file = getRecipeImagesStoragePath()
         if (!file.exists()) {
             file.mkdirs()
         }
-        val imgFile = File(file, "${System.currentTimeMillis()}.jpg")
-        if (imgFile.exists()) {
-            imgFile.delete()
-        }
+        val imgFile = File(file, "${desiredFileName}_${System.currentTimeMillis()}.jpg")
+
+        val previouslySelectedFilesForItem = getRecipeImagesStoragePath()
+            .listFiles()?.filter { it.name.contains(desiredFileName) }
+
+        previouslySelectedFilesForItem?.forEach { it.delete() }
+
         imgFile.createNewFile()
         Log.d(javaClass.simpleName, "file created at: ${imgFile.absolutePath}")
         return imgFile
+    }
+
+    fun getRecipeImageFile(desiredFileName: String): File {
+        val files = getRecipeImagesStoragePath().listFiles()
+        val filesToSort = files?.filter { it.name.contains(desiredFileName) }
+        return filesToSort?.last()!!
     }
 
     fun deleteAllSavedCreateRecipeImages() {

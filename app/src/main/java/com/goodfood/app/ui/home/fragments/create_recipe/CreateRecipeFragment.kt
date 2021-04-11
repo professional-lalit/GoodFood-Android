@@ -1,16 +1,12 @@
 package com.goodfood.app.ui.home.fragments.create_recipe
 
 import android.Manifest
-import android.content.Context
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.goodfood.app.R
 import com.goodfood.app.common.Constants
 import com.goodfood.app.common.multimedia_managers.RecipeMultimediaManager
@@ -22,7 +18,6 @@ import com.goodfood.app.models.domain.RecipeVideo
 import com.goodfood.app.ui.common.BaseFragment
 import com.goodfood.app.ui.common.dialogs.DialogManager
 import com.goodfood.app.ui.home.HomeActivity
-import com.goodfood.app.utils.ActivityLifeObserver
 import com.goodfood.app.utils.Extensions.showToast
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
@@ -88,7 +83,7 @@ class CreateRecipeFragment : BaseFragment() {
 
     private fun setViews() {
         binding.btnPickPhoto.setOnClickListener {
-            checkPermissionsAndShowDialog()
+            checkPermissionsAndShowDialog("")
         }
     }
 
@@ -99,7 +94,7 @@ class CreateRecipeFragment : BaseFragment() {
         binding.recyclerRecipeVideos.setController(recipeVideoListController)
     }
 
-    private fun checkPermissionsAndShowDialog() {
+    private fun checkPermissionsAndShowDialog(desiredFileName: String) {
         Dexter.withContext(requireContext())
             .withPermissions(
                 Manifest.permission.CAMERA,
@@ -109,7 +104,7 @@ class CreateRecipeFragment : BaseFragment() {
             .withListener(object : MultiplePermissionsListener {
                 override fun onPermissionsChecked(report: MultiplePermissionsReport) {
                     if (report.areAllPermissionsGranted()) {
-                        showImageDialog()
+                        showImageDialog(desiredFileName)
                     } else {
                         showToast(getString(R.string.profile_pic_perm_note))
                     }
@@ -124,22 +119,23 @@ class CreateRecipeFragment : BaseFragment() {
             }).check()
     }
 
-    private fun showImageDialog() {
+    private fun showImageDialog(desiredFileName: String) {
         dialogManager.showProfilePicDialog(childFragmentManager) { selection ->
             if (selection == Constants.CAMERA_SELECTED) {
-                recipeMultimediaManager.initCameraFlow()
+                recipeMultimediaManager.initCameraFlow(desiredFileName)
             } else {
-                recipeMultimediaManager.initGalleryFlow()
+                recipeMultimediaManager.initGalleryFlow(desiredFileName)
             }
         }
     }
 
     private fun setUpImageFileCallbackAndRegisterResults() {
-        recipeMultimediaManager.setImageLoadedCallback() { file ->
+        recipeMultimediaManager.setImageLoadedCallback { file ->
             val photoItemToBeSet = photos.find { recipePhoto ->
                 recipePhoto.state == MediaState.MEDIA_TO_BE_SET
             }
             if (photoItemToBeSet != null) {
+                //val index = recipePhotoListController.currentData?.indexOf(photoItemToBeSet)
                 photoItemToBeSet.imgUri = Uri.fromFile(file)
                 photoItemToBeSet.state = MediaState.NOT_UPLOADING
                 recipePhotoListController.setData(photos)
@@ -161,7 +157,8 @@ class CreateRecipeFragment : BaseFragment() {
         super.onClickEvent(event)
         when (event.viewId) {
             R.id.img_recipe_photo -> {
-                checkPermissionsAndShowDialog()
+                val recipePhoto = event.payload as RecipePhoto
+                checkPermissionsAndShowDialog("CREATE_RECIPE_IMG_${photos.indexOf(recipePhoto)}")
             }
             R.id.img_recipe_video -> {
 

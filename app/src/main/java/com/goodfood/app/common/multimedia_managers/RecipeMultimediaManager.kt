@@ -1,16 +1,12 @@
 package com.goodfood.app.common.multimedia_managers
 
-import android.content.Context
 import android.net.Uri
 import android.util.Log
-import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
-import androidx.fragment.app.FragmentActivity
 import com.goodfood.app.common.DirectoryManager
 import com.goodfood.app.utils.GenericFileProvider
-import dagger.hilt.android.qualifiers.ActivityContext
 import java.io.File
 
 
@@ -29,10 +25,11 @@ class RecipeMultimediaManager constructor(
 ) : BaseMultimediaManager(directoryManager) {
 
     private var imageLoadedCallback: ((File) -> Unit)? = null
+    private var desiredFileName: String? = null
 
     override val cameraResult =
         context.registerForActivityResult(CameraActivityContract()) { result ->
-            val file = File("ABCD")
+            val file = directoryManager.getRecipeImageFile(desiredFileName!!)
             Log.d(javaClass.simpleName, "FILE SIZE: ${file.length()}")
             Log.d(javaClass.simpleName, "FILE PATH: ${file.absolutePath}")
             imageLoadedCallback?.invoke(file)
@@ -41,7 +38,7 @@ class RecipeMultimediaManager constructor(
     override val galleryResult =
         context.registerForActivityResult(GalleryActivityContract()) { resultUri ->
             if (resultUri != null) {
-                val file = directoryManager.createRecipeImageFile()
+                val file = directoryManager.createRecipeImageFile(desiredFileName!!)
                 copyFile(resultUri, file)
                 imageLoadedCallback?.invoke(file)
             }
@@ -64,8 +61,9 @@ class RecipeMultimediaManager constructor(
         }
     }
 
-    fun initCameraFlow() {
-        val imgFile = directoryManager.createRecipeImageFile()
+    fun initCameraFlow(desiredFileName: String) {
+        this.desiredFileName = desiredFileName
+        val imgFile = directoryManager.createRecipeImageFile(desiredFileName)
         val photoURI: Uri = FileProvider.getUriForFile(
             context,
             GenericFileProvider::class.java.canonicalName ?: "",
@@ -74,7 +72,8 @@ class RecipeMultimediaManager constructor(
         cameraResult.launch(photoURI)
     }
 
-    fun initGalleryFlow() {
+    fun initGalleryFlow(desiredFileName: String) {
+        this.desiredFileName = desiredFileName
         galleryResult.launch(null)
     }
 
