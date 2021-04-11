@@ -1,12 +1,21 @@
 package com.goodfood.app.common.multimedia_managers
 
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.util.Log
+import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import com.goodfood.app.common.DirectoryManager
+import com.goodfood.app.ui.home.fragments.create_recipe.CreateRecipeFragment
+import com.goodfood.app.ui.video.CameraApi1Activity
+import com.goodfood.app.ui.video.CameraApi2Activity
+import com.goodfood.app.ui.video.VideoViewActivity
 import com.goodfood.app.utils.GenericFileProvider
+import com.goodfood.app.utils.Utils
 import java.io.File
 
 
@@ -25,6 +34,7 @@ class RecipeMultimediaManager constructor(
 ) : BaseMultimediaManager(directoryManager) {
 
     private var imageLoadedCallback: ((File) -> Unit)? = null
+    private var videoLoadedCallback: ((File) -> Unit)? = null
     private var desiredFileName: String? = null
 
     override val cameraResult =
@@ -44,8 +54,37 @@ class RecipeMultimediaManager constructor(
             }
         }
 
+    class VideoRecordContract : ActivityResultContract<Any?, File?>() {
+        override fun createIntent(context: Context, input: Any?): Intent {
+            return if (Utils.isCameraApi2Supported(context as AppCompatActivity)) {
+                Intent(context, CameraApi2Activity::class.java)
+            } else {
+                Intent(context, CameraApi1Activity::class.java)
+            }
+        }
+
+        override fun parseResult(resultCode: Int, intent: Intent?): File? {
+            val data = intent?.getSerializableExtra("file") as File
+            return if (resultCode == Activity.RESULT_OK) {
+                data
+            } else null
+        }
+    }
+
+    private val recordVideoLauncherResult =
+        context.registerForActivityResult(VideoRecordContract()) { file ->
+            file?.let {
+                videoLoadedCallback?.invoke(it)
+//                VideoViewActivity.startActivity(context, it)
+            }
+        }
+
     fun setImageLoadedCallback(imageLoadedCallback: (File) -> Unit) {
         this.imageLoadedCallback = imageLoadedCallback
+    }
+
+    fun setVideoLoadedCallback(videoLoadedCallback: (File) -> Unit) {
+        this.videoLoadedCallback = videoLoadedCallback
     }
 
 
@@ -75,6 +114,10 @@ class RecipeMultimediaManager constructor(
     fun initGalleryFlow(desiredFileName: String) {
         this.desiredFileName = desiredFileName
         galleryResult.launch(null)
+    }
+
+    fun initVideoRecordFlow() {
+        recordVideoLauncherResult.launch(null)
     }
 
     fun deleteCreateRecipeImageFiles() {

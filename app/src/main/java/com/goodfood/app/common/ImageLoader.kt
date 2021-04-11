@@ -1,5 +1,6 @@
 package com.goodfood.app.common
 
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.widget.ImageView
@@ -66,6 +67,16 @@ object ImageLoader {
                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                 )
                 .placeholder(R.drawable.dark_landscape_placeholder)
+                .into(imageView)
+        }
+    }
+
+    @JvmStatic
+    @BindingAdapter("app:loadBmp")
+    fun setBmpImage(imageView: ImageView, bmp: Bitmap?) {
+        bmp?.let {
+            Glide.with(imageView.context)
+                .load(bmp)
                 .into(imageView)
         }
     }

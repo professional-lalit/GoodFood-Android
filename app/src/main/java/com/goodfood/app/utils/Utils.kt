@@ -1,14 +1,19 @@
 package com.goodfood.app.utils
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Bitmap.CompressFormat
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
 import android.media.CamcorderProfile
-import android.util.DisplayMetrics
+import android.media.MediaMetadataRetriever
 import android.util.Log
 import android.util.Patterns
 import androidx.appcompat.app.AppCompatActivity
-import com.goodfood.app.common.CustomApplication
+import java.io.File
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.io.IOException
 
 
 /**
@@ -74,6 +79,30 @@ object Utils {
             Log.e(javaClass.simpleName, ex.localizedMessage ?: "")
         }
         return false
+    }
+
+    fun getVideoFrame(videoFile: File): Bitmap? {
+        try {
+            val retriever = MediaMetadataRetriever()
+            try {
+                retriever.setDataSource(videoFile.absolutePath)
+                val timeInSeconds = 1
+                return retriever.getFrameAtTime(
+                    timeInSeconds * 1000000.toLong(),
+                    MediaMetadataRetriever.OPTION_CLOSEST_SYNC
+                )
+            } catch (ex: java.lang.Exception) {
+                Log.i(javaClass.simpleName, "MediaMetadataRetriever got exception:$ex")
+            }
+            Log.d(javaClass.simpleName, "thumbnail saved successfully")
+        } catch (e: FileNotFoundException) {
+            Log.d(javaClass.simpleName, "File Not Found Exception : check directory path")
+            e.printStackTrace()
+        } catch (e: IOException) {
+            Log.d(javaClass.simpleName, "IOException while closing the stream")
+            e.printStackTrace()
+        }
+        return null
     }
 
 }

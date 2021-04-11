@@ -58,9 +58,7 @@ class UnTypedListController : EpoxyController() {
             clickListener(object : IClickListener {
                 override fun onClick(view: View, model: Any?) {
                     sendClickEvent(viewId = view.id, model)
-                    if (!itemData.isActionItem) {
-                        itemData.state = MediaState.MEDIA_TO_BE_SET
-                    }
+                    itemData.state = MediaState.MEDIA_TO_BE_SET
                 }
             })
         }

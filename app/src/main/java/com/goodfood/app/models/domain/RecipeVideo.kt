@@ -1,5 +1,6 @@
 package com.goodfood.app.models.domain
 
+import android.graphics.Bitmap
 import android.net.Uri
 
 
@@ -13,7 +14,6 @@ import android.net.Uri
  * (please keep the subject as 'GoodFood Android Code Suggestion')
  */
 data class RecipeVideo(
-    private val videoUri: Uri? = null,
-    var state: MediaState,
-    val isActionItem: Boolean
+    var videoBmp: Bitmap? = null,
+    var state: MediaState
 )

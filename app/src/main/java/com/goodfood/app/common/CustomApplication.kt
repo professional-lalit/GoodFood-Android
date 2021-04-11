@@ -20,9 +20,10 @@ class CustomApplication : Application() {
 
     companion object {
         private lateinit var mInstance: CustomApplication
+        fun getInstance(): CustomApplication {
+            return mInstance
+        }
     }
-
-    
 
     override fun onCreate() {
         super.onCreate()

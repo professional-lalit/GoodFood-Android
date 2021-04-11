@@ -1,7 +1,6 @@
 package com.goodfood.app.ui.home.fragments.create_recipe
 
 import android.Manifest
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -19,8 +18,6 @@ import com.goodfood.app.models.domain.RecipeVideo
 import com.goodfood.app.ui.common.BaseFragment
 import com.goodfood.app.ui.common.dialogs.DialogManager
 import com.goodfood.app.ui.home.HomeActivity
-import com.goodfood.app.ui.video.CameraApi1Activity
-import com.goodfood.app.ui.video.CameraApi2Activity
 import com.goodfood.app.utils.Extensions.showToast
 import com.goodfood.app.utils.Utils
 import com.karumi.dexter.Dexter
@@ -78,7 +75,7 @@ class CreateRecipeFragment : BaseFragment() {
 
         setUpListControllers()
 
-        setUpImageFileCallbackAndRegisterResults()
+        setUpFileCallbacks()
     }
 
     override fun onActivityCreated() {
@@ -136,13 +133,12 @@ class CreateRecipeFragment : BaseFragment() {
         }
     }
 
-    private fun setUpImageFileCallbackAndRegisterResults() {
+    private fun setUpFileCallbacks() {
         recipeMultimediaManager.setImageLoadedCallback { file ->
             val photoItemToBeSet = photos.find { recipePhoto ->
                 recipePhoto.state == MediaState.MEDIA_TO_BE_SET
             }
             if (photoItemToBeSet != null) {
-                //val index = recipePhotoListController.currentData?.indexOf(photoItemToBeSet)
                 photoItemToBeSet.imgUri = Uri.fromFile(file)
                 photoItemToBeSet.state = MediaState.NOT_UPLOADING
                 recipePhotoListController.setData(photos)
@@ -157,17 +153,29 @@ class CreateRecipeFragment : BaseFragment() {
             }
             dialogManager.closeDialog()
         }
-    }
-
-    fun openVideoRecordScreen() {
-        val intent: Intent = if (Utils.isCameraApi2Supported(activity as AppCompatActivity)) {
-            Intent(activity, CameraApi2Activity::class.java)
-        } else {
-            Intent(activity, CameraApi1Activity::class.java)
+        recipeMultimediaManager.setVideoLoadedCallback { file ->
+            val videoItemToBeSet = videos.find { recipeVideo ->
+                recipeVideo.state == MediaState.MEDIA_TO_BE_SET
+            }
+            if (videoItemToBeSet != null) {
+                videoItemToBeSet.videoBmp = Utils.getVideoFrame(file)
+                videoItemToBeSet.state = MediaState.NOT_UPLOADING
+                recipePhotoListController.setData(photos)
+            } else {
+                val videoItemToAdd =
+                    RecipeVideo(
+                        Utils.getVideoFrame(file),
+                        MediaState.NOT_UPLOADING
+                    )
+                videos.add(0, videoItemToAdd)
+                recipeVideoListController.setData(videos)
+            }
         }
-        startActivity(intent)
     }
 
+    private fun openVideoRecordScreen() {
+        recipeMultimediaManager.initVideoRecordFlow()
+    }
 
     override fun onClickEvent(event: ClickEventMessage) {
         super.onClickEvent(event)
@@ -177,7 +185,7 @@ class CreateRecipeFragment : BaseFragment() {
                 checkPermissionsAndShowDialog("CREATE_RECIPE_IMG_${photos.indexOf(recipePhoto)}")
             }
             R.id.img_recipe_video -> {
-
+                openVideoRecordScreen()
             }
         }
     }

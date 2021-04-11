@@ -151,7 +151,7 @@ open class BaseCameraActivity : AppCompatActivity() {
         cameraUsecase?.stopVideoRecording()
         isRecordingVideo = false
         stopTimer()
-        VideoViewActivity.startActivity(this, videoFile!!)
+        setResult(RESULT_OK, intent.apply { putExtra("file", videoFile!!) })
         finish()
     }
 

@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:onClick="@{(view) -> clickListener.onClick(view, data)}"
-            app:setActionItemIcon="@{data}"
+            app:loadBmp="@{data.videoBmp}"
             tools:src="@drawable/ic_movie_clapper" />
 
     </RelativeLayout>

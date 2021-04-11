@@ -7,6 +7,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.TypedEpoxyController
 import com.goodfood.app.R
 import com.goodfood.app.databinding.ItemRecipePhotoDataBinding
+import com.goodfood.app.databinding.ItemRecipeVideoDataBinding
 import com.goodfood.app.events.sendClickEvent
 import com.goodfood.app.interfaces.IClickListener
 import com.goodfood.app.models.domain.MediaState
@@ -55,16 +56,18 @@ class RecipeMultimediaListController : TypedEpoxyController<List<Any>>() {
     }
 
     private fun addVideo(itemData: RecipeVideo) {
-        recipeVideoData {
-            id(itemData.hashCode())
-            data(itemData)
-            clickListener(object : IClickListener {
-                override fun onClick(view: View, model: Any?) {
-                    sendClickEvent(viewId = view.id, model)
-                    itemData.state = MediaState.MEDIA_TO_BE_SET
-                }
-            })
+        val model = RecipeVideoModel_().id(itemData.hashCode())
+        model.spanSizeOverride { totalSpanCount, position, itemCount ->
+            totalSpanCount / 3
         }
+        model.recipeVideo = itemData
+        model.clickListener = object : IClickListener {
+            override fun onClick(view: View, model: Any?) {
+                sendClickEvent(viewId = view.id, model)
+                itemData.state = MediaState.MEDIA_TO_BE_SET
+            }
+        }
+        model.addTo(this)
     }
 }
 
@@ -80,6 +83,22 @@ abstract class RecipePhotoModel : DataBindingEpoxyModel() {
     override fun setDataBindingVariables(binding: ViewDataBinding?) {
         binding as ItemRecipePhotoDataBinding
         binding.data = recipePhoto
+        binding.clickListener = clickListener
+    }
+}
+
+@EpoxyModelClass
+abstract class RecipeVideoModel : DataBindingEpoxyModel() {
+    var recipeVideo: RecipeVideo? = null
+    var clickListener: IClickListener? = null
+
+    override fun getDefaultLayout(): Int {
+        return R.layout.item_recipe_video_data
+    }
+
+    override fun setDataBindingVariables(binding: ViewDataBinding?) {
+        binding as ItemRecipeVideoDataBinding
+        binding.data = recipeVideo
         binding.clickListener = clickListener
     }
 }
