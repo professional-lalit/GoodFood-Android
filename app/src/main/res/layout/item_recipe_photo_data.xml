@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -14,7 +15,7 @@
             type="com.goodfood.app.interfaces.IClickListener" />
     </data>
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dimen_size_5">
@@ -27,6 +28,9 @@
             android:adjustViewBounds="true"
             android:onClick="@{(view) -> clickListener.onClick(view, data)}"
             android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:loadImageFile="@{data.imgUri.toString()}"
             tools:src="@drawable/ic_profile_placeholder" />
 
@@ -34,20 +38,29 @@
             android:id="@+id/img_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
             android:layout_margin="@dimen/dimen_size_5"
             android:onClick="@{(view) -> clickListener.onClick(view, data)}"
-            android:src="@drawable/ic_close" />
+            android:src="@drawable/ic_close"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ProgressBar
             android:id="@+id/pgbar_upload_status"
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/img_recipe_photo"
-            android:layout_marginTop="@dimen/dimen_size_10"
-            android:progress="@{data.uploadProgress}"
+            app:layout_constraintTop_toBottomOf="@+id/img_recipe_photo"
+            app:loadProgress="@{data.uploadProgress}"
             tools:progress="50" />
-    </RelativeLayout>
+
+        <TextView
+            style="@style/BasicText"
+            android:padding="0dp"
+            android:textSize="@dimen/text_size_12"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pgbar_upload_status"
+            app:loadProgress="@{data.uploadProgress}"
+            tools:text="10%" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

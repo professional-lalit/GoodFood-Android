@@ -1,6 +1,7 @@
 package com.goodfood.app.common
 
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.goodfood.app.R
@@ -23,11 +24,14 @@ fun appendDiscountText(textView: TextView, discount: Int) {
     textView.text = "$discount%"
 }
 
-@BindingAdapter("app:setActionItemIcon")
-fun setActionItemIcon(imageView: ImageView, model: Any) {
-    if (model is RecipePhoto) {
-        imageView.setImageResource(R.drawable.ic_camera)
-    } else if (model is RecipeVideo) {
-        imageView.setImageResource(R.drawable.ic_movie_clapper)
+@BindingAdapter("app:loadProgress")
+fun setUploadProgress(progressBar: ProgressBar, progress: Int) {
+    progressBar.progress = progress
+}
+
+@BindingAdapter("app:loadProgress")
+fun setUploadProgress(textView: TextView, progress: Int) {
+    if (progress > 0) {
+        textView.text = "$progress% uploaded"
     }
 }

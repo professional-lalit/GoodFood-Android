@@ -8,11 +8,9 @@ import com.goodfood.app.models.domain.RecipePhoto
 import com.goodfood.app.models.domain.RecipeVideo
 import com.goodfood.app.ui.common.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.FlowCollector
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -39,18 +37,21 @@ class CreateRecipeViewModel @Inject constructor() : BaseViewModel() {
 
     val createRecipeUI = CreateRecipeUI()
 
-    fun uploadRecipeData() {
+    private lateinit var photoUploadProgressFlow: Flow<Int>
 
+    init {
+        setUpPhotosUploadFlow()
     }
 
-    private val photoUploadProgressFlow: Flow<Int> = flow {
-        var count = 0
-        while (count == 100) {
-            count++
-            emit(count)
-            Log.d(javaClass.simpleName,"EMITTED PHOTO PROGRESS: $count")
-            delay(500L)
-        }
+    private fun setUpPhotosUploadFlow() {
+        photoUploadProgressFlow = flow {
+            Log.d(javaClass.simpleName, "PHOTO UPLOAD STARTED")
+            (0..100).forEach {
+                delay(50)
+                Log.d(javaClass.simpleName, "Emitting $it")
+                emit(it)
+            }
+        }.flowOn(Dispatchers.Default)
     }
 
     private val videoUploadProgressFlow: Flow<Int> = flow {
@@ -58,7 +59,7 @@ class CreateRecipeViewModel @Inject constructor() : BaseViewModel() {
         while (count == 100) {
             count++
             emit(count)
-            Log.d(javaClass.simpleName,"EMITTED VIDEO PROGRESS: $count")
+            Log.d(javaClass.simpleName, "EMITTED VIDEO PROGRESS: $count")
             delay(500L)
         }
     }
@@ -66,19 +67,15 @@ class CreateRecipeViewModel @Inject constructor() : BaseViewModel() {
     fun uploadRecipePhotos(photos: List<RecipePhoto>) {
         viewModelScope.launch {
             photos.forEach { photo ->
-                uploadPhoto(photo)
+                withContext(coroutineContext) { uploadPhoto(photo) }
             }
         }
     }
 
-    private fun uploadPhoto(photo: RecipePhoto) {
-        _currentUploadingPhoto.postValue(photo)
-        viewModelScope.launch {
-            photoUploadProgressFlow.collect {
-                val recipePhoto = _currentUploadingPhoto.value
-                recipePhoto?.uploadProgress = it
-                _currentUploadingPhoto.postValue(recipePhoto!!)
-            }
+    private suspend fun uploadPhoto(photo: RecipePhoto) {
+        photoUploadProgressFlow.collect {
+            photo.uploadProgress = it
+            _currentUploadingPhoto.postValue(photo)
         }
     }
 

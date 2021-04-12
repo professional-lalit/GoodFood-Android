@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -95,9 +96,12 @@ class CreateRecipeFragment : BaseFragment() {
         viewModel.currentUploadingPhoto.observe(viewLifecycleOwner, { photo ->
             val photoInListToUpdate = photos.find { it.imgUri == photo.imgUri }
             photoInListToUpdate?.let {
+                Log.d(javaClass.simpleName, "item found, progress: ${it.uploadProgress}")
                 it.uploadProgress = photo.uploadProgress
+                it.state = MediaState.UPLOADING
             }
-            recipePhotoListController.setData(photos)
+            Log.d(javaClass.simpleName, "PROGRESS UPDATE RECEIVED ${photo.uploadProgress}")
+            recipePhotoListController.notifyModelChanged(photos.indexOf(photoInListToUpdate))
         })
         viewModel.currentUploadingVideo.observe(viewLifecycleOwner, { video ->
             val videoInListToUpdate = videos.find { it.videoBmp == video.videoBmp }
@@ -192,6 +196,7 @@ class CreateRecipeFragment : BaseFragment() {
                         Uri.fromFile(file),
                         MediaState.NOT_UPLOADING
                     )
+                photoItemToAdd.uploadProgress = 0
                 photos.add(0, photoItemToAdd)
                 recipePhotoListController.setData(photos)
             }
