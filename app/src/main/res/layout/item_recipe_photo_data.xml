@@ -32,12 +32,22 @@
 
         <ImageView
             android:id="@+id/img_delete"
-            android:onClick="@{(view) -> clickListener.onClick(view, data)}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_margin="@dimen/dimen_size_5"
+            android:onClick="@{(view) -> clickListener.onClick(view, data)}"
             android:src="@drawable/ic_close" />
+
+        <ProgressBar
+            android:id="@+id/pgbar_upload_status"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/img_recipe_photo"
+            android:layout_marginTop="@dimen/dimen_size_10"
+            android:progress="@{data.uploadProgress}"
+            tools:progress="50" />
     </RelativeLayout>
 
 </layout>

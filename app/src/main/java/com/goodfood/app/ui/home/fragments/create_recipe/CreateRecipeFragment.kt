@@ -9,6 +9,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.goodfood.app.R
 import com.goodfood.app.common.Constants
 import com.goodfood.app.common.multimedia_managers.RecipeMultimediaManager
@@ -44,6 +46,8 @@ class CreateRecipeFragment : BaseFragment() {
     lateinit var recipeMultimediaManager: RecipeMultimediaManager
 
     private lateinit var binding: FragmentCreateRecipeBinding
+
+    private val viewModel: CreateRecipeViewModel by viewModels()
 
     private val photos = mutableListOf<RecipePhoto>()
     private val videos = mutableListOf<RecipeVideo>()
@@ -83,6 +87,25 @@ class CreateRecipeFragment : BaseFragment() {
         setUpListControllers()
 
         setUpFileCallbacks()
+
+        setObservers()
+    }
+
+    private fun setObservers() {
+        viewModel.currentUploadingPhoto.observe(viewLifecycleOwner, { photo ->
+            val photoInListToUpdate = photos.find { it.imgUri == photo.imgUri }
+            photoInListToUpdate?.let {
+                it.uploadProgress = photo.uploadProgress
+            }
+            recipePhotoListController.setData(photos)
+        })
+        viewModel.currentUploadingVideo.observe(viewLifecycleOwner, { video ->
+            val videoInListToUpdate = videos.find { it.videoBmp == video.videoBmp }
+            videoInListToUpdate?.let {
+                it.uploadProgress = video.uploadProgress
+            }
+            recipeVideoListController.setData(videos)
+        })
     }
 
     override fun onActivityCreated() {
@@ -95,6 +118,10 @@ class CreateRecipeFragment : BaseFragment() {
         }
         binding.btnPickVideo.setOnClickListener {
             showVideoDialog("CREATE_RECIPE_VID_0")
+        }
+        binding.btnSubmit.setOnClickListener {
+            viewModel.uploadRecipePhotos(photos)
+            //viewModel.uploadRecipeVideos(videos)
         }
     }
 
@@ -131,7 +158,7 @@ class CreateRecipeFragment : BaseFragment() {
     }
 
     private fun showImageDialog(desiredFileName: String) {
-        dialogManager.showProfilePicDialog(childFragmentManager) { selection ->
+        dialogManager.showMultimediaSelectionDialog(childFragmentManager) { selection ->
             if (selection == Constants.CAMERA_SELECTED) {
                 recipeMultimediaManager.initCameraFlow(desiredFileName)
             } else {
@@ -141,7 +168,7 @@ class CreateRecipeFragment : BaseFragment() {
     }
 
     private fun showVideoDialog(desiredFileName: String) {
-        dialogManager.showProfilePicDialog(childFragmentManager) { selection ->
+        dialogManager.showMultimediaSelectionDialog(childFragmentManager) { selection ->
             if (selection == Constants.CAMERA_SELECTED) {
                 recipeMultimediaManager.initVideoRecordFlow(desiredFileName)
             } else {

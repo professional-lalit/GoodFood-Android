@@ -153,7 +153,7 @@ class SignupActivity : BaseActivity<ActivitySignupBinding, SignupViewModel>() {
     }
 
     private fun showProfileImageDialog() {
-        dialogManager.showProfilePicDialog(supportFragmentManager) { selection ->
+        dialogManager.showMultimediaSelectionDialog(supportFragmentManager) { selection ->
             if (selection == Constants.CAMERA_SELECTED) {
                 profileImageManager.initCameraFlow()
             } else {

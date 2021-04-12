@@ -34,15 +34,19 @@ class DialogManager constructor(private val context: Context) {
         }
     }
 
-    fun showProfilePicDialog(fragmentManager: FragmentManager, callback: (Int) -> Unit) {
+    fun showMultimediaSelectionDialog(fragmentManager: FragmentManager, callback: (Int) -> Unit) {
         val binding = DialogProfilePicSelectionBinding.inflate(LayoutInflater.from(context))
         binding.btnSelect.setOnClickListener {
-            if (binding.rbCamera.isChecked) {
-                callback.invoke(Constants.CAMERA_SELECTED)
-            } else {
-                callback.invoke(Constants.GALLERY_SELECTED)
+            when {
+                binding.rbCamera.isChecked -> {
+                    callback.invoke(Constants.CAMERA_SELECTED)
+                    dialogFragment!!.dismiss()
+                }
+                binding.rbGallery.isChecked -> {
+                    callback.invoke(Constants.GALLERY_SELECTED)
+                    dialogFragment!!.dismiss()
+                }
             }
-            dialogFragment!!.dismiss()
         }
         dialogFragment = CustomDialogFragment(binding)
         dialogFragment!!.show(fragmentManager, CustomDialogFragment.TAG)

@@ -15,4 +15,6 @@ import android.net.Uri
 data class RecipePhoto(
     var imgUri: Uri? = null,
     var state: MediaState
-)
+) {
+    var uploadProgress: Int = 0
+}

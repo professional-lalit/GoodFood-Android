@@ -2,139 +2,155 @@
 
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingStart="@dimen/dimen_size_5"
-            android:paddingEnd="@dimen/dimen_size_5"
-            tools:context=".ui.home.fragments.create_recipe.CreateRecipeFragment">
-
-
-            <TextView
-                style="@style/BasicText"
-                android:layout_marginTop="@dimen/dimen_size_20"
-                android:text="@string/title" />
-
-            <EditText
-                android:id="@+id/edt_recipe_title"
-                style="@style/BasicEditText"
-                android:background="@drawable/edt_bg_form"
-                android:gravity="top"
-                android:lines="2"
-                android:singleLine="false" />
-
-            <TextView
-                style="@style/BasicText"
-                android:layout_marginTop="@dimen/dimen_size_20"
-                android:text="@string/short_desc" />
-
-            <EditText
-                android:id="@+id/edt_recipe_brief"
-                style="@style/BasicEditText"
-                android:background="@drawable/edt_bg_form"
-                android:gravity="top"
-                android:lines="4"
-                android:singleLine="false" />
-
-            <TextView
-                style="@style/BasicText"
-                android:layout_marginTop="@dimen/dimen_size_20"
-                android:text="@string/full_description" />
-
-            <EditText
-                android:id="@+id/edt_recipe_description"
-                style="@style/BasicEditText"
-                android:background="@drawable/edt_bg_form"
-                android:gravity="top"
-                android:lines="10"
-                android:singleLine="false" />
+            android:layout_height="match_parent"
+            android:layout_above="@+id/btn_submit"
+            android:background="@color/white"
+            android:fillViewport="true">
 
             <LinearLayout
-                android:id="@+id/lin_recipe_photos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingStart="@dimen/dimen_size_5"
+                android:paddingEnd="@dimen/dimen_size_5"
+                tools:context=".ui.home.fragments.create_recipe.CreateRecipeFragment">
+
 
                 <TextView
                     style="@style/BasicText"
                     android:layout_marginTop="@dimen/dimen_size_20"
-                    android:text="@string/photos" />
+                    android:text="@string/title" />
 
-                <com.airbnb.epoxy.EpoxyRecyclerView
-                    android:id="@+id/recycler_recipe_photos"
+                <EditText
+                    android:id="@+id/edt_recipe_title"
+                    style="@style/BasicEditText"
+                    android:background="@drawable/edt_bg_form"
+                    android:gravity="top"
+                    android:lines="2"
+                    android:singleLine="false" />
+
+                <TextView
+                    style="@style/BasicText"
+                    android:layout_marginTop="@dimen/dimen_size_20"
+                    android:text="@string/short_desc" />
+
+                <EditText
+                    android:id="@+id/edt_recipe_brief"
+                    style="@style/BasicEditText"
+                    android:background="@drawable/edt_bg_form"
+                    android:gravity="top"
+                    android:lines="4"
+                    android:singleLine="false" />
+
+                <TextView
+                    style="@style/BasicText"
+                    android:layout_marginTop="@dimen/dimen_size_20"
+                    android:text="@string/full_description" />
+
+                <EditText
+                    android:id="@+id/edt_recipe_description"
+                    style="@style/BasicEditText"
+                    android:background="@drawable/edt_bg_form"
+                    android:gravity="top"
+                    android:lines="10"
+                    android:singleLine="false" />
+
+                <LinearLayout
+                    android:id="@+id/lin_recipe_photos"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dimen_size_10"
-                    android:nestedScrollingEnabled="false"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    app:spanCount="3" />
+                    android:orientation="vertical">
 
-                <ImageButton
-                    android:id="@+id/btn_pick_photo"
-                    style="@style/BasicButton"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/dimen_size_10"
-                    android:background="@drawable/ic_recipe_camera" />
+                    <TextView
+                        style="@style/BasicText"
+                        android:layout_marginTop="@dimen/dimen_size_20"
+                        android:text="@string/photos" />
 
-                <TextView
-                    style="@style/BasicText"
-                    android:layout_gravity="center_horizontal"
-                    android:fontFamily="@font/montserrat_bold"
-                    android:text="@string/add_photo"
-                    android:textSize="@dimen/text_size_12" />
+                    <com.airbnb.epoxy.EpoxyRecyclerView
+                        android:id="@+id/recycler_recipe_photos"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_size_10"
+                        android:nestedScrollingEnabled="false"
+                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                        app:spanCount="3" />
 
-            </LinearLayout>
+                    <ImageButton
+                        android:id="@+id/btn_pick_photo"
+                        style="@style/BasicButton"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/dimen_size_10"
+                        android:background="@drawable/ic_recipe_camera" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dimen_size_1"
-                android:layout_marginTop="@dimen/dimen_size_5"
-                android:background="@color/faint_grey_text" />
+                    <TextView
+                        style="@style/BasicText"
+                        android:layout_gravity="center_horizontal"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:text="@string/add_photo"
+                        android:textSize="@dimen/text_size_12" />
 
-            <LinearLayout
-                android:id="@+id/lin_recipe_videos"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dimen_size_5"
-                android:layout_marginBottom="@dimen/dimen_size_20"
-                android:orientation="vertical">
+                </LinearLayout>
 
-                <TextView
-                    style="@style/BasicText"
-                    android:text="@string/videos" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_size_0_5"
+                    android:layout_marginTop="@dimen/dimen_size_5"
+                    android:background="@color/faint_grey_text" />
 
-                <com.airbnb.epoxy.EpoxyRecyclerView
-                    android:id="@+id/recycler_recipe_videos"
+                <LinearLayout
+                    android:id="@+id/lin_recipe_videos"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dimen_size_10"
-                    android:nestedScrollingEnabled="false"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    app:spanCount="3" />
+                    android:layout_marginTop="@dimen/dimen_size_5"
+                    android:layout_marginBottom="@dimen/dimen_size_20"
+                    android:orientation="vertical">
 
-                <ImageButton
-                    android:id="@+id/btn_pick_video"
-                    style="@style/BasicButton"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/dimen_size_10"
-                    android:background="@drawable/ic_recipe_vid_camera" />
+                    <TextView
+                        style="@style/BasicText"
+                        android:text="@string/videos" />
 
-                <TextView
-                    style="@style/BasicText"
-                    android:layout_gravity="center_horizontal"
-                    android:fontFamily="@font/montserrat_bold"
-                    android:text="@string/add_video"
-                    android:textSize="@dimen/text_size_12" />
+                    <com.airbnb.epoxy.EpoxyRecyclerView
+                        android:id="@+id/recycler_recipe_videos"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_size_10"
+                        android:nestedScrollingEnabled="false"
+                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                        app:spanCount="3" />
+
+                    <ImageButton
+                        android:id="@+id/btn_pick_video"
+                        style="@style/BasicButton"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="@dimen/dimen_size_10"
+                        android:background="@drawable/ic_recipe_vid_camera" />
+
+                    <TextView
+                        style="@style/BasicText"
+                        android:layout_gravity="center_horizontal"
+                        android:fontFamily="@font/montserrat_bold"
+                        android:text="@string/add_video"
+                        android:textSize="@dimen/text_size_12" />
+                </LinearLayout>
+
             </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
 
-        </LinearLayout>
+        <Button
+            android:id="@+id/btn_submit"
+            style="@style/BasicButton"
+            android:layout_width="match_parent"
+            android:layout_alignParentBottom="true"
+            android:text="@string/submit"
+            android:textSize="@dimen/text_size_20" />
 
-    </androidx.core.widget.NestedScrollView>
+    </RelativeLayout>
+
 </layout>
