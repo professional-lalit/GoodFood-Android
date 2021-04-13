@@ -98,16 +98,16 @@ class CreateRecipeFragment : BaseFragment() {
             photoInListToUpdate?.let {
                 it.uploadProgress = photo.uploadProgress
                 it.state = MediaState.UPLOADING
+                recipePhotoListController.notifyModelChanged(photos.indexOf(it))
             }
-            recipePhotoListController.notifyModelChanged(photos.indexOf(photoInListToUpdate))
         })
         viewModel.currentUploadingVideo.observe(viewLifecycleOwner, { video ->
             val videoInListToUpdate = videos.find { it.videoBmp == video.videoBmp }
             videoInListToUpdate?.let {
                 it.uploadProgress = video.uploadProgress
                 it.state = MediaState.UPLOADING
+                recipeVideoListController.notifyModelChanged(videos.indexOf(it))
             }
-            recipeVideoListController.notifyModelChanged(videos.indexOf(videoInListToUpdate))
         })
     }
 
