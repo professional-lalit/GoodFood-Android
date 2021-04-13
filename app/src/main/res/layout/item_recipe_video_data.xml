@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -14,7 +15,7 @@
             type="com.goodfood.app.interfaces.IClickListener" />
     </data>
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dimen_size_5">
@@ -23,33 +24,45 @@
             android:id="@+id/img_recipe_video"
             android:layout_width="@dimen/dimen_size_120"
             android:layout_height="@dimen/dimen_size_120"
-            android:layout_centerInParent="true"
             android:adjustViewBounds="true"
             android:onClick="@{(view) -> clickListener.onClick(view, data)}"
             android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:loadBmp="@{data.videoBmp}"
             tools:src="@drawable/dark_landscape_placeholder" />
 
         <ImageView
+            android:id="@+id/imageView2"
             android:layout_width="@dimen/dimen_size_120"
             android:layout_height="@dimen/dimen_size_120"
-            android:layout_centerInParent="true"
-            android:src="@drawable/gradient_black_overlay" />
+            android:elevation="@dimen/dimen_size_1"
+            android:src="@drawable/gradient_black_overlay"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:src="@drawable/ic_vid_play" />
+            android:elevation="@dimen/dimen_size_2"
+            android:src="@drawable/ic_vid_play"
+            app:layout_constraintBottom_toBottomOf="@+id/img_recipe_video"
+            app:layout_constraintEnd_toEndOf="@+id/img_recipe_video"
+            app:layout_constraintStart_toStartOf="@+id/img_recipe_video"
+            app:layout_constraintTop_toTopOf="@+id/img_recipe_video" />
 
         <ImageView
             android:id="@+id/img_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
             android:layout_margin="@dimen/dimen_size_5"
+            android:elevation="@dimen/dimen_size_2"
             android:onClick="@{(view) -> clickListener.onClick(view, data)}"
-            android:src="@drawable/ic_close" />
+            android:src="@drawable/ic_close"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ProgressBar
             android:id="@+id/pgbar_upload_status"
@@ -57,10 +70,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/img_recipe_video"
-            android:layout_marginTop="@dimen/dimen_size_10"
-            android:progress="@{data.uploadProgress}"
+            app:layout_constraintTop_toBottomOf="@+id/img_recipe_video"
+            app:loadProgress="@{data.uploadProgress}"
             tools:progress="50" />
 
-    </RelativeLayout>
+        <TextView
+            style="@style/BasicText"
+            android:padding="0dp"
+            android:textSize="@dimen/text_size_12"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pgbar_upload_status"
+            app:loadProgress="@{data.uploadProgress}"
+            tools:text="10%" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

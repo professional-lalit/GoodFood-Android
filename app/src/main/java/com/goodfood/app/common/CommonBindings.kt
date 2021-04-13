@@ -31,7 +31,5 @@ fun setUploadProgress(progressBar: ProgressBar, progress: Int) {
 
 @BindingAdapter("app:loadProgress")
 fun setUploadProgress(textView: TextView, progress: Int) {
-    if (progress > 0) {
-        textView.text = "$progress% uploaded"
-    }
+    textView.text = "$progress% uploaded"
 }

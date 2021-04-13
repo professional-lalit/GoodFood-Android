@@ -96,19 +96,18 @@ class CreateRecipeFragment : BaseFragment() {
         viewModel.currentUploadingPhoto.observe(viewLifecycleOwner, { photo ->
             val photoInListToUpdate = photos.find { it.imgUri == photo.imgUri }
             photoInListToUpdate?.let {
-                Log.d(javaClass.simpleName, "item found, progress: ${it.uploadProgress}")
                 it.uploadProgress = photo.uploadProgress
                 it.state = MediaState.UPLOADING
             }
-            Log.d(javaClass.simpleName, "PROGRESS UPDATE RECEIVED ${photo.uploadProgress}")
             recipePhotoListController.notifyModelChanged(photos.indexOf(photoInListToUpdate))
         })
         viewModel.currentUploadingVideo.observe(viewLifecycleOwner, { video ->
             val videoInListToUpdate = videos.find { it.videoBmp == video.videoBmp }
             videoInListToUpdate?.let {
                 it.uploadProgress = video.uploadProgress
+                it.state = MediaState.UPLOADING
             }
-            recipeVideoListController.setData(videos)
+            recipeVideoListController.notifyModelChanged(videos.indexOf(videoInListToUpdate))
         })
     }
 
@@ -124,8 +123,7 @@ class CreateRecipeFragment : BaseFragment() {
             showVideoDialog("CREATE_RECIPE_VID_0")
         }
         binding.btnSubmit.setOnClickListener {
-            viewModel.uploadRecipePhotos(photos)
-            //viewModel.uploadRecipeVideos(videos)
+            viewModel.startMultimediaUpload(photos, videos)
         }
     }
 

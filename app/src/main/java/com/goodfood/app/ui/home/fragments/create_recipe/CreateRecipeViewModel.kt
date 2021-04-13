@@ -38,37 +38,41 @@ class CreateRecipeViewModel @Inject constructor() : BaseViewModel() {
     val createRecipeUI = CreateRecipeUI()
 
     private lateinit var photoUploadProgressFlow: Flow<Int>
+    private lateinit var videoUploadProgressFlow: Flow<Int>
 
     init {
         setUpPhotosUploadFlow()
+        setUpVideosUploadFlow()
     }
 
     private fun setUpPhotosUploadFlow() {
         photoUploadProgressFlow = flow {
-            Log.d(javaClass.simpleName, "PHOTO UPLOAD STARTED")
             (0..100).forEach {
                 delay(50)
-                Log.d(javaClass.simpleName, "Emitting $it")
                 emit(it)
             }
-        }.flowOn(Dispatchers.Default)
+        }.flowOn(Dispatchers.IO)
     }
 
-    private val videoUploadProgressFlow: Flow<Int> = flow {
-        var count = 0
-        while (count == 100) {
-            count++
-            emit(count)
-            Log.d(javaClass.simpleName, "EMITTED VIDEO PROGRESS: $count")
-            delay(500L)
+    private fun setUpVideosUploadFlow() {
+        videoUploadProgressFlow = flow {
+            (0..100).forEach {
+                delay(50)
+                emit(it)
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    fun startMultimediaUpload(photos: List<RecipePhoto>, videos: List<RecipeVideo>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            withContext(coroutineContext) { uploadRecipePhotos(photos) }
+            withContext(coroutineContext) { uploadRecipeVideos(videos) }
         }
     }
 
-    fun uploadRecipePhotos(photos: List<RecipePhoto>) {
-        viewModelScope.launch {
-            photos.forEach { photo ->
-                withContext(coroutineContext) { uploadPhoto(photo) }
-            }
+    private suspend fun uploadRecipePhotos(photos: List<RecipePhoto>) {
+        photos.forEach { photo ->
+            uploadPhoto(photo)
         }
     }
 
@@ -79,22 +83,16 @@ class CreateRecipeViewModel @Inject constructor() : BaseViewModel() {
         }
     }
 
-    fun uploadRecipeVideos(videos: List<RecipeVideo>) {
-        viewModelScope.launch {
-            videos.forEach { video ->
-                uploadVideo(video)
-            }
+    private suspend fun uploadRecipeVideos(videos: List<RecipeVideo>) {
+        videos.forEach { video ->
+            uploadVideo(video)
         }
     }
 
-    private fun uploadVideo(video: RecipeVideo) {
-        _currentUploadingVideo.postValue(video)
-        viewModelScope.launch {
-            videoUploadProgressFlow.collect {
-                val recipeVideo = _currentUploadingVideo.value
-                recipeVideo?.uploadProgress = it
-                _currentUploadingVideo.postValue(recipeVideo!!)
-            }
+    private suspend fun uploadVideo(video: RecipeVideo) {
+        videoUploadProgressFlow.collect {
+            video.uploadProgress = it
+            _currentUploadingVideo.postValue(video)
         }
     }
 
