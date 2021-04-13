@@ -63,4 +63,6 @@
     <string name="stop">Stop</string>
     <string name="plz_try_again_sorry_abt_incv">Please try again sorry about inconvenience</string>
     <string name="copying_file_plz_wt">Copying the file please wait…</string>
+    <string name="plz_wt_until_files_upload">Please wait until files upload</string>
 </resources>
+

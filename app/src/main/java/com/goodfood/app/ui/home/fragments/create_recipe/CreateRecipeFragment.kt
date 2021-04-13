@@ -243,6 +243,14 @@ class CreateRecipeFragment : BaseFragment() {
 
     override fun onClickEvent(event: ClickEventMessage) {
         super.onClickEvent(event)
+
+        if (viewModel.isMultimediaUploadInProgress.value == true) {
+            NotificationBottomDialog
+                .getInstance(getString(R.string.plz_wt_until_files_upload), true)
+                .show(childFragmentManager, NotificationBottomDialog.TAG)
+            return
+        }
+
         when (event.viewId) {
             R.id.img_recipe_photo -> {
                 val recipePhoto = event.payload as RecipePhoto

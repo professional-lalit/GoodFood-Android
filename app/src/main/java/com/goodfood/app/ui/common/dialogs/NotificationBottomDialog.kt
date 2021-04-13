@@ -1,6 +1,8 @@
 package com.goodfood.app.ui.common.dialogs
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,10 +23,17 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 class NotificationBottomDialog : BottomSheetDialogFragment() {
 
     companion object {
+
         const val TAG = "NotificationBottomDialog"
-        fun getInstance(title: String): NotificationBottomDialog {
+        private const val TIMED_DISMISSAL_VALUE = 2000L
+
+        fun getInstance(
+            title: String,
+            isTimedDismissal: Boolean? = false
+        ): NotificationBottomDialog {
             val bundle = Bundle()
             bundle.putString("title", title)
+            bundle.putBoolean("is_timed", isTimedDismissal!!)
             return NotificationBottomDialog().apply { arguments = bundle }
         }
     }
@@ -32,10 +41,12 @@ class NotificationBottomDialog : BottomSheetDialogFragment() {
     private lateinit var binding: DialogNotificationBottomBinding
 
     private lateinit var title: String
+    private var isTimedDismissal: Boolean = false
 
     override fun setArguments(args: Bundle?) {
         super.setArguments(args)
         title = args?.getString("title") ?: ""
+        isTimedDismissal = args?.getBoolean("is_timed") ?: false
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,6 +67,12 @@ class NotificationBottomDialog : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.txtNotificationTitle.text = title
+
+        if (isTimedDismissal) {
+            Handler(Looper.getMainLooper()).postDelayed({
+                dismiss()
+            }, TIMED_DISMISSAL_VALUE)
+        }
     }
 
 }

@@ -35,6 +35,9 @@ class CreateRecipeViewModel @Inject constructor() : BaseViewModel() {
     private val _currentUploadingPhoto = MutableLiveData<RecipePhoto>()
     val currentUploadingPhoto: LiveData<RecipePhoto> = _currentUploadingPhoto
 
+    private val _isMultimediaUploadInProgress = MutableLiveData<Boolean>()
+    val isMultimediaUploadInProgress: LiveData<Boolean> = _isMultimediaUploadInProgress
+
     val createRecipeUI = CreateRecipeUI()
 
     private lateinit var photoUploadProgressFlow: Flow<Int>
@@ -65,8 +68,10 @@ class CreateRecipeViewModel @Inject constructor() : BaseViewModel() {
 
     fun startMultimediaUpload(photos: List<RecipePhoto>, videos: List<RecipeVideo>) {
         viewModelScope.launch(Dispatchers.IO) {
+            _isMultimediaUploadInProgress.postValue(true)
             withContext(coroutineContext) { uploadRecipePhotos(photos) }
             withContext(coroutineContext) { uploadRecipeVideos(videos) }
+            _isMultimediaUploadInProgress.postValue(false)
         }
     }
 
