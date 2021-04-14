@@ -2,6 +2,7 @@ package com.goodfood.app.ui.home.fragments.create_recipe
 
 import androidx.databinding.BaseObservable
 import androidx.databinding.Bindable
+import com.goodfood.app.models.request_dtos.CreateRecipeRequestDTO
 import com.goodfood.app.models.request_dtos.LoginRequestDTO
 
 
@@ -15,6 +16,27 @@ import com.goodfood.app.models.request_dtos.LoginRequestDTO
  * (please keep the subject as 'GoodFood Android Code Suggestion')
  */
 class CreateRecipeUI : BaseObservable() {
+
+    @Bindable
+    var title: String = ""
+        set(value) {
+            field = value
+            notifyChange()
+        }
+
+    @Bindable
+    var description: String = ""
+        set(value) {
+            field = value
+            notifyChange()
+        }
+
+    @Bindable
+    var price: String = "0"
+        set(value) {
+            field = value
+            notifyChange()
+        }
 
     @Bindable
     var isRecipeDataUploading: Boolean = false
@@ -37,4 +59,13 @@ class CreateRecipeUI : BaseObservable() {
             notifyChange()
         }
 
+    fun getRequestDTO(): CreateRecipeRequestDTO {
+        return CreateRecipeRequestDTO(
+            CreateRecipeRequestDTO.RecipeData(
+                title,
+                description,
+                price.toDouble()
+            )
+        )
+    }
 }

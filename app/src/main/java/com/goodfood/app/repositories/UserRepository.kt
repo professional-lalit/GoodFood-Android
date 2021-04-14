@@ -9,6 +9,7 @@ import com.goodfood.app.models.response_dtos.UploadProfileImageResponseDTO
 import com.goodfood.app.models.response_dtos.UserResponseDTO
 import com.goodfood.app.networking.NetworkResponse
 import com.goodfood.app.networking.ServerInterface
+import com.goodfood.app.utils.Utils.getMimeType
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.scopes.ViewModelScoped
@@ -40,16 +41,6 @@ class UserRepository @Inject constructor(
     private val serverInterface: ServerInterface,
     private val prefs: Prefs
 ) {
-
-
-    private fun getMimeType(file: File): String? {
-        var type: String? = null
-        val extension = MimeTypeMap.getFileExtensionFromUrl(file.path)
-        if (extension != null) {
-            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
-        }
-        return type
-    }
 
     suspend fun uploadUserImage(userId: String, file: File): NetworkResponse {
 

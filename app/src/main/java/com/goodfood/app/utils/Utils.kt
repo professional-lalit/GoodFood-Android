@@ -9,6 +9,7 @@ import android.media.CamcorderProfile
 import android.media.MediaMetadataRetriever
 import android.util.Log
 import android.util.Patterns
+import android.webkit.MimeTypeMap
 import androidx.appcompat.app.AppCompatActivity
 import java.io.File
 import java.io.FileNotFoundException
@@ -103,6 +104,15 @@ object Utils {
             e.printStackTrace()
         }
         return null
+    }
+
+    fun getMimeType(file: File): String? {
+        var type: String? = null
+        val extension = MimeTypeMap.getFileExtensionFromUrl(file.path)
+        if (extension != null) {
+            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
+        }
+        return type
     }
 
 }

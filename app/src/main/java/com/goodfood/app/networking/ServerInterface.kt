@@ -1,5 +1,6 @@
 package com.goodfood.app.networking
 
+import com.goodfood.app.models.request_dtos.CreateRecipeRequestDTO
 import com.goodfood.app.models.request_dtos.LoginRequestDTO
 import com.goodfood.app.models.request_dtos.SignupRequestDTO
 import okhttp3.MultipartBody
@@ -39,5 +40,15 @@ interface ServerInterface {
 
     @GET("user/me")
     suspend fun fetchMeDetails(): Response<Any?>
+
+    @POST("recipe/create")
+    suspend fun createRecipe(@Body recipeRequestDTO: CreateRecipeRequestDTO): Response<Any?>
+
+    @Multipart
+    @POST("recipe/imageUpload")
+    suspend fun uploadRecipeImage(
+        @Query("recipeId") userId: String,
+        @Part recipeImage: MultipartBody.Part
+    ): Response<Any?>
 
 }

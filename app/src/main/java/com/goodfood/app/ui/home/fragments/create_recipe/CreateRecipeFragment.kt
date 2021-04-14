@@ -77,6 +77,7 @@ class CreateRecipeFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentCreateRecipeBinding.inflate(inflater)
+        binding.model = viewModel.createRecipeUI
         return binding.root
     }
 
@@ -93,6 +94,12 @@ class CreateRecipeFragment : BaseFragment() {
     }
 
     private fun setObservers() {
+        viewModel.recipeUploadResponse.observe(viewLifecycleOwner, {
+            if (it.recipeId.isNotEmpty()) {
+                showToast(getString(R.string.recipe_data_uploaded))
+                viewModel.startMultimediaUpload(it.recipeId, photos, videos)
+            }
+        })
         viewModel.currentUploadingPhoto.observe(viewLifecycleOwner, { photo ->
             val photoInListToUpdate = photos.find { it.imgUri == photo.imgUri }
             photoInListToUpdate?.let {
@@ -117,13 +124,13 @@ class CreateRecipeFragment : BaseFragment() {
 
     private fun setViews() {
         binding.btnPickPhoto.setOnClickListener {
-            checkPermissionsAndShowDialog("CREATE_RECIPE_IMG_0")
+            checkPermissionsAndShowDialog("CREATE_RECIPE_IMG_${photos.size}")
         }
         binding.btnPickVideo.setOnClickListener {
-            showVideoDialog("CREATE_RECIPE_VID_0")
+            showVideoDialog("CREATE_RECIPE_VID_${videos.size}")
         }
         binding.btnSubmit.setOnClickListener {
-            viewModel.startMultimediaUpload(photos, videos)
+            viewModel.uploadRecipeData()
         }
     }
 
