@@ -269,11 +269,11 @@ class CreateRecipeFragment : BaseFragment() {
         when (event.viewId) {
             R.id.img_recipe_photo -> {
                 val recipePhoto = event.payload as RecipePhoto
-                checkPermissionsAndShowDialog("CREATE_RECIPE_IMG_${photos.indexOf(recipePhoto)}")
+                checkPermissionsAndShowDialog("IMG_${photos.indexOf(recipePhoto)}")
             }
             R.id.img_recipe_video -> {
                 val recipeVideo = event.payload as RecipeVideo
-                showVideoDialog("CREATE_RECIPE_VID_${videos.indexOf(recipeVideo)}")
+                showVideoDialog("VID_${videos.indexOf(recipeVideo)}")
             }
             R.id.img_delete -> {
                 if (event.payload is RecipeVideo) {

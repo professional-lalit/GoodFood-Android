@@ -78,7 +78,7 @@ class RecipeRepository @Inject constructor(
         val partFile: MultipartBody.Part =
             MultipartBody.Part.createFormData(
                 "recipeImage",
-                file.name,
+                recipeId + "_" + file.name,
                 createCountingRequestBody(requestBody, cb)!!
             )
 
@@ -111,7 +111,7 @@ class RecipeRepository @Inject constructor(
         val partFile: MultipartBody.Part =
             MultipartBody.Part.createFormData(
                 "recipeVideo",
-                file.name,
+                recipeId + "_" + file.name,
                 createCountingRequestBody(requestBody, cb)!!
             )
 
