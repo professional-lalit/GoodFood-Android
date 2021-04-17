@@ -8,6 +8,7 @@ import com.goodfood.app.networking.ServerInterface
 import com.goodfood.app.networking.NetworkResponse
 import com.goodfood.app.ui.login.LoginData
 import com.goodfood.app.ui.signup.SignupData
+import com.goodfood.app.utils.Utils
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.scopes.ViewModelScoped
@@ -46,12 +47,7 @@ class AuthRepository @Inject constructor(
             prefs.accessToken = signupResponseDTO.token
             NetworkResponse.NetworkSuccess(model)
         } else {
-            val type = object : TypeToken<ErrorResponseDTO>() {}.type
-            val errorResponseDTO: ErrorResponseDTO =
-                Gson().fromJson(response.errorBody()!!.charStream(), type)
-            val errorData = errorResponseDTO.getDomainModel()
-            errorData.status = response.code()
-            NetworkResponse.NetworkError(errorData)
+            NetworkResponse.NetworkError(Utils.parseError(response))
         }
     }
 
@@ -68,12 +64,7 @@ class AuthRepository @Inject constructor(
             prefs.accessToken = loginResponseDTO.token
             NetworkResponse.NetworkSuccess(model)
         } else {
-            val type = object : TypeToken<ErrorResponseDTO>() {}.type
-            val errorResponseDTO: ErrorResponseDTO =
-                Gson().fromJson(response.errorBody()!!.charStream(), type)
-            val errorData = errorResponseDTO.getDomainModel()
-            errorData.status = response.code()
-            NetworkResponse.NetworkError(errorData)
+            NetworkResponse.NetworkError(Utils.parseError(response))
         }
     }
 

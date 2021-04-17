@@ -5,11 +5,13 @@
     android:layout_height="match_parent"
     tools:context=".ui.home.fragments.explore.ExploreFragment">
 
-    <TextView
-        android:layout_centerInParent="true"
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="My RECIPES" />
+    <com.airbnb.epoxy.EpoxyRecyclerView
+        android:id="@+id/recycler_recipes"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/dimen_size_10"
+        android:layout_marginEnd="@dimen/dimen_size_10"
+        android:clipToPadding="false"
+        android:paddingBottom="@dimen/dimen_size_20" />
 
 </RelativeLayout>

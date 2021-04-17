@@ -2,7 +2,6 @@ package com.goodfood.app.utils
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.Bitmap.CompressFormat
 import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
 import android.media.CamcorderProfile
@@ -11,9 +10,13 @@ import android.util.Log
 import android.util.Patterns
 import android.webkit.MimeTypeMap
 import androidx.appcompat.app.AppCompatActivity
+import com.goodfood.app.models.domain.Error
+import com.goodfood.app.models.response_dtos.ErrorResponseDTO
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import retrofit2.Response
 import java.io.File
 import java.io.FileNotFoundException
-import java.io.FileOutputStream
 import java.io.IOException
 
 
@@ -113,6 +116,15 @@ object Utils {
             type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
         }
         return type
+    }
+
+    fun parseError(response: Response<Any?>): Error {
+        val type = object : TypeToken<ErrorResponseDTO>() {}.type
+        val errorResponseDTO: ErrorResponseDTO =
+            Gson().fromJson(response.errorBody()!!.charStream(), type)
+        val errorData = errorResponseDTO.getDomainModel()
+        errorData.status = response.code()
+        return errorData
     }
 
 }

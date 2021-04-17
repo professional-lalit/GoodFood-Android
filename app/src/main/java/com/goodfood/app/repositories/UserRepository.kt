@@ -9,6 +9,7 @@ import com.goodfood.app.models.response_dtos.UploadProfileImageResponseDTO
 import com.goodfood.app.models.response_dtos.UserResponseDTO
 import com.goodfood.app.networking.NetworkResponse
 import com.goodfood.app.networking.ServerInterface
+import com.goodfood.app.utils.Utils
 import com.goodfood.app.utils.Utils.getMimeType
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -56,12 +57,7 @@ class UserRepository @Inject constructor(
             val serverMessage = uploadProfileImageResponseDTO.getDomainModel()
             NetworkResponse.NetworkSuccess(serverMessage)
         } else {
-            val type = object : TypeToken<ErrorResponseDTO>() {}.type
-            val errorResponseDTO: ErrorResponseDTO =
-                Gson().fromJson(response.errorBody()!!.charStream(), type)
-            val errorData = errorResponseDTO.getDomainModel()
-            errorData.status = response.code()
-            NetworkResponse.NetworkError(errorData)
+            NetworkResponse.NetworkError(Utils.parseError(response))
         }
     }
 
@@ -82,12 +78,7 @@ class UserRepository @Inject constructor(
                 NetworkResponse.NetworkSuccess(localUser)
             }
             else -> {
-                val type = object : TypeToken<ErrorResponseDTO>() {}.type
-                val errorResponseDTO: ErrorResponseDTO =
-                    Gson().fromJson(response.errorBody()!!.charStream(), type)
-                val errorData = errorResponseDTO.getDomainModel()
-                errorData.status = response.code()
-                NetworkResponse.NetworkError(errorData)
+                NetworkResponse.NetworkError(Utils.parseError(response))
             }
         }
     }

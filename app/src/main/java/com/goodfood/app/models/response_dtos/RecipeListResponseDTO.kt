@@ -15,7 +15,7 @@ import com.goodfood.app.models.domain.Recipe
 data class RecipeListResponseDTO(
     val list: List<RecipeDTO>
 ) : BaseResponseDTO() {
-    
+
     data class RecipeDTO(
         val recipeId: String,
         val title: String,
@@ -24,14 +24,26 @@ data class RecipeListResponseDTO(
         val imageUrls: List<String>? = null,
         val videoUrls: List<String>? = null,
         val avgRating: Int = 0,
-        val isFeatured: Boolean? = false
+        val isFeatured: Boolean? = false,
+        val creator: UserResponseDTO.UserDTO? = null
     ) : BaseResponseDTO() {
         override fun getDomainModel(): Recipe {
+
+            fun getImages(list: List<String>?): String {
+                return if (list?.isNotEmpty() == true) {
+                    list[0]
+                } else {
+                    ""
+                }
+            }
+
             return Recipe(
                 recipeTitle = title,
                 recipeBrief = description,
-                recipePoster = imageUrls?.get(0),
-                discount = 0
+                recipePoster = getImages(imageUrls),
+                discount = 0,
+                imgUrls = imageUrls,
+                videoUrls = videoUrls
             )
         }
     }

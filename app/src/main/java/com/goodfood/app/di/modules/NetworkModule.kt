@@ -6,6 +6,8 @@ import com.goodfood.app.common.Prefs
 import com.goodfood.app.di.qualifiers.MultimediaHttpClient
 import com.goodfood.app.di.qualifiers.MultimediaRetrofit
 import com.goodfood.app.di.qualifiers.MultimediaServerInterface
+import com.goodfood.app.events.EventConstants
+import com.goodfood.app.events.sendEvent
 import com.goodfood.app.models.response_dtos.ErrorResponseDTO
 import com.goodfood.app.networking.HeaderInterceptor
 import com.goodfood.app.networking.ServerInterface
@@ -108,6 +110,16 @@ class NetworkModule {
             .readTimeout(5, TimeUnit.SECONDS)
             .addInterceptor(logInterceptor)
             .addInterceptor(headerInterceptor)
+            .addInterceptor { chain ->
+                val request = chain.request()
+                val response = chain.proceed(request)
+                if (response.code == 403) {
+                    //handleForbiddenResponse
+                } else if (response.code == 401) {
+                    sendEvent(EventConstants.Event.NOT_AUTHENTICATED.id)
+                }
+                response
+            }
             .build()
     }
 

@@ -2,6 +2,7 @@ package com.goodfood.app.networking
 
 import com.goodfood.app.models.request_dtos.CreateRecipeRequestDTO
 import com.goodfood.app.models.request_dtos.LoginRequestDTO
+import com.goodfood.app.models.request_dtos.RecipeFilterRequest
 import com.goodfood.app.models.request_dtos.SignupRequestDTO
 import okhttp3.MultipartBody
 import retrofit2.Response
@@ -58,5 +59,8 @@ interface ServerInterface {
         @Query("recipeId") userId: String,
         @Part recipeImage: MultipartBody.Part
     ): Response<Any?>
+
+    @POST("recipe/list")
+    suspend fun fetchRecipeList(@Body recipeFilterRequest: RecipeFilterRequest): Response<Any?>
 
 }

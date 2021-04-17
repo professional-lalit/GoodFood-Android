@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="recipe"
+            type="com.goodfood.app.models.domain.Recipe" />
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_size_50">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_size_50"
+            android:scaleType="fitXY"
+            android:src="@drawable/recipe_bottom_gradient" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true">
+
+            <TextView
+                android:id="@+id/txt_photo_count"
+                style="@style/BasicText"
+                android:text="@{recipe.photoCountText}"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_10" />
+
+            <TextView
+                android:id="@+id/txt_video_count"
+                style="@style/BasicText"
+                android:text="@{recipe.videoCountText}"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_10" />
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+</layout>
+

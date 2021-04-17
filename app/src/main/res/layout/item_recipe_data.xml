@@ -40,9 +40,25 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:setImage="@{data.recipePoster}" />
 
+
             <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="@dimen/dimen_size_1"
+                app:layout_constraintBottom_toBottomOf="@+id/img_recipe_poster"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <include
+                    layout="@layout/layout_recipt_item_bottom_strip"
+                    app:recipe="@{data}" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/frameLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:elevation="@dimen/dimen_size_2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 

@@ -3,17 +3,15 @@ package com.goodfood.app.repositories
 import android.util.Log
 import com.goodfood.app.di.qualifiers.MultimediaServerInterface
 import com.goodfood.app.models.request_dtos.CreateRecipeRequestDTO
-import com.goodfood.app.models.response_dtos.CreateRecipeResponseDTO
-import com.goodfood.app.models.response_dtos.ErrorResponseDTO
-import com.goodfood.app.models.response_dtos.UploadRecipeImageResponseDTO
-import com.goodfood.app.models.response_dtos.UploadRecipeVideoResponseDTO
+import com.goodfood.app.models.request_dtos.RecipeFilterRequest
+import com.goodfood.app.models.response_dtos.*
 import com.goodfood.app.networking.NetworkResponse
 import com.goodfood.app.networking.ServerInterface
 import com.goodfood.app.utils.CountingRequestBody
+import com.goodfood.app.utils.Utils
 import com.goodfood.app.utils.Utils.getMimeType
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import kotlinx.coroutines.flow.flow
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -92,12 +90,7 @@ class RecipeRepository @Inject constructor(
             val serverMessage = uploadRecipeImageResponseDTO.getDomainModel()
             NetworkResponse.NetworkSuccess(serverMessage)
         } else {
-            val type = object : TypeToken<ErrorResponseDTO>() {}.type
-            val errorResponseDTO: ErrorResponseDTO =
-                Gson().fromJson(response.errorBody()!!.charStream(), type)
-            val errorData = errorResponseDTO.getDomainModel()
-            errorData.status = response.code()
-            NetworkResponse.NetworkError(errorData)
+            NetworkResponse.NetworkError(Utils.parseError(response))
         }
     }
 
@@ -125,12 +118,23 @@ class RecipeRepository @Inject constructor(
             val serverMessage = uploadRecipeVideoResponseDTO.getDomainModel()
             NetworkResponse.NetworkSuccess(serverMessage)
         } else {
-            val type = object : TypeToken<ErrorResponseDTO>() {}.type
-            val errorResponseDTO: ErrorResponseDTO =
-                Gson().fromJson(response.errorBody()!!.charStream(), type)
-            val errorData = errorResponseDTO.getDomainModel()
-            errorData.status = response.code()
-            NetworkResponse.NetworkError(errorData)
+            NetworkResponse.NetworkError(Utils.parseError(response))
+        }
+    }
+
+    suspend fun getRecipeList(recipeFilterRequest: RecipeFilterRequest): NetworkResponse {
+        val response = serverInterface.fetchRecipeList(recipeFilterRequest)
+        return when {
+            response.code() in 200..210 -> {
+                val responseDTO: RecipeListResponseDTO? = Gson().fromJson(
+                    Gson().toJson(response.body()),
+                    RecipeListResponseDTO::class.java
+                )
+                NetworkResponse.NetworkSuccess(responseDTO)
+            }
+            else -> {
+                NetworkResponse.NetworkError(Utils.parseError(response))
+            }
         }
     }
 

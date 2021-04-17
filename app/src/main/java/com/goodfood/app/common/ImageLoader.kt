@@ -24,10 +24,11 @@ import java.io.File
 object ImageLoader {
 
     @JvmStatic
-    @BindingAdapter("app:loadImage")
-    fun loadImage(imageView: ImageView, url: String?) {
+    @BindingAdapter("app:loadCircularImage")
+    fun loadCircularImage(imageView: ImageView, url: String?) {
         url?.let {
             if (it.isNotEmpty()) {
+                it.replace("localhost","10.0.2.2")
                 Glide.with(imageView.context)
                     .load(it)
                     .placeholder(R.drawable.ic_profile_placeholder)
@@ -42,12 +43,9 @@ object ImageLoader {
     fun setImage(imageView: ImageView, url: String?) {
         url?.let {
             if (it.isNotEmpty()) {
+                val imageLink = it.replace("localhost","10.0.2.2")
                 Glide.with(imageView.context)
-                    .load(it)
-                    .apply(
-                        RequestOptions().skipMemoryCache(true)
-                            .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    )
+                    .load(imageLink)
                     .placeholder(R.drawable.dark_landscape_placeholder)
                     .into(imageView)
             }

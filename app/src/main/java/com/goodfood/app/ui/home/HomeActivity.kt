@@ -9,7 +9,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import com.goodfood.app.R
-import com.goodfood.app.common.multimedia_managers.ProfileImageManager
 import com.goodfood.app.common.multimedia_managers.RecipeMultimediaManager
 import com.goodfood.app.databinding.ActivityHomeBinding
 import com.goodfood.app.databinding.HomeDrawerHeaderBinding
@@ -23,6 +22,7 @@ import com.goodfood.app.ui.common.dialogs.DialogManager
 import com.goodfood.app.ui.home.fragments.*
 import com.goodfood.app.ui.home.fragments.create_recipe.CreateRecipeFragment
 import com.goodfood.app.ui.home.fragments.explore.ExploreFragment
+import com.goodfood.app.ui.home.fragments.my_recipes.MyRecipesFragment
 import com.goodfood.app.ui.login.LoginActivity
 import com.goodfood.app.utils.Extensions.showToast
 import com.ncapdevi.fragnav.FragNavController
