@@ -15,7 +15,8 @@ import android.net.Uri
  */
 data class RecipeVideo(
     var videoBmp: Bitmap? = null,
+    var videoUri: Uri? = null,
     var state: MediaState
-){
+) {
     var uploadProgress: Int = 0
 }

@@ -1,12 +1,19 @@
 package com.goodfood.app.repositories
 
+import android.util.Log
+import com.goodfood.app.di.qualifiers.MultimediaServerInterface
 import com.goodfood.app.models.request_dtos.CreateRecipeRequestDTO
-import com.goodfood.app.models.response_dtos.*
+import com.goodfood.app.models.response_dtos.CreateRecipeResponseDTO
+import com.goodfood.app.models.response_dtos.ErrorResponseDTO
+import com.goodfood.app.models.response_dtos.UploadRecipeImageResponseDTO
+import com.goodfood.app.models.response_dtos.UploadRecipeVideoResponseDTO
 import com.goodfood.app.networking.NetworkResponse
 import com.goodfood.app.networking.ServerInterface
+import com.goodfood.app.utils.CountingRequestBody
 import com.goodfood.app.utils.Utils.getMimeType
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.flow.flow
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -24,7 +31,10 @@ import javax.inject.Inject
  * also if any suggestions they are welcomed at: `lalit.appsmail@gmail.com`
  * (please keep the subject as 'GoodFood Android Code Suggestion')
  */
-class RecipeRepository @Inject constructor(private val serverInterface: ServerInterface) {
+class RecipeRepository @Inject constructor(
+    private val serverInterface: ServerInterface,
+    @MultimediaServerInterface private val multimediaServerInterface: ServerInterface
+) {
 
     suspend fun addRecipe(recipeRequestDTO: CreateRecipeRequestDTO): NetworkResponse {
         val response = serverInterface.createRecipe(recipeRequestDTO)
@@ -47,13 +57,33 @@ class RecipeRepository @Inject constructor(private val serverInterface: ServerIn
         }
     }
 
-    suspend fun uploadRecipeImage(recipeId: String, file: File): NetworkResponse {
+    private fun createCountingRequestBody(
+        requestBody: RequestBody,
+        progressCallback: (Int) -> Unit
+    ): RequestBody? {
+        return CountingRequestBody(requestBody) { bytesWritten, contentLength ->
+            val progress = (1.0 * bytesWritten / contentLength) * 100
+            Log.d(javaClass.simpleName, "UPLOADED: ${progress.toInt()}")
+            progressCallback(progress.toInt())
+        }
+    }
+
+    suspend fun uploadRecipeImage(
+        recipeId: String,
+        file: File,
+        cb: (Int) -> Unit
+    ): NetworkResponse {
 
         val requestBody: RequestBody = file.asRequestBody(getMimeType(file)!!.toMediaType())
         val partFile: MultipartBody.Part =
-            MultipartBody.Part.createFormData("recipeImage", file.name, requestBody)
+            MultipartBody.Part.createFormData(
+                "recipeImage",
+                file.name,
+                createCountingRequestBody(requestBody, cb)!!
+            )
 
-        val response = serverInterface.uploadRecipeImage(recipeId, partFile)
+        val response = multimediaServerInterface.uploadRecipeImage(recipeId, partFile)
+
         return if (response.code() in 200..210) {
             val uploadRecipeImageResponseDTO = Gson().fromJson(
                 Gson().toJson(response.body()),
@@ -70,5 +100,39 @@ class RecipeRepository @Inject constructor(private val serverInterface: ServerIn
             NetworkResponse.NetworkError(errorData)
         }
     }
+
+    suspend fun uploadRecipeVideo(
+        recipeId: String,
+        file: File,
+        cb: (Int) -> Unit
+    ): NetworkResponse {
+
+        val requestBody: RequestBody = file.asRequestBody(getMimeType(file)!!.toMediaType())
+        val partFile: MultipartBody.Part =
+            MultipartBody.Part.createFormData(
+                "recipeVideo",
+                file.name,
+                createCountingRequestBody(requestBody, cb)!!
+            )
+
+        val response = multimediaServerInterface.uploadRecipeVideo(recipeId, partFile)
+
+        return if (response.code() in 200..210) {
+            val uploadRecipeVideoResponseDTO = Gson().fromJson(
+                Gson().toJson(response.body()),
+                UploadRecipeVideoResponseDTO::class.java
+            )
+            val serverMessage = uploadRecipeVideoResponseDTO.getDomainModel()
+            NetworkResponse.NetworkSuccess(serverMessage)
+        } else {
+            val type = object : TypeToken<ErrorResponseDTO>() {}.type
+            val errorResponseDTO: ErrorResponseDTO =
+                Gson().fromJson(response.errorBody()!!.charStream(), type)
+            val errorData = errorResponseDTO.getDomainModel()
+            errorData.status = response.code()
+            NetworkResponse.NetworkError(errorData)
+        }
+    }
+
 
 }

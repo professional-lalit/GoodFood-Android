@@ -18,21 +18,21 @@ import com.goodfood.app.models.request_dtos.LoginRequestDTO
 class CreateRecipeUI : BaseObservable() {
 
     @Bindable
-    var title: String = ""
+    var title: String = "Sample recipe, from Mumbai"
         set(value) {
             field = value
             notifyChange()
         }
 
     @Bindable
-    var description: String = ""
+    var description: String = "This is a sample recipe from Mumbai"
         set(value) {
             field = value
             notifyChange()
         }
 
     @Bindable
-    var price: String = "0"
+    var price: String = "915"
         set(value) {
             field = value
             notifyChange()

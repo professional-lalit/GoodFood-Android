@@ -3,6 +3,9 @@ package com.goodfood.app.di.modules
 import com.goodfood.app.common.Constants
 import com.goodfood.app.common.CustomApplication
 import com.goodfood.app.common.Prefs
+import com.goodfood.app.di.qualifiers.MultimediaHttpClient
+import com.goodfood.app.di.qualifiers.MultimediaRetrofit
+import com.goodfood.app.di.qualifiers.MultimediaServerInterface
 import com.goodfood.app.models.response_dtos.ErrorResponseDTO
 import com.goodfood.app.networking.HeaderInterceptor
 import com.goodfood.app.networking.ServerInterface
@@ -36,11 +39,64 @@ import javax.inject.Singleton
  * This code is free and can be reused by anyone,
  * also if any suggestions they are welcomed at: `lalit.appsmail@gmail.com`
  * (please keep the subject as 'GoodFood Android Code Suggestion')
+ *
+ * The retrofit instances for binary uploads/downloads are managed separately
+ * because retrofit logs the binary data which could lead to `OutOfMemory` Exception
+ * I have disabled it in multimedia retrofit instance.
+ *
  */
 
 @Module
 @InstallIn(SingletonComponent::class)
 class NetworkModule {
+
+
+    /**
+     * ***************************************************************************************
+     * ***************************** RETROFIT FOR MULTIMEDIA/BINARY DATA *********************
+     * ***************************************************************************************
+     */
+
+    @MultimediaHttpClient
+    @Provides
+    fun provideMMAPIClient(headerInterceptor: HeaderInterceptor): OkHttpClient {
+        val logInterceptor = HttpLoggingInterceptor()
+        logInterceptor.level = HttpLoggingInterceptor.Level.NONE
+        return OkHttpClient().newBuilder()
+            .connectTimeout(5, TimeUnit.SECONDS)
+            .writeTimeout(5, TimeUnit.SECONDS)
+            .readTimeout(5, TimeUnit.SECONDS)
+            .addInterceptor(logInterceptor)
+            .addInterceptor(headerInterceptor)
+            .build()
+    }
+
+    @MultimediaRetrofit
+    @Provides
+    fun provideMMRetrofit(@MultimediaHttpClient apiClient: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+            .client(apiClient)
+            .baseUrl(Constants.BASE_URL)
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+
+    @MultimediaServerInterface
+    @Provides
+    fun provideMMAPI(@MultimediaRetrofit retrofit: Retrofit): ServerInterface {
+        return retrofit.create(ServerInterface::class.java)
+    }
+
+    /**
+     * ***************************************************************************************
+     */
+
+    /**
+     * ***************************************************************************************
+     * ******************************** RETROFIT FOR NORMAL DATA *****************************
+     * ***************************************************************************************
+     */
 
     @Provides
     fun provideAPIClient(headerInterceptor: HeaderInterceptor): OkHttpClient {
@@ -69,5 +125,9 @@ class NetworkModule {
     fun provideAPI(retrofit: Retrofit): ServerInterface {
         return retrofit.create(ServerInterface::class.java)
     }
+
+    /**
+     * ***************************************************************************************
+     */
 
 }

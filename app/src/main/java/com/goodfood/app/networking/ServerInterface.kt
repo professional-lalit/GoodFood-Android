@@ -51,4 +51,12 @@ interface ServerInterface {
         @Part recipeImage: MultipartBody.Part
     ): Response<Any?>
 
+    @Streaming
+    @Multipart
+    @POST("recipe/videoUpload")
+    suspend fun uploadRecipeVideo(
+        @Query("recipeId") userId: String,
+        @Part recipeImage: MultipartBody.Part
+    ): Response<Any?>
+
 }

@@ -9,17 +9,13 @@ import com.goodfood.app.models.domain.RecipePhoto
 import com.goodfood.app.models.domain.RecipeVideo
 import com.goodfood.app.models.domain.ServerMessage
 import com.goodfood.app.models.response_dtos.CreateRecipeResponseDTO
-import com.goodfood.app.models.response_dtos.LoginResponseDTO
 import com.goodfood.app.networking.NetworkResponse
 import com.goodfood.app.repositories.RecipeRepository
 import com.goodfood.app.ui.common.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
 import javax.inject.Inject
 
 
@@ -46,43 +42,25 @@ class CreateRecipeViewModel @Inject constructor(
     private val _currentUploadingPhoto = MutableLiveData<RecipePhoto>()
     val currentUploadingPhoto: LiveData<RecipePhoto> = _currentUploadingPhoto
 
-    private val _isMultimediaUploadInProgress = MutableLiveData<Boolean>()
-    val isMultimediaUploadInProgress: LiveData<Boolean> = _isMultimediaUploadInProgress
+    private val _isUploadInProgress = MutableLiveData<Boolean>()
+    val isUploadInProgress: LiveData<Boolean> = _isUploadInProgress
 
     val createRecipeUI = CreateRecipeUI()
 
-    private lateinit var photoUploadProgressFlow: Flow<Int>
-    private lateinit var videoUploadProgressFlow: Flow<Int>
-
-    init {
-        setUpPhotosUploadFlow()
-        setUpVideosUploadFlow()
-    }
-
-    private fun setUpPhotosUploadFlow() {
-        photoUploadProgressFlow = flow {
-            (0..100).forEach {
-                delay(50)
-                emit(it)
-            }
-        }.flowOn(Dispatchers.IO)
-    }
-
-    private fun setUpVideosUploadFlow() {
-        videoUploadProgressFlow = flow {
-            (0..100).forEach {
-                delay(50)
-                emit(it)
-            }
-        }.flowOn(Dispatchers.IO)
-    }
-
-    fun startMultimediaUpload(recipeId: String, photos: List<RecipePhoto>, videos: List<RecipeVideo>) {
+    fun startMultimediaUpload(
+        recipeId: String,
+        photos: List<RecipePhoto>,
+        videos: List<RecipeVideo>
+    ) {
         viewModelScope.launch(Dispatchers.IO) {
-            _isMultimediaUploadInProgress.postValue(true)
-            withContext(coroutineContext) { uploadRecipePhotos(recipeId, photos) }
-            withContext(coroutineContext) { uploadRecipeVideos(videos) }
-            _isMultimediaUploadInProgress.postValue(false)
+            _isUploadInProgress.postValue(true)
+            if (photos.isNotEmpty()) {
+                withContext(coroutineContext) { uploadRecipePhotos(recipeId, photos) }
+            }
+            if (videos.isNotEmpty()) {
+                withContext(coroutineContext) { uploadRecipeVideos(recipeId, videos) }
+            }
+            _isUploadInProgress.postValue(false)
         }
     }
 
@@ -95,6 +73,10 @@ class CreateRecipeViewModel @Inject constructor(
     private suspend fun uploadPhoto(recipeId: String, photo: RecipePhoto) {
         val fileToUpload = photo.imgUri?.toFile()
         val imageResponse = recipeRepository.uploadRecipeImage(recipeId, fileToUpload!!)
+        { progress ->
+            photo.uploadProgress = progress
+            _currentUploadingPhoto.postValue(photo)
+        }
         if (imageResponse is NetworkResponse.NetworkSuccess) {
             val data = imageResponse.data as ServerMessage
             Log.d(javaClass.simpleName, "file uploaded")
@@ -102,23 +84,27 @@ class CreateRecipeViewModel @Inject constructor(
             val errorData = (imageResponse as NetworkResponse.NetworkError).error
             _errorData.postValue(errorData)
         }
-
-        photoUploadProgressFlow.collect {
-            photo.uploadProgress = it
-            _currentUploadingPhoto.postValue(photo)
-        }
     }
 
-    private suspend fun uploadRecipeVideos(videos: List<RecipeVideo>) {
+    private suspend fun uploadRecipeVideos(recipeId: String, videos: List<RecipeVideo>) {
         videos.forEach { video ->
-            uploadVideo(video)
+            uploadVideo(recipeId, video)
         }
     }
 
-    private suspend fun uploadVideo(video: RecipeVideo) {
-        videoUploadProgressFlow.collect {
-            video.uploadProgress = it
+    private suspend fun uploadVideo(recipeId: String, video: RecipeVideo) {
+        val fileToUpload = video.videoUri?.toFile()
+        val imageResponse = recipeRepository.uploadRecipeVideo(recipeId, fileToUpload!!)
+        { progress ->
+            video.uploadProgress = progress
             _currentUploadingVideo.postValue(video)
+        }
+        if (imageResponse is NetworkResponse.NetworkSuccess) {
+            val data = imageResponse.data as ServerMessage
+            Log.d(javaClass.simpleName, "file uploaded")
+        } else {
+            val errorData = (imageResponse as NetworkResponse.NetworkError).error
+            _errorData.postValue(errorData)
         }
     }
 

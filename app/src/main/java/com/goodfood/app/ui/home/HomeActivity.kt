@@ -190,6 +190,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
             finish()
         } else {
             showToast(getString(R.string.please_again_press_back_to_exit))
+            fragNavController.popFragment()
         }
         backPressTime = System.currentTimeMillis()
     }
@@ -217,6 +218,16 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
                     popEnterAnimation = R.anim.enter_from_left
                     popExitAnimation = R.anim.exit_to_right
                     fragNavController.pushFragment(CreateRecipeFragment.newInstance(), build())
+                }
+            }
+            EventConstants.Event.RECIPE_UPLOADED.id -> {
+                showToast(getString(R.string.recipe_data_uploaded))
+                with(FragNavTransactionOptions.newBuilder()) {
+                    enterAnimation = R.anim.enter_from_right
+                    exitAnimation = R.anim.exit_to_left
+                    popEnterAnimation = R.anim.enter_from_left
+                    popExitAnimation = R.anim.exit_to_right
+                    fragNavController.popFragment()
                 }
             }
         }

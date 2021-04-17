@@ -5,6 +5,7 @@ import android.os.Environment
 import android.util.Log
 import java.io.File
 import java.util.*
+import javax.inject.Inject
 import kotlin.Comparator
 
 
@@ -22,7 +23,7 @@ import kotlin.Comparator
  * Manages all the low level file handling, typically for an activity
  */
 
-class DirectoryManager constructor(private val context: Context) {
+class DirectoryManager @Inject constructor(private val context: Context) {
 
     companion object {
         private var PROFILE_IMAGE_DIRECTORY_PATH = "MULTIMEDIA/PROFILE/IMAGES"

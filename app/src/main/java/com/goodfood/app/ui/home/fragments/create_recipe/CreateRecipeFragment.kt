@@ -5,13 +5,11 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import com.goodfood.app.R
 import com.goodfood.app.common.Constants
 import com.goodfood.app.common.multimedia_managers.RecipeMultimediaManager
@@ -19,6 +17,7 @@ import com.goodfood.app.databinding.FragmentCreateRecipeBinding
 import com.goodfood.app.events.ClickEventMessage
 import com.goodfood.app.events.EventConstants
 import com.goodfood.app.events.Message
+import com.goodfood.app.events.sendEvent
 import com.goodfood.app.models.domain.MediaState
 import com.goodfood.app.models.domain.RecipePhoto
 import com.goodfood.app.models.domain.RecipeVideo
@@ -96,8 +95,11 @@ class CreateRecipeFragment : BaseFragment() {
     private fun setObservers() {
         viewModel.recipeUploadResponse.observe(viewLifecycleOwner, {
             if (it.recipeId.isNotEmpty()) {
-                showToast(getString(R.string.recipe_data_uploaded))
-                viewModel.startMultimediaUpload(it.recipeId, photos, videos)
+                if (photos.isNotEmpty() || videos.isNotEmpty()) {
+                    viewModel.startMultimediaUpload(it.recipeId, photos, videos)
+                } else {
+                    sendEvent(EventConstants.Event.RECIPE_UPLOADED.id)
+                }
             }
         })
         viewModel.currentUploadingPhoto.observe(viewLifecycleOwner, { photo ->
@@ -114,6 +116,11 @@ class CreateRecipeFragment : BaseFragment() {
                 it.uploadProgress = video.uploadProgress
                 it.state = MediaState.UPLOADING
                 recipeVideoListController.notifyModelChanged(videos.indexOf(it))
+            }
+        })
+        viewModel.isUploadInProgress.observe(viewLifecycleOwner, { isUploading ->
+            if (!isUploading) {
+                sendEvent(EventConstants.Event.RECIPE_UPLOADED.id)
             }
         })
     }
@@ -220,6 +227,7 @@ class CreateRecipeFragment : BaseFragment() {
                 val videoItemToAdd =
                     RecipeVideo(
                         Utils.getVideoFrame(file),
+                        Uri.fromFile(file),
                         MediaState.NOT_UPLOADING
                     )
                 videos.add(0, videoItemToAdd)
@@ -251,7 +259,7 @@ class CreateRecipeFragment : BaseFragment() {
     override fun onClickEvent(event: ClickEventMessage) {
         super.onClickEvent(event)
 
-        if (viewModel.isMultimediaUploadInProgress.value == true) {
+        if (viewModel.isUploadInProgress.value == true) {
             NotificationBottomDialog
                 .getInstance(getString(R.string.plz_wt_until_files_upload), true)
                 .show(childFragmentManager, NotificationBottomDialog.TAG)
