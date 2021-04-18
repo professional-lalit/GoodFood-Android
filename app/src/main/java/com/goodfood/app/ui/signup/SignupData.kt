@@ -46,7 +46,15 @@ data class SignupData(
     }
 
     fun getSignupRequestDTO(): SignupRequestDTO {
-        return SignupRequestDTO(firstName, lastName, mobileNumber, email, password, confirmPassword)
+        return SignupRequestDTO(
+            firstName,
+            lastName,
+            mobileNumber,
+            email,
+            password,
+            confirmPassword,
+            ""
+        )
     }
 
     fun isValid(): ValidationCode {

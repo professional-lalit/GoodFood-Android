@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="user"
+            type="com.goodfood.app.models.domain.User" />
+    </data>
+
+    <merge>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="@dimen/dimen_size_50"
+                android:layout_height="@dimen/dimen_size_50"
+                app:loadCircularImage="@{user.imageUrl}"
+                tools:src="@drawable/ic_profile_placeholder" />
+
+            <TextView
+                style="@style/BasicText"
+                android:textColor="@color/white"
+                android:text="@{user.fullname}"
+                tools:text="Lorem Ipsum" />
+        </LinearLayout>
+    </merge>
+
+</layout>

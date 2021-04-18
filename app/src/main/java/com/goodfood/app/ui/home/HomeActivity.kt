@@ -62,11 +62,10 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-//        viewModel.getMeDetails()
         setUpActionBar()
         setViews()
         setUpFragNav(savedInstanceState)
+        viewModel.getMeDetails()
     }
 
     private fun setUpActionBar() {
@@ -190,7 +189,9 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
             finish()
         } else {
             showToast(getString(R.string.please_again_press_back_to_exit))
-            fragNavController.popFragment()
+            if (!fragNavController.isRootFragment) {
+                fragNavController.popFragment()
+            }
         }
         backPressTime = System.currentTimeMillis()
     }

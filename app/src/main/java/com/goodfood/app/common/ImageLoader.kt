@@ -28,9 +28,9 @@ object ImageLoader {
     fun loadCircularImage(imageView: ImageView, url: String?) {
         url?.let {
             if (it.isNotEmpty()) {
-                it.replace("localhost","10.0.2.2")
+                val imageLink = it.replace("localhost","10.0.2.2")
                 Glide.with(imageView.context)
-                    .load(it)
+                    .load(imageLink)
                     .placeholder(R.drawable.ic_profile_placeholder)
                     .circleCrop()
                     .into(imageView)

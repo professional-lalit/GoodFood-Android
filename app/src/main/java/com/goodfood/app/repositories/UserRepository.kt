@@ -46,7 +46,10 @@ class UserRepository @Inject constructor(
     suspend fun uploadUserImage(userId: String, file: File): NetworkResponse {
 
         val requestBody: RequestBody = file.asRequestBody(getMimeType(file)!!.toMediaType())
-        val partFile: MultipartBody.Part = createFormData("profileImage", file.name, requestBody)
+        val partFile: MultipartBody.Part = createFormData(
+            "profileImage", "${userId}_${file.name}",
+            requestBody
+        )
 
         val response = serverInterface.uploadUserImage(userId, partFile)
         return if (response.code() in 200..210) {

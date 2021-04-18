@@ -16,5 +16,6 @@ data class SignupRequestDTO(
     private val mobileNumber: String,
     private val email: String,
     private val password: String,
-    private val confirmPassword: String
+    private val confirmPassword: String,
+    private val imageUrl: String
 )

@@ -21,8 +21,17 @@ data class Recipe(
     val recipePoster: String? = null,
     val discount: Int? = 0,
     val imgUrls: List<String>? = null,
-    val videoUrls: List<String>? = null
+    val videoUrls: List<String>? = null,
+    val profile: User? = null
 ) {
+
+    fun getPhotoCount(): Int {
+        return imgUrls?.size ?: 0
+    }
+
+    fun getVideoCount(): Int {
+        return videoUrls?.size ?: 0
+    }
 
     fun getPhotoCountText(): String {
         return if (imgUrls?.isNotEmpty() == true) {
@@ -33,8 +42,8 @@ data class Recipe(
     }
 
     fun getVideoCountText(): String {
-        return if (imgUrls?.isNotEmpty() == true) {
-            "${imgUrls.size} Videos"
+        return if (videoUrls?.isNotEmpty() == true) {
+            "${videoUrls.size} Videos"
         } else {
             "No Videos"
         }

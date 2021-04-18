@@ -52,6 +52,9 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class NetworkModule {
 
+    companion object {
+        private const val TIMEOUT_INTERVAL_SECS = 15L
+    }
 
     /**
      * ***************************************************************************************
@@ -65,9 +68,9 @@ class NetworkModule {
         val logInterceptor = HttpLoggingInterceptor()
         logInterceptor.level = HttpLoggingInterceptor.Level.NONE
         return OkHttpClient().newBuilder()
-            .connectTimeout(5, TimeUnit.SECONDS)
-            .writeTimeout(5, TimeUnit.SECONDS)
-            .readTimeout(5, TimeUnit.SECONDS)
+            .connectTimeout(TIMEOUT_INTERVAL_SECS, TimeUnit.SECONDS)
+            .writeTimeout(TIMEOUT_INTERVAL_SECS, TimeUnit.SECONDS)
+            .readTimeout(TIMEOUT_INTERVAL_SECS, TimeUnit.SECONDS)
             .addInterceptor(logInterceptor)
             .addInterceptor(headerInterceptor)
             .build()
@@ -105,9 +108,9 @@ class NetworkModule {
         val logInterceptor = HttpLoggingInterceptor()
         logInterceptor.level = HttpLoggingInterceptor.Level.BODY
         return OkHttpClient().newBuilder()
-            .connectTimeout(5, TimeUnit.SECONDS)
-            .writeTimeout(5, TimeUnit.SECONDS)
-            .readTimeout(5, TimeUnit.SECONDS)
+            .connectTimeout(TIMEOUT_INTERVAL_SECS, TimeUnit.SECONDS)
+            .writeTimeout(TIMEOUT_INTERVAL_SECS, TimeUnit.SECONDS)
+            .readTimeout(TIMEOUT_INTERVAL_SECS, TimeUnit.SECONDS)
             .addInterceptor(logInterceptor)
             .addInterceptor(headerInterceptor)
             .addInterceptor { chain ->

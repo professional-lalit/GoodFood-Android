@@ -26,7 +26,20 @@ data class UserResponseDTO(private val user: UserDTO? = null) : BaseResponseDTO(
         val address: String? = null,
         val imageUrl: String? = null,
         val videoUrl: String? = null
-    )
+    ): BaseResponseDTO() {
+
+        override fun getDomainModel(): User {
+            return User(
+                userId = _id ?: "",
+                firstName = firstName ?: "",
+                lastName = lastName ?: "",
+                imageUrl = imageUrl ?: "",
+                email = email ?: "",
+                bio = bio ?: "",
+                videoUrl = videoUrl ?: ""
+            )
+        }
+    }
 
 
 

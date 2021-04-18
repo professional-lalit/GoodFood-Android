@@ -40,19 +40,24 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:setImage="@{data.recipePoster}" />
 
-
-            <FrameLayout
-                android:layout_width="match_parent"
+            <com.goodfood.app.ui.common.widgets.UserProfileLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/dimen_size_10"
+                android:elevation="@dimen/dimen_size_1"
+                android:orientation="vertical"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:userData="@{data.profile}" />
+
+            <com.goodfood.app.ui.common.widgets.RecipeBottomStrip
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dimen_size_50"
                 android:elevation="@dimen/dimen_size_1"
                 app:layout_constraintBottom_toBottomOf="@+id/img_recipe_poster"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
-
-                <include
-                    layout="@layout/layout_recipt_item_bottom_strip"
-                    app:recipe="@{data}" />
-            </FrameLayout>
+                app:layout_constraintStart_toStartOf="parent"
+                app:recipeBottomStripData="@{data}" />
 
             <FrameLayout
                 android:id="@+id/frameLayout"

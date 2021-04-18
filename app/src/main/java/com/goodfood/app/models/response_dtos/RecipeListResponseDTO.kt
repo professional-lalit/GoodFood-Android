@@ -43,7 +43,8 @@ data class RecipeListResponseDTO(
                 recipePoster = getImages(imageUrls),
                 discount = 0,
                 imgUrls = imageUrls,
-                videoUrls = videoUrls
+                videoUrls = videoUrls,
+                profile = creator?.getDomainModel()
             )
         }
     }
