@@ -1,36 +1,27 @@
 package com.goodfood.app.di.modules
 
+import android.content.Context
+import android.content.Intent
 import com.goodfood.app.common.Constants
-import com.goodfood.app.common.CustomApplication
-import com.goodfood.app.common.Prefs
 import com.goodfood.app.di.qualifiers.MultimediaHttpClient
 import com.goodfood.app.di.qualifiers.MultimediaRetrofit
 import com.goodfood.app.di.qualifiers.MultimediaServerInterface
 import com.goodfood.app.events.EventConstants
-import com.goodfood.app.events.sendEvent
-import com.goodfood.app.models.response_dtos.ErrorResponseDTO
+import com.goodfood.app.events.sendSticky
 import com.goodfood.app.networking.HeaderInterceptor
 import com.goodfood.app.networking.ServerInterface
-import com.google.gson.Gson
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ActivityContext
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.*
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.RequestBody.Companion.toRequestBody
-import okhttp3.ResponseBody.Companion.toResponseBody
 import okhttp3.logging.HttpLoggingInterceptor
-import org.json.JSONObject
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.io.IOException
-import java.net.ConnectException
-import java.net.NetworkInterface
-import java.net.SocketTimeoutException
 import java.util.concurrent.TimeUnit
-import javax.inject.Singleton
 
 
 /**
@@ -104,7 +95,10 @@ class NetworkModule {
      */
 
     @Provides
-    fun provideAPIClient(headerInterceptor: HeaderInterceptor): OkHttpClient {
+    fun provideAPIClient(
+        @ApplicationContext context: Context,
+        headerInterceptor: HeaderInterceptor
+    ): OkHttpClient {
         val logInterceptor = HttpLoggingInterceptor()
         logInterceptor.level = HttpLoggingInterceptor.Level.BODY
         return OkHttpClient().newBuilder()
@@ -119,7 +113,7 @@ class NetworkModule {
                 if (response.code == 403) {
                     //handleForbiddenResponse
                 } else if (response.code == 401) {
-                    sendEvent(EventConstants.Event.NOT_AUTHENTICATED.id)
+                    context.sendBroadcast(Intent("unauthenticated"))
                 }
                 response
             }

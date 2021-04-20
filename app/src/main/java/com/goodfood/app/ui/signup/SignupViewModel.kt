@@ -45,7 +45,7 @@ class SignupViewModel @Inject constructor(
 
     val signupData = SignupData(
         "Lalit", "Hajare", "9876543210",
-        "hajare.lalit@gmail.com", "123Abc", "123Abc",
+        "hajare.lalit1@gmail.com", "123Abc", "123Abc",
     )
 
     private var profilePicFileToUpload: File? = null

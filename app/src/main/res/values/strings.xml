@@ -67,5 +67,6 @@
     <string name="description">Description</string>
     <string name="price">Price($):</string>
     <string name="recipe_data_uploaded">Recipe data uploaded</string>
+    <string name="plz_login_again_session_expired">Please login again session expired</string>
 </resources>
 

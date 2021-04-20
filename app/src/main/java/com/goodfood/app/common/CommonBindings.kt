@@ -1,13 +1,9 @@
 package com.goodfood.app.common
 
-import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import com.goodfood.app.R
 import com.goodfood.app.models.domain.Recipe
-import com.goodfood.app.models.domain.RecipePhoto
-import com.goodfood.app.models.domain.RecipeVideo
 import com.goodfood.app.models.domain.User
 import com.goodfood.app.ui.common.widgets.RecipeBottomStrip
 import com.goodfood.app.ui.common.widgets.UserProfileLayout
@@ -43,9 +39,18 @@ fun setRecipeBottomStripData(recipeBottomStrip: RecipeBottomStrip, recipe: Recip
     recipeBottomStrip.setData(recipe)
 }
 
+@BindingAdapter("app:recipeData")
+fun setRecipeData(
+    userProfileLayout: UserProfileLayout,
+    recipe: Recipe?
+) {
+    userProfileLayout.setRecipeData(recipe)
+}
+
 @BindingAdapter("app:userData")
-fun setUserProfile(userProfileLayout: UserProfileLayout, user: User?) {
-    user?.let {
-        userProfileLayout.setData(user)
-    }
+fun setUserData(
+    userProfileLayout: UserProfileLayout,
+    user: User?
+) {
+    userProfileLayout.setProfileData(user)
 }

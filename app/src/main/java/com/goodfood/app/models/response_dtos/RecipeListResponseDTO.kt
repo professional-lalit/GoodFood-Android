@@ -44,7 +44,8 @@ data class RecipeListResponseDTO(
                 discount = 0,
                 imgUrls = imageUrls,
                 videoUrls = videoUrls,
-                profile = creator?.getDomainModel()
+                profile = creator?.getDomainModel(),
+                price = price?.toInt()
             )
         }
     }

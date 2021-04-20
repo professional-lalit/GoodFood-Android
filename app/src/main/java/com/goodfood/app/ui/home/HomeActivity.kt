@@ -1,6 +1,9 @@
 package com.goodfood.app.ui.home
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.activity.viewModels
@@ -62,6 +65,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        registerReceiver(tokenExpirationReceiver, IntentFilter("unauthenticated"))
         setUpActionBar()
         setViews()
         setUpFragNav(savedInstanceState)
@@ -231,6 +235,18 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
                     fragNavController.popFragment()
                 }
             }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(tokenExpirationReceiver)
+    }
+
+    private val tokenExpirationReceiver = object : BroadcastReceiver() {
+        override fun onReceive(p0: Context?, p1: Intent?) {
+            showToast(getString(R.string.plz_login_again_session_expired))
+            viewModel.logout()
         }
     }
 
