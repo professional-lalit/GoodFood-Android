@@ -78,12 +78,8 @@ class ExploreFragment : BaseFragment() {
     }
 
     override fun onClickEvent(event: ClickEventMessage) {
-        val model = event.payload as Recipe
-        Toast.makeText(
-            requireContext(),
-            "Event received, model: ${model.recipeTitle}",
-            Toast.LENGTH_SHORT
-        ).show()
+
+
     }
 
     override fun onEvent(event: Message) {

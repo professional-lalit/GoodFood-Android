@@ -4,6 +4,7 @@ import android.view.View
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyModel
 import com.goodfood.app.R
+import java.io.Serializable
 
 
 /**
@@ -24,7 +25,7 @@ data class Recipe(
     val videoUrls: List<String>? = null,
     val profile: User? = null,
     val price: Int? = 0
-) {
+): Serializable {
 
     fun getPhotoCount(): Int {
         return imgUrls?.size ?: 0

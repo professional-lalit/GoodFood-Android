@@ -16,6 +16,7 @@ import com.goodfood.app.events.ClickEventMessage
 import com.goodfood.app.events.EventConstants
 import com.goodfood.app.events.Message
 import com.goodfood.app.interfaces.Navigable
+import com.goodfood.app.models.domain.Recipe
 import com.goodfood.app.ui.common.BaseActivity
 import com.goodfood.app.ui.common.BaseViewModel
 import com.goodfood.app.ui.common.dialogs.DialogManager
@@ -23,6 +24,7 @@ import com.goodfood.app.ui.home.fragments.*
 import com.goodfood.app.ui.home.fragments.create_recipe.CreateRecipeFragment
 import com.goodfood.app.ui.home.fragments.explore.ExploreFragment
 import com.goodfood.app.ui.home.fragments.my_recipes.MyRecipesFragment
+import com.goodfood.app.ui.home.fragments.recipe_detail.RecipeDetailFragment
 import com.goodfood.app.ui.login.LoginActivity
 import com.goodfood.app.utils.Extensions.showToast
 import com.ncapdevi.fragnav.FragNavController
@@ -207,7 +209,18 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     override fun onClickEvent(event: ClickEventMessage) {
-
+        when (event.viewId) {
+            R.id.cl_root -> {
+                val model = event.payload as Recipe
+                with(FragNavTransactionOptions.newBuilder()) {
+                    enterAnimation = R.anim.enter_from_right
+                    exitAnimation = R.anim.exit_to_left
+                    popEnterAnimation = R.anim.enter_from_left
+                    popExitAnimation = R.anim.exit_to_right
+                    fragNavController.pushFragment(RecipeDetailFragment.newInstance(recipeId = model), build())
+                }
+            }
+        }
     }
 
     override fun onEvent(event: Message) {

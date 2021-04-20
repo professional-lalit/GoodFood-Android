@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.goodfood.app.models.domain.Recipe" />
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".ui.home.fragments.recipe_detail.RecipeDetailFragment">
+
+        <com.goodfood.app.ui.common.widgets.RecipeImagePagerLayout
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_size_200"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:setRecipeImages="@{model.imgUrls}" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pager">
+
+            <TextView
+                android:id="@+id/txt_recipe_title"
+                style="@style/BasicText"
+                android:textSize="@dimen/text_size_20"
+                tools:text="Lorem Ipsum" />
+
+            <TextView
+                android:id="@+id/txt_recipe_description"
+                style="@style/BasicText"
+                android:layout_marginStart="@dimen/dimen_size_50"
+                android:letterSpacing="0.1"
+                android:textColor="@color/faint_grey_text"
+                tools:text="@string/lorem_para" />
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/btn_purchase"
+            style="@style/BasicButton"
+            android:layout_width="match_parent"
+            android:text="@string/purchase"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
+
