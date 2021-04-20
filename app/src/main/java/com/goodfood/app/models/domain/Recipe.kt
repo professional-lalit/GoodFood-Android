@@ -22,7 +22,8 @@ data class Recipe(
     val discount: Int? = 0,
     val imgUrls: List<String>? = null,
     val videoUrls: List<String>? = null,
-    val profile: User? = null
+    val profile: User? = null,
+    val price: Int? = 0
 ) {
 
     fun getPhotoCount(): Int {
@@ -47,6 +48,10 @@ data class Recipe(
         } else {
             "No Videos"
         }
+    }
+
+    fun getPriceText(): String {
+        return "$ $price"
     }
 
 }

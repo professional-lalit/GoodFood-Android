@@ -4,4 +4,9 @@
         <attr name="photoCount" format="integer" />
         <attr name="videoCount" format="integer" />
     </declare-styleable>
+
+    <declare-styleable name="UserProfileLayout">
+        <attr name="profileImageSize" format="dimension" />
+        <attr name="profileUsernameTextSize" format="integer" />
+    </declare-styleable>
 </resources>

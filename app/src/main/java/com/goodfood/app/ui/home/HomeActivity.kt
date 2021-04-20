@@ -165,7 +165,6 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
     override fun setUp() {
         viewModel = homeViewModel
         binding = ActivityHomeBinding.inflate(layoutInflater)
-        drawerHeaderBinding = DataBindingUtil.bind(binding.navHome.getHeaderView(0))!!
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -201,6 +200,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
             showToast(it.message)
         })
         homeViewModel.user.observe(this, { user ->
+            drawerHeaderBinding = DataBindingUtil.bind(binding.navHome.getHeaderView(0))!!
             drawerHeaderBinding.user = user
         })
     }
