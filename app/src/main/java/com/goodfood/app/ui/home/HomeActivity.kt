@@ -152,6 +152,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
                 supportActionBar?.title = getString(R.string.payment_history)
             is ComplaintsFragment ->
                 supportActionBar?.title = getString(R.string.complaints)
+            is RecipeDetailFragment ->
+                supportActionBar?.title = getString(R.string.recipe_details)
         }
     }
 
@@ -217,7 +219,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
                     exitAnimation = R.anim.exit_to_left
                     popEnterAnimation = R.anim.enter_from_left
                     popExitAnimation = R.anim.exit_to_right
-                    fragNavController.pushFragment(RecipeDetailFragment.newInstance(recipeId = model), build())
+                    fragNavController.pushFragment(RecipeDetailFragment.newInstance(recipeId = model.recipeId), build())
                 }
             }
         }

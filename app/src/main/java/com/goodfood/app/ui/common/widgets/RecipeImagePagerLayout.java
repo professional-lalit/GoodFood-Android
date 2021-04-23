@@ -8,12 +8,15 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.goodfood.app.R;
 import com.goodfood.app.databinding.ItemRecipeImagePagerBinding;
 import com.goodfood.app.databinding.LayoutRecipeImagesPagerBinding;
+
+import java.util.List;
 
 /**
  * Created by Lalit N. Hajare (Android Developer) on 20/4/21.
@@ -36,17 +39,17 @@ public class RecipeImagePagerLayout extends RelativeLayout {
         super(context, attrs);
     }
 
-    public void setData(String[] imageUrls) {
+    public void setData(List<String> imageUrls) {
         binding = LayoutRecipeImagesPagerBinding.inflate(LayoutInflater.from(getContext()), this);
         binding.pagerRecipeImages.setAdapter(new RecipeImageAdapter(imageUrls));
     }
 
 
-    private class RecipeImageAdapter extends RecyclerView.Adapter<RecipeImageAdapter.RecipePagerViewHolder> {
+    private static class RecipeImageAdapter extends RecyclerView.Adapter<RecipeImageAdapter.RecipePagerViewHolder> {
 
-        private String[] imageUrls;
+        private List<String> imageUrls;
 
-        public RecipeImageAdapter(String[] imageUrls) {
+        public RecipeImageAdapter(List<String> imageUrls) {
             this.imageUrls = imageUrls;
         }
 
@@ -54,18 +57,18 @@ public class RecipeImagePagerLayout extends RelativeLayout {
         @Override
         public RecipePagerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             return new RecipeImageAdapter.RecipePagerViewHolder(
-                    ItemRecipeImagePagerBinding.inflate(LayoutInflater.from(parent.getContext()))
+                    ItemRecipeImagePagerBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false)
             );
         }
 
         @Override
         public void onBindViewHolder(@NonNull RecipePagerViewHolder holder, int position) {
-            holder.onBind(imageUrls[position]);
+            holder.onBind(imageUrls.get(position));
         }
 
         @Override
         public int getItemCount() {
-            return imageUrls.length;
+            return imageUrls.size();
         }
 
         private class RecipePagerViewHolder extends RecyclerView.ViewHolder {

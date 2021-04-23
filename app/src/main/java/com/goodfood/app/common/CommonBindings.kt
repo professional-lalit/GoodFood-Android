@@ -1,5 +1,6 @@
 package com.goodfood.app.common
 
+import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
@@ -59,7 +60,12 @@ fun setUserData(
 @BindingAdapter("app:setRecipeImages")
 fun setRecipeImages(
     recipeImagePagerLayout: RecipeImagePagerLayout,
-    imageUrls: List<String>
+    imageUrls: List<String>?
 ) {
-    recipeImagePagerLayout.setData(imageUrls.toTypedArray())
+    if (imageUrls?.isNotEmpty() == true) {
+        recipeImagePagerLayout.visibility = View.VISIBLE
+        recipeImagePagerLayout.setData(imageUrls)
+    } else {
+        recipeImagePagerLayout.visibility = View.GONE
+    }
 }

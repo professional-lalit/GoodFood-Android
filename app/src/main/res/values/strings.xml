@@ -68,5 +68,6 @@
     <string name="price">Price($):</string>
     <string name="recipe_data_uploaded">Recipe data uploaded</string>
     <string name="purchase">Purchase</string>
+    <string name="recipe_details">Recipe Details</string>
 </resources>
 

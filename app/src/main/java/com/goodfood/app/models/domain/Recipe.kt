@@ -17,6 +17,7 @@ import java.io.Serializable
  * (please keep the subject as 'GoodFood Android Code Suggestion')
  */
 data class Recipe(
+    val recipeId: String,
     val recipeTitle: String,
     val recipeBrief: String,
     val recipePoster: String? = null,
@@ -25,7 +26,7 @@ data class Recipe(
     val videoUrls: List<String>? = null,
     val profile: User? = null,
     val price: Int? = 0
-): Serializable {
+) : Serializable {
 
     fun getPhotoCount(): Int {
         return imgUrls?.size ?: 0

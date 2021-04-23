@@ -40,7 +40,7 @@ class LoginViewModel @Inject constructor(
         _screenToNav.postValue(Navigables.HOME)
     }
 
-    val loginData = LoginData("hajare.lalit@gmail.com", "123@Abc")
+    val loginData = LoginData("hajare.lalit@gmail.com", "123Abc")
 
     private val _loginResponse = MutableLiveData<LoginResponseDTO>()
     val loginResponse: LiveData<LoginResponseDTO> = _loginResponse

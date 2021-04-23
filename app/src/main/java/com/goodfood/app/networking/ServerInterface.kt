@@ -63,4 +63,7 @@ interface ServerInterface {
     @POST("recipe/list")
     suspend fun fetchRecipeList(@Body recipeFilterRequest: RecipeFilterRequest): Response<Any?>
 
+    @GET("recipe/details")
+    suspend fun fetchRecipeDetails(@Query("recipeId") recipeId: String): Response<Any?>
+
 }

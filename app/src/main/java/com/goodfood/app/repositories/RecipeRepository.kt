@@ -138,5 +138,21 @@ class RecipeRepository @Inject constructor(
         }
     }
 
+    suspend fun getRecipeDetails(recipeId: String): NetworkResponse {
+        val response = serverInterface.fetchRecipeDetails(recipeId)
+        return when {
+            response.code() in 200..210 -> {
+                val responseDTO: RecipeDetailsResponseDTO? = Gson().fromJson(
+                    Gson().toJson(response.body()),
+                    RecipeDetailsResponseDTO::class.java
+                )
+                NetworkResponse.NetworkSuccess(responseDTO)
+            }
+            else -> {
+                NetworkResponse.NetworkError(Utils.parseError(response))
+            }
+        }
+    }
+
 
 }

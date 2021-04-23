@@ -17,7 +17,7 @@ data class RecipeListResponseDTO(
 ) : BaseResponseDTO() {
 
     data class RecipeDTO(
-        val recipeId: String,
+        val _id: String,
         val title: String,
         val description: String,
         val price: Double? = 0.00,
@@ -38,6 +38,7 @@ data class RecipeListResponseDTO(
             }
 
             return Recipe(
+                recipeId = _id,
                 recipeTitle = title,
                 recipeBrief = description,
                 recipePoster = getImages(imageUrls),
