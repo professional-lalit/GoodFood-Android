@@ -7,8 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.goodfood.app.R
 import com.goodfood.app.databinding.FragmentPaymentHistoryBinding
+import com.goodfood.app.ui.common.BaseFragment
 
-class PaymentHistoryFragment : Fragment() {
+class PaymentHistoryFragment : BaseFragment() {
 
     companion object {
         fun newInstance(bundle: Bundle? = null): PaymentHistoryFragment {
@@ -16,6 +17,10 @@ class PaymentHistoryFragment : Fragment() {
             fragment.arguments = bundle
             return fragment
         }
+    }
+
+    override fun addObservers() {
+
     }
 
     override fun onCreateView(

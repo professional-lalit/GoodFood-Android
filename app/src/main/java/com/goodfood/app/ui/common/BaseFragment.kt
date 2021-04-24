@@ -1,6 +1,8 @@
 package com.goodfood.app.ui.common
 
 import android.content.Context
+import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.Fragment
 import com.goodfood.app.events.ClickEventMessage
 import com.goodfood.app.events.Message
@@ -28,6 +30,11 @@ abstract class BaseFragment : Fragment() {
         })
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        addObservers()
+    }
+
     override fun onStart() {
         super.onStart()
         EventBus.getDefault().register(this)
@@ -39,14 +46,15 @@ abstract class BaseFragment : Fragment() {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    open fun onClickEvent(event: ClickEventMessage){
+    open fun onClickEvent(event: ClickEventMessage) {
 
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    open fun onEvent(event: Message){
+    open fun onEvent(event: Message) {
 
     }
 
-    abstract fun onActivityCreated()
+    open fun onActivityCreated() {}
+    abstract fun addObservers()
 }

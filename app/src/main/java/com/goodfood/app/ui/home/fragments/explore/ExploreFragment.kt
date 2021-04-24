@@ -3,6 +3,7 @@ package com.goodfood.app.ui.home.fragments.explore
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.core.view.isEmpty
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.goodfood.app.R
@@ -47,17 +48,14 @@ class ExploreFragment : BaseFragment() {
         return binding.root
     }
 
-    override fun onActivityCreated() {
-
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        addObservers()
-        viewModel.loadRecipes()
+        if (binding.recyclerRecipes.isEmpty()) {
+            viewModel.loadRecipes()
+        }
     }
 
-    private fun addObservers() {
+    override fun addObservers() {
         viewModel.recipeList.observe(viewLifecycleOwner, {
             val controller = ExploreListController()
             controller.setData(it)
@@ -75,11 +73,6 @@ class ExploreFragment : BaseFragment() {
             sendEvent(EventConstants.Event.OPEN_CREATE_RECIPE_SCREEN.id)
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    override fun onClickEvent(event: ClickEventMessage) {
-
-
     }
 
     override fun onEvent(event: Message) {

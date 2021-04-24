@@ -88,11 +88,9 @@ class CreateRecipeFragment : BaseFragment() {
         setUpListControllers()
 
         setUpFileCallbacks()
-
-        setObservers()
     }
 
-    private fun setObservers() {
+    override fun addObservers() {
         viewModel.recipeUploadResponse.observe(viewLifecycleOwner, {
             if (it.recipeId.isNotEmpty()) {
                 if (photos.isNotEmpty() || videos.isNotEmpty()) {
@@ -123,10 +121,6 @@ class CreateRecipeFragment : BaseFragment() {
                 sendEvent(EventConstants.Event.RECIPE_UPLOADED.id)
             }
         })
-    }
-
-    override fun onActivityCreated() {
-
     }
 
     private fun setViews() {

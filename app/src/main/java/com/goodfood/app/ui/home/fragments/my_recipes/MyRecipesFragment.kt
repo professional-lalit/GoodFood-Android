@@ -24,10 +24,6 @@ class MyRecipesFragment : BaseFragment() {
         }
     }
 
-    override fun onActivityCreated() {
-
-    }
-
     private val viewModel: MyRecipesViewModel by viewModels()
     private lateinit var binding: FragmentMyRecipesBinding
 
@@ -42,11 +38,10 @@ class MyRecipesFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        addObservers()
         viewModel.loadRecipes()
     }
 
-    private fun addObservers() {
+    override fun addObservers() {
         viewModel.recipeList.observe(viewLifecycleOwner, { list ->
             val controller = ExploreListController()
             controller.setData(list)

@@ -104,6 +104,6 @@ dependencies {
     // Add the annotation processor if you are using Epoxy's annotations (recommended)
     kapt "com.airbnb.android:epoxy-processor:$epoxyVersion"
     implementation "com.airbnb.android:epoxy-databinding:$epoxyVersion"
-
     implementation 'org.greenrobot:eventbus:3.2.0'
+    implementation 'me.relex:circleindicator:2.1.6'
 }

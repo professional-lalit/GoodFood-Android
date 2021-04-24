@@ -8,9 +8,10 @@ import android.view.ViewGroup
 import com.goodfood.app.R
 import com.goodfood.app.databinding.FragmentComplaintsBinding
 import com.goodfood.app.databinding.FragmentExploreBinding
+import com.goodfood.app.ui.common.BaseFragment
 
 
-class ComplaintsFragment : Fragment() {
+class ComplaintsFragment : BaseFragment() {
 
     companion object {
         fun newInstance(bundle: Bundle? = null): ComplaintsFragment {
@@ -18,6 +19,10 @@ class ComplaintsFragment : Fragment() {
             fragment.arguments = bundle
             return fragment
         }
+    }
+
+    override fun addObservers() {
+
     }
 
     override fun onCreateView(

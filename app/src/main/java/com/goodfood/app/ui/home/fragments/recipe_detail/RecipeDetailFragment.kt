@@ -1,16 +1,23 @@
 package com.goodfood.app.ui.home.fragments.recipe_detail
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.goodfood.app.R
 import com.goodfood.app.databinding.FragmentRecipeDetailBinding
 import com.goodfood.app.models.domain.Recipe
 import com.goodfood.app.ui.common.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+
+private const val PAGER_SCROLL_DELAY = 10000L
 
 @AndroidEntryPoint
 class RecipeDetailFragment : BaseFragment() {
@@ -20,9 +27,23 @@ class RecipeDetailFragment : BaseFragment() {
 
     private val viewModel: RecipeDetailsViewModel by viewModels()
 
-    override fun onActivityCreated() {
-
+    override fun addObservers() {
+        viewModel.recipeDetails.observe(viewLifecycleOwner, { details ->
+            val recipe = details.recipe
+            binding.model = recipe
+            setPagerScroll()
+        })
     }
+
+    private fun setPagerScroll() {
+        lifecycleScope.launch {
+            while (true) {
+                delay(PAGER_SCROLL_DELAY)
+                binding.pager.nextPage()
+            }
+        }
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,15 +60,7 @@ class RecipeDetailFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        addDetailsObserver()
         viewModel.loadRecipeDetails(recipeId)
-    }
-
-    private fun addDetailsObserver() {
-        viewModel.recipeDetails.observe(viewLifecycleOwner, { details ->
-            val recipe = details.recipe
-            binding.model = recipe
-        })
     }
 
     companion object {

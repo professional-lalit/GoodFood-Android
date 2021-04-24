@@ -40,7 +40,9 @@ public class RecipeBottomStrip extends RelativeLayout {
 
     @SuppressLint("SetTextI18n")
     public void setData(Recipe recipe) {
-        binding = LayoutReceiptItemBottomStripBinding.inflate(LayoutInflater.from(getContext()), this, true);
+        binding = LayoutReceiptItemBottomStripBinding.inflate(
+                LayoutInflater.from(getContext()), this, true
+        );
         binding.setRecipe(recipe);
         animateView();
     }

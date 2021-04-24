@@ -7,8 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.goodfood.app.R
 import com.goodfood.app.databinding.FragmentPurchasedRecipesBinding
+import com.goodfood.app.ui.common.BaseFragment
 
-class PurchasedRecipesFragment : Fragment() {
+class PurchasedRecipesFragment : BaseFragment() {
 
     companion object {
         fun newInstance(bundle: Bundle? = null): PurchasedRecipesFragment {
@@ -16,6 +17,10 @@ class PurchasedRecipesFragment : Fragment() {
             fragment.arguments = bundle
             return fragment
         }
+    }
+
+    override fun addObservers() {
+
     }
 
     override fun onCreateView(

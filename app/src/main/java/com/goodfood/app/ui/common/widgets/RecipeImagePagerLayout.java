@@ -39,9 +39,26 @@ public class RecipeImagePagerLayout extends RelativeLayout {
         super(context, attrs);
     }
 
+    private List<String> imageUrls;
+    private int currentPage;
+
     public void setData(List<String> imageUrls) {
+        this.imageUrls = imageUrls;
         binding = LayoutRecipeImagesPagerBinding.inflate(LayoutInflater.from(getContext()), this);
-        binding.pagerRecipeImages.setAdapter(new RecipeImageAdapter(imageUrls));
+        binding.pagerRecipeImages.setAdapter(new RecipeImageAdapter(this.imageUrls));
+
+        binding.indicator.setViewPager(binding.pagerRecipeImages);
+    }
+
+    public void nextPage() {
+        currentPage = binding.pagerRecipeImages.getCurrentItem();
+        int totalPages = imageUrls.size();
+        if (currentPage < (totalPages - 1)) {
+            currentPage += 1;
+        } else {
+            currentPage = 0;
+        }
+        binding.pagerRecipeImages.setCurrentItem(currentPage);
     }
 
 
