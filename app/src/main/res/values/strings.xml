@@ -69,5 +69,6 @@
     <string name="recipe_data_uploaded">Recipe data uploaded</string>
     <string name="purchase">Purchase</string>
     <string name="recipe_details">Recipe Details</string>
+    <string name="plz_login_again">Please login again, session expired</string>
 </resources>
 

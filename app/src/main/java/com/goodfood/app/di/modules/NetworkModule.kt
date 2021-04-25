@@ -10,6 +10,7 @@ import com.goodfood.app.events.EventConstants
 import com.goodfood.app.events.sendEvent
 import com.goodfood.app.models.response_dtos.ErrorResponseDTO
 import com.goodfood.app.networking.HeaderInterceptor
+import com.goodfood.app.networking.ResponseInterceptor
 import com.goodfood.app.networking.ServerInterface
 import com.google.gson.Gson
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
@@ -64,7 +65,10 @@ class NetworkModule {
 
     @MultimediaHttpClient
     @Provides
-    fun provideMMAPIClient(headerInterceptor: HeaderInterceptor): OkHttpClient {
+    fun provideMMAPIClient(
+        headerInterceptor: HeaderInterceptor,
+        responseInterceptor: ResponseInterceptor
+    ): OkHttpClient {
         val logInterceptor = HttpLoggingInterceptor()
         logInterceptor.level = HttpLoggingInterceptor.Level.NONE
         return OkHttpClient().newBuilder()
@@ -73,6 +77,7 @@ class NetworkModule {
             .readTimeout(TIMEOUT_INTERVAL_SECS, TimeUnit.SECONDS)
             .addInterceptor(logInterceptor)
             .addInterceptor(headerInterceptor)
+            .addInterceptor(responseInterceptor)
             .build()
     }
 
@@ -104,7 +109,10 @@ class NetworkModule {
      */
 
     @Provides
-    fun provideAPIClient(headerInterceptor: HeaderInterceptor): OkHttpClient {
+    fun provideAPIClient(
+        headerInterceptor: HeaderInterceptor,
+        responseInterceptor: ResponseInterceptor
+    ): OkHttpClient {
         val logInterceptor = HttpLoggingInterceptor()
         logInterceptor.level = HttpLoggingInterceptor.Level.BODY
         return OkHttpClient().newBuilder()
@@ -113,16 +121,7 @@ class NetworkModule {
             .readTimeout(TIMEOUT_INTERVAL_SECS, TimeUnit.SECONDS)
             .addInterceptor(logInterceptor)
             .addInterceptor(headerInterceptor)
-            .addInterceptor { chain ->
-                val request = chain.request()
-                val response = chain.proceed(request)
-                if (response.code == 403) {
-                    //handleForbiddenResponse
-                } else if (response.code == 401) {
-                    sendEvent(EventConstants.Event.NOT_AUTHENTICATED.id)
-                }
-                response
-            }
+            .addInterceptor(responseInterceptor)
             .build()
     }
 

@@ -18,4 +18,7 @@ object Constants {
     const val CAMERA_SELECTED = 0
     const val GALLERY_SELECTED = 1
 
+    const val UNAUTHENTICATED = "unauthenticated"
+
+
 }
