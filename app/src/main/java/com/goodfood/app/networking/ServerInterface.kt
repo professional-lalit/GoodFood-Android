@@ -57,7 +57,9 @@ interface ServerInterface {
     @POST("recipe/videoUpload")
     suspend fun uploadRecipeVideo(
         @Query("recipeId") userId: String,
-        @Part recipeImage: MultipartBody.Part
+        @Query("title") title: String,
+        @Part recipeDataPart1: MultipartBody.Part,
+        @Part recipeDataPart2: MultipartBody.Part
     ): Response<Any?>
 
     @POST("recipe/list")

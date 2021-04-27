@@ -29,6 +29,8 @@ class DirectoryManager @Inject constructor(private val context: Context) {
         private var PROFILE_IMAGE_DIRECTORY_PATH = "MULTIMEDIA/PROFILE/IMAGES"
         private var CREATE_RECIPE_IMAGE_DIRECTORY_PATH = "MULTIMEDIA/RECIPE/CREATE/IMAGES"
         private var CREATE_RECIPE_VIDEO_DIRECTORY_PATH = "MULTIMEDIA/RECIPE/CREATE/VIDEOS"
+        private var CREATE_RECIPE_VIDEO_THUMB_DIRECTORY_PATH =
+            "MULTIMEDIA/RECIPE/CREATE/VIDEOS/THUMBNAILS"
         private var PROFILE_PIC_FILE_NAME = "profile_pic.jpg"
     }
 
@@ -53,6 +55,14 @@ class DirectoryManager @Inject constructor(private val context: Context) {
             File(context.getExternalFilesDir(null), CREATE_RECIPE_VIDEO_DIRECTORY_PATH)
         } else {
             File(context.filesDir, CREATE_RECIPE_VIDEO_DIRECTORY_PATH)
+        }
+    }
+
+    private fun getRecipeVideoThumbStoragePath(): File {
+        return if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()) {
+            File(context.getExternalFilesDir(null), CREATE_RECIPE_VIDEO_THUMB_DIRECTORY_PATH)
+        } else {
+            File(context.filesDir, CREATE_RECIPE_VIDEO_THUMB_DIRECTORY_PATH)
         }
     }
 
@@ -114,9 +124,27 @@ class DirectoryManager @Inject constructor(private val context: Context) {
         return imgFile
     }
 
+    fun createRecipeVideoThumbFile(desiredFileName: String): File {
+        val file = getRecipeVideoThumbStoragePath()
+        if (!file.exists()) {
+            file.mkdirs()
+        }
+        val imgFile = File(file, "${desiredFileName.replace(".mp4", "")}.jpg")
+
+        val previouslySelectedFilesForItem = getRecipeVideosStoragePath()
+            .listFiles()?.filter { it.name.contains(desiredFileName) }
+
+        previouslySelectedFilesForItem?.forEach { it.delete() }
+
+        imgFile.createNewFile()
+        Log.d(javaClass.simpleName, "file created at: ${imgFile.absolutePath}")
+        return imgFile
+    }
+
     fun deleteAllSavedCreateRecipeMultimedia() {
         deleteRecursive(getRecipeImagesStoragePath())
         deleteRecursive(getRecipeVideosStoragePath())
+        deleteRecursive(getRecipeVideoThumbStoragePath())
     }
 
     private fun deleteRecursive(file: File) {

@@ -97,6 +97,7 @@ class RecipeRepository @Inject constructor(
     suspend fun uploadRecipeVideo(
         recipeId: String,
         file: File,
+        thumbnailFile: File,
         cb: (Int) -> Unit
     ): NetworkResponse {
 
@@ -107,8 +108,14 @@ class RecipeRepository @Inject constructor(
                 recipeId + "_" + file.name,
                 createCountingRequestBody(requestBody, cb)!!
             )
+        val partThumbFile: MultipartBody.Part =
+            MultipartBody.Part.createFormData(
+                "recipeVideoThumb",
+                recipeId + "_" + thumbnailFile.name,
+                createCountingRequestBody(requestBody, cb)!!
+            )
 
-        val response = multimediaServerInterface.uploadRecipeVideo(recipeId, partFile)
+        val response = multimediaServerInterface.uploadRecipeVideo(recipeId, file.name, partFile, partThumbFile)
 
         return if (response.code() in 200..210) {
             val uploadRecipeVideoResponseDTO = Gson().fromJson(

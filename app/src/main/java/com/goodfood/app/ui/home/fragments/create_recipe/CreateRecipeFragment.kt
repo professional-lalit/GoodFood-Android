@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.fragment.app.viewModels
 import com.goodfood.app.R
 import com.goodfood.app.common.Constants
@@ -109,7 +110,7 @@ class CreateRecipeFragment : BaseFragment() {
             }
         })
         viewModel.currentUploadingVideo.observe(viewLifecycleOwner, { video ->
-            val videoInListToUpdate = videos.find { it.videoBmp == video.videoBmp }
+            val videoInListToUpdate = videos.find { it.videoThumbUri == video.videoThumbUri }
             videoInListToUpdate?.let {
                 it.uploadProgress = video.uploadProgress
                 it.state = MediaState.UPLOADING
@@ -208,20 +209,21 @@ class CreateRecipeFragment : BaseFragment() {
             }
             dialogManager.closeDialog()
         }
-        recipeMultimediaManager.setVideoLoadedCallback { file ->
+        recipeMultimediaManager.setVideoLoadedCallback { file, thumbFile ->
             dismissFileCopyNotification()
             val videoItemToBeSet = videos.find { recipeVideo ->
                 recipeVideo.state == MediaState.MEDIA_TO_BE_SET
             }
             if (videoItemToBeSet != null) {
-                videoItemToBeSet.videoBmp = Utils.getVideoFrame(file)
+                videoItemToBeSet.videoUri = file.toUri()
+                videoItemToBeSet.videoThumbUri = thumbFile.toUri()
                 videoItemToBeSet.state = MediaState.NOT_UPLOADING
                 recipeVideoListController.setData(videos)
             } else {
                 val videoItemToAdd =
                     RecipeVideo(
-                        Utils.getVideoFrame(file),
-                        Uri.fromFile(file),
+                        thumbFile.toUri(),
+                        file.toUri(),
                         MediaState.NOT_UPLOADING
                     )
                 videos.add(0, videoItemToAdd)

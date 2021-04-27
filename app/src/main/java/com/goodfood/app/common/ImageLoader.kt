@@ -70,6 +70,21 @@ object ImageLoader {
     }
 
     @JvmStatic
+    @BindingAdapter("app:loadImageUri")
+    fun setImageUri(imageView: ImageView, uri: Uri?) {
+        uri?.let {
+            Glide.with(imageView.context)
+                .load(uri)
+                .apply(
+                    RequestOptions().skipMemoryCache(true)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                )
+                .placeholder(R.drawable.dark_landscape_placeholder)
+                .into(imageView)
+        }
+    }
+
+    @JvmStatic
     @BindingAdapter("app:loadBmp")
     fun setBmpImage(imageView: ImageView, bmp: Bitmap?) {
         bmp?.let {

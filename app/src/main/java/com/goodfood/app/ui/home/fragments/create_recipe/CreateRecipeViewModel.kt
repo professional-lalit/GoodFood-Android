@@ -94,7 +94,8 @@ class CreateRecipeViewModel @Inject constructor(
 
     private suspend fun uploadVideo(recipeId: String, video: RecipeVideo) {
         val fileToUpload = video.videoUri?.toFile()
-        val imageResponse = recipeRepository.uploadRecipeVideo(recipeId, fileToUpload!!)
+        val thumbFileToUpload = video.videoThumbUri?.toFile()
+        val imageResponse = recipeRepository.uploadRecipeVideo(recipeId, fileToUpload!!, thumbFileToUpload!!)
         { progress ->
             video.uploadProgress = progress
             _currentUploadingVideo.postValue(video)

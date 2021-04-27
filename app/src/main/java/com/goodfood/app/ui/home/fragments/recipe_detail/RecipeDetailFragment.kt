@@ -17,7 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-private const val PAGER_SCROLL_DELAY = 10000L
+private const val PAGER_SCROLL_DELAY = 5000L
 
 @AndroidEntryPoint
 class RecipeDetailFragment : BaseFragment() {

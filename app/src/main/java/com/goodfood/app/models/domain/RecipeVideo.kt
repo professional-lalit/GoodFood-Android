@@ -14,7 +14,7 @@ import android.net.Uri
  * (please keep the subject as 'GoodFood Android Code Suggestion')
  */
 data class RecipeVideo(
-    var videoBmp: Bitmap? = null,
+    var videoThumbUri: Uri? = null,
     var videoUri: Uri? = null,
     var state: MediaState
 ) {

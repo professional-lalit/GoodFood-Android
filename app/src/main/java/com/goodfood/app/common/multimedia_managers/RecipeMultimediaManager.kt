@@ -3,6 +3,7 @@ package com.goodfood.app.common.multimedia_managers
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
@@ -39,7 +40,7 @@ class RecipeMultimediaManager constructor(
 ) : BaseMultimediaManager(directoryManager) {
 
     private var imageLoadedCallback: ((File) -> Unit)? = null
-    private var videoLoadedCallback: ((File) -> Unit)? = null
+    private var videoLoadedCallback: ((File, File) -> Unit)? = null
     private var desiredFileName: String? = null
 
     override val cameraResult =
@@ -70,8 +71,26 @@ class RecipeMultimediaManager constructor(
                 context.lifecycleScope.launch(Dispatchers.IO) {
                     val file = directoryManager.createRecipeVideoFile(desiredFileName!!)
                     copyFile(resultUri, file)
+
+                    val thumbFile = directoryManager.createRecipeVideoThumbFile("THUMB_${file.name}")
+                    val bmp = Utils.getVideoFrame(file)
+                    copyBmp(bmp!!, thumbFile)
                     Handler(Looper.getMainLooper()).post {
-                        videoLoadedCallback?.invoke(file)
+                        videoLoadedCallback?.invoke(file, thumbFile)
+                    }
+                }
+            }
+        }
+
+    private val recordVideoLauncherResult =
+        context.registerForActivityResult(VideoRecordContract()) { file ->
+            file?.let {
+                context.lifecycleScope.launch(Dispatchers.IO) {
+                    val thumbFile = directoryManager.createRecipeVideoThumbFile("THUMB_${file.name}")
+                    val bmp = Utils.getVideoFrame(file)
+                    copyBmp(bmp!!, thumbFile)
+                    Handler(Looper.getMainLooper()).post {
+                        videoLoadedCallback?.invoke(it, thumbFile)
                     }
                 }
             }
@@ -98,18 +117,13 @@ class RecipeMultimediaManager constructor(
         }
     }
 
-    private val recordVideoLauncherResult =
-        context.registerForActivityResult(VideoRecordContract()) { file ->
-            file?.let {
-                videoLoadedCallback?.invoke(it)
-            }
-        }
+
 
     fun setImageLoadedCallback(imageLoadedCallback: (File) -> Unit) {
         this.imageLoadedCallback = imageLoadedCallback
     }
 
-    fun setVideoLoadedCallback(videoLoadedCallback: (File) -> Unit) {
+    fun setVideoLoadedCallback(videoLoadedCallback: (File, File) -> Unit) {
         this.videoLoadedCallback = videoLoadedCallback
     }
 
@@ -120,6 +134,16 @@ class RecipeMultimediaManager constructor(
         try {
             copy(inputStream, outputStream)
             inputStream.close()
+            outputStream.close()
+        } catch (ex: Exception) {
+            Log.e(javaClass.simpleName, ex.localizedMessage ?: "")
+        }
+    }
+
+    suspend fun copyBmp(bmp: Bitmap, file: File?) {
+        val outputStream = context.contentResolver.openOutputStream(file?.toUri()!!)!!
+        try {
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
             outputStream.close()
         } catch (ex: Exception) {
             Log.e(javaClass.simpleName, ex.localizedMessage ?: "")
