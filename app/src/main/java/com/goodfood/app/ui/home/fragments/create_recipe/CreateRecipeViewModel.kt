@@ -65,6 +65,7 @@ class CreateRecipeViewModel @Inject constructor(
     }
 
     private suspend fun uploadRecipePhotos(recipeId: String, photos: List<RecipePhoto>) {
+        Log.d(javaClass.simpleName, "TEST::uploading photos")
         photos.forEach { photo ->
             uploadPhoto(recipeId, photo)
         }
@@ -72,6 +73,7 @@ class CreateRecipeViewModel @Inject constructor(
 
     private suspend fun uploadPhoto(recipeId: String, photo: RecipePhoto) {
         val fileToUpload = photo.imgUri?.toFile()
+        Log.d(javaClass.simpleName, "TEST::uploading photo")
         val imageResponse = recipeRepository.uploadRecipeImage(recipeId, fileToUpload!!)
         { progress ->
             photo.uploadProgress = progress

@@ -39,26 +39,33 @@
                     app:setRecipeImages="@{model.imgUrls}" />
 
 
-                <TextView
-                    style="@style/BasicText"
-                    android:text="@string/videos" />
-
-                <com.airbnb.epoxy.EpoxyRecyclerView
-                    android:id="@+id/recycler_recipe_videos"
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:id="@+id/lin_recipe_videos"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dimen_size_5"
-                    android:nestedScrollingEnabled="false"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    app:spanCount="3" />
+                    android:layout_height="wrap_content">
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimen_size_0_5"
-                    android:layout_marginTop="@dimen/dimen_size_10"
-                    android:layout_marginBottom="@dimen/dimen_size_10"
-                    android:background="@color/faint_grey_text" />
+                    <TextView
+                        style="@style/BasicText"
+                        android:text="@string/videos" />
 
+                    <com.airbnb.epoxy.EpoxyRecyclerView
+                        android:id="@+id/recycler_recipe_videos"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dimen_size_5"
+                        android:nestedScrollingEnabled="false"
+                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                        app:spanCount="3" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dimen_size_0_5"
+                        android:layout_marginTop="@dimen/dimen_size_10"
+                        android:layout_marginBottom="@dimen/dimen_size_10"
+                        android:background="@color/faint_grey_text" />
+
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/txt_recipe_title"

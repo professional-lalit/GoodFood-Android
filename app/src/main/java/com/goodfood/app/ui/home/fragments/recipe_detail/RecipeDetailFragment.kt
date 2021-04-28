@@ -35,10 +35,13 @@ class RecipeDetailFragment : BaseFragment() {
             if (details.recipe.imgUrls?.isNotEmpty() == true) {
                 setPagerScroll()
             }
-            details.recipe.videos?.let {
+            if(details.recipe.videos?.isNotEmpty() == true){
                 val controller = RecipeVideoListController()
-                controller.setData(it)
+                controller.setData(details.recipe.videos)
                 binding.recyclerRecipeVideos.setController(controller)
+                binding.linRecipeVideos.visibility = View.VISIBLE
+            }else{
+                binding.linRecipeVideos.visibility = View.GONE
             }
         })
     }

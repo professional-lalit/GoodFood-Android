@@ -33,7 +33,7 @@ data class VideoDTO(
         fun getVideos(list: List<VideoDTO>?): List<Recipe.Video> {
             val videoList = mutableListOf<Recipe.Video>()
             list?.forEach {
-                videoList.add(it.getDomainModel())
+                it?.let { videoList.add(it.getDomainModel()) }
             }
             return videoList
         }
