@@ -18,60 +18,72 @@
         android:orientation="vertical"
         tools:context=".ui.home.fragments.recipe_detail.RecipeDetailFragment">
 
-        <com.goodfood.app.ui.common.widgets.RecipeImagePagerLayout
-            android:id="@+id/pager"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_size_200"
+            android:layout_height="match_parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:setRecipeImages="@{model.imgUrls}" />
+            app:layout_constraintStart_toStartOf="parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pager">
-
-
-            <TextView
-                style="@style/BasicText"
-                android:text="@string/videos" />
-
-            <com.airbnb.epoxy.EpoxyRecyclerView
-                android:id="@+id/recycler_recipe_videos"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dimen_size_10"
-                android:nestedScrollingEnabled="false"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                app:spanCount="3" />
+                android:orientation="vertical">
+
+                <com.goodfood.app.ui.common.widgets.RecipeImagePagerLayout
+                    android:id="@+id/pager"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_size_200"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:setRecipeImages="@{model.imgUrls}" />
 
 
-            <TextView
-                android:id="@+id/txt_recipe_title"
-                style="@style/BasicText"
-                android:text="@{model.recipeTitle}"
-                android:textSize="@dimen/text_size_18"
-                tools:text="Lorem Ipsum" />
+                <TextView
+                    style="@style/BasicText"
+                    android:text="@string/videos" />
 
-            <TextView
-                android:id="@+id/txt_recipe_description"
-                style="@style/BasicText"
-                android:layout_marginStart="@dimen/dimen_size_50"
-                android:letterSpacing="0.1"
-                android:text="@{model.recipeBrief}"
-                android:textColor="@color/faint_grey_text"
-                tools:text="@string/lorem_para" />
-        </LinearLayout>
+                <com.airbnb.epoxy.EpoxyRecyclerView
+                    android:id="@+id/recycler_recipe_videos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimen_size_5"
+                    android:nestedScrollingEnabled="false"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:spanCount="3" />
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dimen_size_0_5"
+                    android:layout_marginTop="@dimen/dimen_size_10"
+                    android:layout_marginBottom="@dimen/dimen_size_10"
+                    android:background="@color/faint_grey_text" />
+
+
+                <TextView
+                    android:id="@+id/txt_recipe_title"
+                    style="@style/BasicText"
+                    android:text="@{model.recipeTitle}"
+                    android:textSize="@dimen/text_size_18"
+                    tools:text="Lorem Ipsum" />
+
+                <TextView
+                    android:id="@+id/txt_recipe_description"
+                    style="@style/BasicText"
+                    android:layout_marginStart="@dimen/dimen_size_50"
+                    android:layout_marginBottom="@dimen/dimen_size_80"
+                    android:letterSpacing="0.1"
+                    android:text="@{model.recipeBrief}"
+                    android:textColor="@color/faint_grey_text"
+                    tools:text="@string/lorem_para" />
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
 
         <Button
             android:id="@+id/btn_purchase"
             style="@style/BasicButton"
             android:layout_width="match_parent"
+            android:elevation="@dimen/dimen_size_1"
             android:text="@string/purchase"
             app:layout_constraintBottom_toBottomOf="parent" />
 

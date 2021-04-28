@@ -2,6 +2,7 @@ package com.goodfood.app.models.response_dtos
 
 import com.goodfood.app.models.domain.Recipe
 import com.goodfood.app.models.domain.RecipeDetails
+import com.goodfood.app.models.response_dtos.VideoDTO.Companion.getVideos
 
 
 /**
@@ -19,7 +20,7 @@ data class RecipeDetailsResponseDTO(
 
     data class RecipeDetailsDTO(
         val imageUrls: List<String>? = null,
-        val videoUrls: List<String>? = null,
+        val videos: List<VideoDTO>? = null,
         val avgRating: Int,
         val comments: List<String>? = null,
         val isFeatured: Boolean? = false,
@@ -53,7 +54,7 @@ data class RecipeDetailsResponseDTO(
                 recipePoster = getImages(recipe?.imageUrls),
                 discount = 0,
                 imgUrls = recipe?.imageUrls,
-                videoUrls = recipe?.videoUrls,
+                videos = getVideos(recipe?.videos),
                 profile = recipe?.creator?.getDomainModel(),
                 price = recipe?.price
             )

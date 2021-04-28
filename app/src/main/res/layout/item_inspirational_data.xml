@@ -26,7 +26,7 @@
                 android:layout_height="@dimen/dimen_size_200"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
-                app:setImage="@{data.backgroundImageUrl}"
+                app:loadImageUrl="@{data.backgroundImageUrl}"
                 tools:src="@drawable/dark_landscape_placeholder" />
 
             <ImageView

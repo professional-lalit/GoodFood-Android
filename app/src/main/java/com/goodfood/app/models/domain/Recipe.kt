@@ -23,17 +23,24 @@ data class Recipe(
     val recipePoster: String? = null,
     val discount: Int? = 0,
     val imgUrls: List<String>? = null,
-    val videoUrls: List<String>? = null,
+    val videos: List<Video>? = null,
     val profile: User? = null,
     val price: Int? = 0
 ) : Serializable {
+
+    data class Video(
+        val videoId: String,
+        val thumbUrl: String,
+        val url: String,
+        val title: String
+    )
 
     fun getPhotoCount(): Int {
         return imgUrls?.size ?: 0
     }
 
     fun getVideoCount(): Int {
-        return videoUrls?.size ?: 0
+        return videos?.size ?: 0
     }
 
     fun getPhotoCountText(): String {
@@ -45,8 +52,8 @@ data class Recipe(
     }
 
     fun getVideoCountText(): String {
-        return if (videoUrls?.isNotEmpty() == true) {
-            "${videoUrls.size} Videos"
+        return if (videos?.isNotEmpty() == true) {
+            "${videos.size} Videos"
         } else {
             "No Videos"
         }

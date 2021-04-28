@@ -12,7 +12,7 @@
         android:id="@+id/img_recipe_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:setImage="@{imageUrl}"
+        app:loadImageUrl="@{imageUrl}"
         android:scaleType="centerCrop"
         android:src="@drawable/dark_landscape_placeholder" />
 </layout>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="data"
+            type="com.goodfood.app.models.domain.Recipe.Video" />
+
+        <variable
+            name="clickListener"
+            type="com.goodfood.app.interfaces.IClickListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_item_root"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dimen_size_5"
+        android:onClick="@{(view) -> clickListener.onClick(view, data)}">
+
+        <ImageView
+            android:id="@+id/img_recipe_video"
+            android:layout_width="@dimen/dimen_size_120"
+            android:layout_height="@dimen/dimen_size_120"
+            android:adjustViewBounds="true"
+            android:onClick="@{(view) -> clickListener.onClick(view, data)}"
+            android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:loadImageUrl="@{data.thumbUrl}"
+            tools:src="@drawable/dark_landscape_placeholder" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="@dimen/dimen_size_120"
+            android:layout_height="@dimen/dimen_size_120"
+            android:elevation="@dimen/dimen_size_1"
+            android:src="@drawable/gradient_black_overlay"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/dimen_size_2"
+            android:src="@drawable/ic_vid_play"
+            app:layout_constraintBottom_toBottomOf="@+id/img_recipe_video"
+            app:layout_constraintEnd_toEndOf="@+id/img_recipe_video"
+            app:layout_constraintStart_toStartOf="@+id/img_recipe_video"
+            app:layout_constraintTop_toTopOf="@+id/img_recipe_video" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

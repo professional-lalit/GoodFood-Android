@@ -13,6 +13,7 @@ import com.goodfood.app.R
 import com.goodfood.app.databinding.FragmentRecipeDetailBinding
 import com.goodfood.app.models.domain.Recipe
 import com.goodfood.app.ui.common.BaseFragment
+import com.goodfood.app.ui.home.fragments.explore.ExploreListController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -31,7 +32,14 @@ class RecipeDetailFragment : BaseFragment() {
         viewModel.recipeDetails.observe(viewLifecycleOwner, { details ->
             val recipe = details.recipe
             binding.model = recipe
-            setPagerScroll()
+            if (details.recipe.imgUrls?.isNotEmpty() == true) {
+                setPagerScroll()
+            }
+            details.recipe.videos?.let {
+                val controller = RecipeVideoListController()
+                controller.setData(it)
+                binding.recyclerRecipeVideos.setController(controller)
+            }
         })
     }
 
@@ -43,7 +51,6 @@ class RecipeDetailFragment : BaseFragment() {
             }
         }
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

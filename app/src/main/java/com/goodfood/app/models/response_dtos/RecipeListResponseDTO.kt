@@ -1,6 +1,7 @@
 package com.goodfood.app.models.response_dtos
 
 import com.goodfood.app.models.domain.Recipe
+import com.goodfood.app.models.response_dtos.VideoDTO.Companion.getVideos
 
 
 /**
@@ -22,11 +23,12 @@ data class RecipeListResponseDTO(
         val description: String,
         val price: Double? = 0.00,
         val imageUrls: List<String>? = null,
-        val videoUrls: List<String>? = null,
+        val videos: List<VideoDTO>? = null,
         val avgRating: Int = 0,
         val isFeatured: Boolean? = false,
         val creator: UserResponseDTO.UserDTO? = null
     ) : BaseResponseDTO() {
+
         override fun getDomainModel(): Recipe {
 
             fun getImages(list: List<String>?): String {
@@ -44,7 +46,7 @@ data class RecipeListResponseDTO(
                 recipePoster = getImages(imageUrls),
                 discount = 0,
                 imgUrls = imageUrls,
-                videoUrls = videoUrls,
+                videos = getVideos(videos),
                 profile = creator?.getDomainModel(),
                 price = price?.toInt()
             )

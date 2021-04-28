@@ -39,7 +39,7 @@ object ImageLoader {
     }
 
     @JvmStatic
-    @BindingAdapter("app:setImage")
+    @BindingAdapter("app:loadImageUrl")
     fun setImage(imageView: ImageView, url: String?) {
         url?.let {
             if (it.isNotEmpty()) {

@@ -40,7 +40,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:profileImageSize="@dimen/dimen_size_50"
                 app:profileUsernameTextSize="@dimen/text_size_10"
-                app:setImage="@{data.recipePoster}" />
+                app:loadImageUrl="@{data.recipePoster}" />
 
             <com.goodfood.app.ui.common.widgets.UserProfileLayout
                 android:layout_width="wrap_content"
