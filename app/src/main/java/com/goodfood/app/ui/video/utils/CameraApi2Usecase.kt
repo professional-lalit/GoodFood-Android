@@ -1,4 +1,4 @@
-package com.goodfood.app.ui.video
+package com.goodfood.app.ui.video.utils
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -18,10 +18,11 @@ import androidx.appcompat.app.AppCompatActivity
 import com.goodfood.app.BuildConfig
 import com.goodfood.app.R
 import com.goodfood.app.utils.Utils
-import com.goodfood.app.ui.video.CameraApi2Utilities.DEFAULT_ORIENTATIONS
-import com.goodfood.app.ui.video.CameraApi2Utilities.INVERSE_ORIENTATIONS
-import com.goodfood.app.ui.video.CameraApi2Utilities.SENSOR_ORIENTATION_DEFAULT_DEGREES
-import com.goodfood.app.ui.video.CameraApi2Utilities.SENSOR_ORIENTATION_INVERSE_DEGREES
+import com.goodfood.app.ui.video.utils.CameraApi2Utilities.DEFAULT_ORIENTATIONS
+import com.goodfood.app.ui.video.utils.CameraApi2Utilities.INVERSE_ORIENTATIONS
+import com.goodfood.app.ui.video.utils.CameraApi2Utilities.SENSOR_ORIENTATION_DEFAULT_DEGREES
+import com.goodfood.app.ui.video.utils.CameraApi2Utilities.SENSOR_ORIENTATION_INVERSE_DEGREES
+import com.goodfood.app.ui.video.widgets.AutoFitTextureView
 import java.io.File
 import java.io.IOException
 import java.util.*

@@ -1,4 +1,4 @@
-package com.goodfood.app.ui.video
+package com.goodfood.app.ui.video.utils
 
 import androidx.lifecycle.LifecycleObserver
 import java.io.File

@@ -8,7 +8,6 @@ import android.content.IntentFilter
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.media.AudioManager
 import android.os.BatteryManager
 import android.os.Build
 import android.os.Bundle
@@ -18,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleRegistry
 import com.goodfood.app.common.DirectoryManager
+import com.goodfood.app.ui.video.utils.ICameraUsecase
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.util.*

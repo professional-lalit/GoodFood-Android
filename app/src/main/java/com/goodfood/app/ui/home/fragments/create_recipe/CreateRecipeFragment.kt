@@ -126,10 +126,10 @@ class CreateRecipeFragment : BaseFragment() {
 
     private fun setViews() {
         binding.btnPickPhoto.setOnClickListener {
-            checkPermissionsAndShowDialog("CREATE_RECIPE_IMG_${photos.size}")
+            checkPermissionsAndShowDialog("RECIPE_IMG_${photos.size}")
         }
         binding.btnPickVideo.setOnClickListener {
-            showVideoDialog("CREATE_RECIPE_VID_${videos.size}")
+            showVideoDialog("RECIPE_VID_${videos.size}")
         }
         binding.btnSubmit.setOnClickListener {
             viewModel.uploadRecipeData()
@@ -265,11 +265,11 @@ class CreateRecipeFragment : BaseFragment() {
         when (event.viewId) {
             R.id.img_recipe_photo -> {
                 val recipePhoto = event.payload as RecipePhoto
-                checkPermissionsAndShowDialog("IMG_${photos.indexOf(recipePhoto)}")
+                checkPermissionsAndShowDialog("RECIPE_IMG_${photos.indexOf(recipePhoto)}")
             }
             R.id.img_recipe_video -> {
                 val recipeVideo = event.payload as RecipeVideo
-                showVideoDialog("VID_${videos.indexOf(recipeVideo)}")
+                showVideoDialog("RECIPE_VID_${videos.indexOf(recipeVideo)}")
             }
             R.id.img_delete -> {
                 if (event.payload is RecipeVideo) {

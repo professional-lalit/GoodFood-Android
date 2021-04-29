@@ -1,6 +1,6 @@
 @file:Suppress("DEPRECATION")
 
-package com.goodfood.app.ui.video
+package com.goodfood.app.ui.video.utils
 
 import android.annotation.SuppressLint
 import android.net.Uri

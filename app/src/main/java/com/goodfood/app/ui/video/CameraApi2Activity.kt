@@ -7,6 +7,8 @@ import android.view.TextureView
 import android.view.View
 import com.goodfood.app.R
 import com.goodfood.app.databinding.ActivityCameraApi2Binding
+import com.goodfood.app.ui.video.utils.CameraApi2Usecase
+import com.goodfood.app.ui.video.utils.ICameraUsecase
 import com.goodfood.app.utils.Extensions.showToast
 import dagger.hilt.android.AndroidEntryPoint
 

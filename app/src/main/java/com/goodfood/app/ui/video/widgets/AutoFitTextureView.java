@@ -1,4 +1,4 @@
-package com.goodfood.app.ui.video;
+package com.goodfood.app.ui.video.widgets;
 
 import android.content.Context;
 import android.util.AttributeSet;

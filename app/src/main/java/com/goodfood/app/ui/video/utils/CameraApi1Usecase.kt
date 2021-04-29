@@ -1,6 +1,6 @@
 @file:Suppress("DEPRECATION")
 
-package com.goodfood.app.ui.video
+package com.goodfood.app.ui.video.utils
 
 import android.content.Context
 import android.hardware.Camera
@@ -13,6 +13,7 @@ import android.view.Surface
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.goodfood.app.BuildConfig
+import com.goodfood.app.ui.video.widgets.CameraPreview
 import java.io.File
 import java.io.IOException
 

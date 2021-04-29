@@ -7,6 +7,8 @@ import android.util.Log
 import android.view.View
 import com.goodfood.app.R
 import com.goodfood.app.databinding.ActivityCameraApi1Binding
+import com.goodfood.app.ui.video.utils.CameraApi1Usecase
+import com.goodfood.app.ui.video.utils.ICameraUsecase
 import com.goodfood.app.utils.Extensions.showToast
 import dagger.hilt.android.AndroidEntryPoint
 
