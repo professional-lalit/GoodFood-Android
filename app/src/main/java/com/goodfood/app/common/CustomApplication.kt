@@ -20,6 +20,7 @@ class CustomApplication : Application() {
 
     companion object {
         private lateinit var mInstance: CustomApplication
+        var userId: String? = null
         fun getInstance(): CustomApplication {
             return mInstance
         }

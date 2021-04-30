@@ -28,6 +28,7 @@ public class UserProfileLayout extends LinearLayout {
     private LayoutUserProfileBinding binding;
     private float imageSize;
     private int textSize;
+    private boolean isHorizontal;
 
     public UserProfileLayout(Context context) {
         super(context);
@@ -43,7 +44,12 @@ public class UserProfileLayout extends LinearLayout {
 
         imageSize = attributeArray.getDimension(R.styleable.UserProfileLayout_profileImageSize, 0f);
         textSize = attributeArray.getInt(R.styleable.UserProfileLayout_profileUsernameTextSize, 0);
-
+        isHorizontal = attributeArray.getBoolean(R.styleable.UserProfileLayout_orientationHorizontal, false);
+        if (isHorizontal) {
+            setOrientation(LinearLayout.HORIZONTAL);
+        } else {
+            setOrientation(LinearLayout.VERTICAL);
+        }
         attributeArray.recycle();
 
     }
@@ -56,10 +62,10 @@ public class UserProfileLayout extends LinearLayout {
         );
         LayoutParams params = new LayoutParams((int) imageSize, (int) imageSize);
         binding.imgUser.setLayoutParams(params);
-
         binding.txtUsername.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
         binding.txtRecipePrice.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
         binding.txtRecipePrice.setVisibility(VISIBLE);
+
         binding.setUser(recipe.getProfile());
         binding.setRecipe(recipe);
     }
@@ -75,6 +81,15 @@ public class UserProfileLayout extends LinearLayout {
         binding.txtUsername.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
         binding.txtRecipePrice.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
         binding.txtRecipePrice.setVisibility(GONE);
+
+        if (user.getImageUrl().isEmpty()) {
+            binding.imgUser.setVisibility(GONE);
+            LayoutParams params1 = new LayoutParams(binding.txtUsername.getLayoutParams());
+            params1.setMargins(0, 0, 0, 0);
+            binding.txtUsername.setLayoutParams(params1);
+        } else {
+            binding.imgUser.setVisibility(VISIBLE);
+        }
         binding.setUser(user);
     }
 

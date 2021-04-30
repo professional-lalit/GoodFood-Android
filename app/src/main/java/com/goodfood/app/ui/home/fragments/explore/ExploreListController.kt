@@ -12,6 +12,7 @@ import com.goodfood.app.models.domain.Inspiration
 import com.goodfood.app.models.domain.Recipe
 import com.goodfood.app.recipeData
 import com.goodfood.app.surveyData
+import com.goodfood.app.ui.common.comments.RecipeModel_
 import org.greenrobot.eventbus.EventBus
 
 
@@ -51,14 +52,13 @@ class ExploreListController : TypedEpoxyController<List<Any>>() {
     }
 
     private fun addRecipe(itemData: Recipe) {
-        recipeData {
-            id(itemData.hashCode())
-            data(itemData)
-            itemClickListener(object : IClickListener {
-                override fun onClick(view: View, model: Any?) {
-                    sendClickEvent(view.id, model)
-                }
-            })
+        val model = RecipeModel_().id(itemData.hashCode())
+        model.recipe = itemData
+        model.itemClickListener = object : IClickListener {
+            override fun onClick(view: View, model: Any?) {
+                sendClickEvent(view.id, model)
+            }
         }
+        model.addTo(this)
     }
 }

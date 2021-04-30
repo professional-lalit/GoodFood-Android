@@ -8,5 +8,6 @@
     <declare-styleable name="UserProfileLayout">
         <attr name="profileImageSize" format="dimension" />
         <attr name="profileUsernameTextSize" format="integer" />
+        <attr name="orientationHorizontal" format="boolean" />
     </declare-styleable>
 </resources>

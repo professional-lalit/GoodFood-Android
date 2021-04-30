@@ -1,9 +1,15 @@
 package com.goodfood.app.common
 
+import android.R
 import android.view.View
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.databinding.BindingAdapter
+import com.goodfood.app.models.domain.Reaction
 import com.goodfood.app.models.domain.Recipe
 import com.goodfood.app.models.domain.User
 import com.goodfood.app.ui.common.widgets.RecipeBottomStrip
@@ -69,3 +75,13 @@ fun setRecipeImages(
         recipeImagePagerLayout.visibility = View.GONE
     }
 }
+
+@BindingAdapter("app:replyVisibility")
+fun setReplyVisiblity(img: ImageView, list: List<Any>) {
+    if (list.isNotEmpty()) {
+        img.visibility = View.VISIBLE
+    } else {
+        img.visibility = View.GONE
+    }
+}
+

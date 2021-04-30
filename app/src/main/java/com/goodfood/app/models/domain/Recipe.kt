@@ -25,7 +25,8 @@ data class Recipe(
     val imgUrls: List<String>? = null,
     val videos: List<Video>? = null,
     val profile: User? = null,
-    val price: Int? = 0
+    val price: Int? = 0,
+    val comments: List<Comment>?
 ) : Serializable {
 
     data class Video(

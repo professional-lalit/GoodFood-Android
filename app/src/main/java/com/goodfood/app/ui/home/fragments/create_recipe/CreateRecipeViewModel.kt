@@ -40,12 +40,15 @@ class CreateRecipeViewModel @Inject constructor(
     private val recipeDataUploadUsecase: RecipeDataUploadUsecase
 ) : BaseViewModel() {
 
-    val photos = mutableListOf<RecipePhoto>()
-    val videos = mutableListOf<RecipeVideo>()
-
     enum class RecipeUploadState {
         INIT, PHOTOS_UPLOAD_INIT, PHOTOS_UPLOADED, VIDEOS_UPLOAD_INIT, VIDEOS_UPLOADED, SUCCESS, FAILED
     }
+
+    val photos = mutableListOf<RecipePhoto>()
+    val videos = mutableListOf<RecipeVideo>()
+
+    val failedPhotos = recipeImageUploadUsecase.failedUploads
+    val failedVideos = recipeVideoUploadUsecase.failedUploads
 
     private val _currentUploadingVideo = recipeVideoUploadUsecase.currentUploadingVideo
     val currentUploadingVideo: LiveData<RecipeVideo> = _currentUploadingVideo
@@ -70,14 +73,20 @@ class CreateRecipeViewModel @Inject constructor(
                 if (photos.isNotEmpty()) {
                     _recipeUploadState.postValue(RecipeUploadState.PHOTOS_UPLOAD_INIT)
                     withContext(coroutineContext) {
-                        recipeImageUploadUsecase.uploadRecipePhotos(recipeDataResponse.recipeId, photos)
+                        recipeImageUploadUsecase.uploadRecipePhotos(
+                            recipeDataResponse.recipeId,
+                            photos
+                        )
                     }
                     _recipeUploadState.postValue(RecipeUploadState.PHOTOS_UPLOADED)
                 }
                 if (videos.isNotEmpty()) {
                     _recipeUploadState.postValue(RecipeUploadState.VIDEOS_UPLOAD_INIT)
                     withContext(coroutineContext) {
-                        recipeVideoUploadUsecase.uploadRecipeVideos(recipeDataResponse.recipeId, videos)
+                        recipeVideoUploadUsecase.uploadRecipeVideos(
+                            recipeDataResponse.recipeId,
+                            videos
+                        )
                     }
                     _recipeUploadState.postValue(RecipeUploadState.VIDEOS_UPLOADED)
                 }

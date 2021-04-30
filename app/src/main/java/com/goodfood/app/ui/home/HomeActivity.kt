@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import com.goodfood.app.R
+import com.goodfood.app.common.CustomApplication
 import com.goodfood.app.common.multimedia_managers.RecipeMultimediaManager
 import com.goodfood.app.databinding.ActivityHomeBinding
 import com.goodfood.app.databinding.HomeDrawerHeaderBinding
@@ -206,6 +207,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
         homeViewModel.user.observe(this, { user ->
             drawerHeaderBinding = DataBindingUtil.bind(binding.navHome.getHeaderView(0))!!
             drawerHeaderBinding.user = user
+            CustomApplication.userId = user.userId
         })
     }
 
@@ -219,7 +221,10 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel>() {
                     exitAnimation = R.anim.exit_to_left
                     popEnterAnimation = R.anim.enter_from_left
                     popExitAnimation = R.anim.exit_to_right
-                    fragNavController.pushFragment(RecipeDetailFragment.newInstance(recipeId = model.recipeId), build())
+                    fragNavController.pushFragment(
+                        RecipeDetailFragment.newInstance(recipeId = model.recipeId),
+                        build()
+                    )
                 }
             }
         }

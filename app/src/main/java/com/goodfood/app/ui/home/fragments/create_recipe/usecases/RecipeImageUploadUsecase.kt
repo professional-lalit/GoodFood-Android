@@ -27,8 +27,9 @@ class RecipeImageUploadUsecase @Inject constructor(private val recipeRepository:
 
     val errorData = MutableLiveData<Error>()
     val currentUploadingPhoto = MutableLiveData<RecipePhoto>()
+    val failedUploads = mutableListOf<RecipePhoto>()
 
-    suspend fun uploadRecipePhotos(recipeId: String, photos: List<RecipePhoto>){
+    suspend fun uploadRecipePhotos(recipeId: String, photos: List<RecipePhoto>) {
         Log.d(javaClass.simpleName, "TEST::uploading photos")
         photos.forEach { photo ->
             uploadPhoto(recipeId, photo)
@@ -47,6 +48,7 @@ class RecipeImageUploadUsecase @Inject constructor(private val recipeRepository:
             val data = imageResponse.data as ServerMessage
             Log.d(javaClass.simpleName, "file uploaded")
         } else {
+            failedUploads.add(photo)
             val error = (imageResponse as NetworkResponse.NetworkError).error
             errorData.postValue(error)
         }

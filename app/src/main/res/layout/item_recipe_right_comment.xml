@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="comment"
+            type="com.goodfood.app.models.domain.Comment" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/dimen_size_5">
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:background="@drawable/right_comment_bg"
+            android:orientation="vertical"
+            android:padding="@dimen/dimen_size_5"
+            app:layout_constraintStart_toStartOf="@+id/img_reply"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.goodfood.app.ui.common.widgets.UserProfileLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/dimen_size_5"
+                app:orientationHorizontal="true"
+                app:profileImageSize="@dimen/dimen_size_20"
+                app:profileUsernameTextSize="10"
+                app:userData="@{comment.user}" />
+
+            <TextView
+                style="@style/BasicText"
+                android:layout_width="@dimen/dimen_size_150"
+                android:includeFontPadding="false"
+                android:padding="0dp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_10"
+                tools:text="@{comment.comment}" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/img_reply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/linearLayout"
+            android:layout_toStartOf="@+id/recycler_inner_comments"
+            android:src="@drawable/ic_reply"
+            android:layout_marginEnd="@dimen/dimen_size_2"
+            app:layout_constraintEnd_toStartOf="@+id/recycler_inner_comments"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+            app:replyVisibility="@{comment.reactions}" />
+
+        <com.airbnb.epoxy.EpoxyRecyclerView
+            android:id="@+id/recycler_inner_comments"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/linearLayout"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="@dimen/dimen_size_2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

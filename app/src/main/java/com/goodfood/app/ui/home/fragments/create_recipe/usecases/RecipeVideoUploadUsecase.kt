@@ -9,6 +9,7 @@ import com.goodfood.app.models.domain.RecipeVideo
 import com.goodfood.app.models.domain.ServerMessage
 import com.goodfood.app.networking.NetworkResponse
 import com.goodfood.app.repositories.RecipeRepository
+import dagger.hilt.android.scopes.ViewModelScoped
 import javax.inject.Inject
 
 
@@ -21,10 +22,12 @@ import javax.inject.Inject
  * also if any suggestions they are welcomed at: `lalit.appsmail@gmail.com`
  * (please keep the subject as 'GoodFood Android Code Suggestion')
  */
+@ViewModelScoped
 class RecipeVideoUploadUsecase @Inject constructor(private val recipeRepository: RecipeRepository) {
 
     val errorData = MutableLiveData<Error>()
     val currentUploadingVideo = MutableLiveData<RecipeVideo>()
+    val failedUploads = mutableListOf<RecipeVideo>()
 
     suspend fun uploadRecipeVideos(recipeId: String, videos: List<RecipeVideo>) {
         videos.forEach { video ->
@@ -45,6 +48,7 @@ class RecipeVideoUploadUsecase @Inject constructor(private val recipeRepository:
             val data = imageResponse.data as ServerMessage
             Log.d(javaClass.simpleName, "file uploaded")
         } else {
+            failedUploads.add(video)
             val error = (imageResponse as NetworkResponse.NetworkError).error
             errorData.postValue(error)
         }

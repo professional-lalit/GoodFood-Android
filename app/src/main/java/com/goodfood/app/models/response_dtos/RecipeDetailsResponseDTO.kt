@@ -1,5 +1,6 @@
 package com.goodfood.app.models.response_dtos
 
+import com.goodfood.app.models.domain.Comment
 import com.goodfood.app.models.domain.Recipe
 import com.goodfood.app.models.domain.RecipeDetails
 import com.goodfood.app.models.response_dtos.VideoDTO.Companion.getVideos
@@ -22,7 +23,7 @@ data class RecipeDetailsResponseDTO(
         val imageUrls: List<String>? = null,
         val videos: List<VideoDTO>? = null,
         val avgRating: Int,
-        val comments: List<String>? = null,
+        val comments: List<CommentDTO>? = null,
         val isFeatured: Boolean? = false,
         val _id: String? = "",
         val description: String? = "",
@@ -46,6 +47,10 @@ data class RecipeDetailsResponseDTO(
             }
         }
 
+        fun getDomainComments(list: List<CommentDTO>?): List<Comment>? {
+            return list?.map { it.getDomainModel() }
+        }
+
         return RecipeDetails(
             Recipe(
                 recipeId = recipe?._id ?: "",
@@ -56,7 +61,8 @@ data class RecipeDetailsResponseDTO(
                 imgUrls = recipe?.imageUrls,
                 videos = getVideos(recipe?.videos),
                 profile = recipe?.creator?.getDomainModel(),
-                price = recipe?.price
+                price = recipe?.price,
+                comments = getDomainComments(recipe?.comments)
             )
         )
     }

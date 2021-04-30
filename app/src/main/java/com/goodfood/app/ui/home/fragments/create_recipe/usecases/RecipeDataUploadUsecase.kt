@@ -6,6 +6,7 @@ import com.goodfood.app.models.request_dtos.CreateRecipeRequestDTO
 import com.goodfood.app.models.response_dtos.CreateRecipeResponseDTO
 import com.goodfood.app.networking.NetworkResponse
 import com.goodfood.app.repositories.RecipeRepository
+import dagger.hilt.android.scopes.ViewModelScoped
 import javax.inject.Inject
 
 
@@ -18,6 +19,7 @@ import javax.inject.Inject
  * also if any suggestions they are welcomed at: `lalit.appsmail@gmail.com`
  * (please keep the subject as 'GoodFood Android Code Suggestion')
  */
+@ViewModelScoped
 class RecipeDataUploadUsecase @Inject constructor(private val recipeRepository: RecipeRepository) {
 
     val errorData = MutableLiveData<Error>()
