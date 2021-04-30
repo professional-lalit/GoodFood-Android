@@ -70,5 +70,12 @@
     <string name="purchase">Purchase</string>
     <string name="recipe_details">Recipe Details</string>
     <string name="plz_login_again">Please login again, session expired</string>
+    <string name="upload_started">Upload Started</string>
+    <string name="recipes_photos_are_uploading">Recipe photos are uploading</string>
+    <string name="recipes_photos_uploaded">Recipe photos uploaded</string>
+    <string name="recipes_videos_are_uploading">Recipe videos are uploading</string>
+    <string name="recipe_videos_uploaded">Recipe videos are uploaded</string>
+    <string name="recipe_uploaded">Recipe uploaded</string>
+    <string name="recipe_upload_failed">Recipe uplaod failed</string>
 </resources>
 

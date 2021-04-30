@@ -50,11 +50,11 @@ class CreateRecipeFragment : BaseFragment() {
 
     private val viewModel: CreateRecipeViewModel by viewModels()
 
-    private val photos = mutableListOf<RecipePhoto>()
-    private val videos = mutableListOf<RecipeVideo>()
     private val recipePhotoListController = RecipeMultimediaListController()
     private val recipeVideoListController = RecipeMultimediaListController()
 
+    private lateinit var photos: MutableList<RecipePhoto>
+    private lateinit var videos: MutableList<RecipeVideo>
 
     companion object {
         fun newInstance(bundle: Bundle? = null): CreateRecipeFragment {
@@ -66,6 +66,8 @@ class CreateRecipeFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        photos = viewModel.photos
+        videos = viewModel.videos
         recipeMultimediaManager = (requireActivity() as HomeActivity).recipeMultimediaManager
         (requireActivity() as AppCompatActivity).supportActionBar?.title =
             getString(R.string.create_recipe)
@@ -92,13 +94,39 @@ class CreateRecipeFragment : BaseFragment() {
     }
 
     override fun addObservers() {
-        viewModel.recipeUploadResponse.observe(viewLifecycleOwner, {
-            if (it.recipeId.isNotEmpty()) {
-                if (photos.isNotEmpty() || videos.isNotEmpty()) {
-                    viewModel.startMultimediaUpload(it.recipeId, photos, videos)
-                } else {
+        viewModel.recipeUploadState.observe(viewLifecycleOwner, {
+            when (it) {
+                CreateRecipeViewModel.RecipeUploadState.INIT -> showBottomDialog(
+                    getString(R.string.upload_started),
+                    false
+                )
+                CreateRecipeViewModel.RecipeUploadState.PHOTOS_UPLOAD_INIT -> showBottomDialog(
+                    getString(R.string.recipes_photos_are_uploading),
+                    false
+                )
+                CreateRecipeViewModel.RecipeUploadState.PHOTOS_UPLOADED -> showBottomDialog(
+                    getString(R.string.recipes_photos_uploaded),
+                    false
+                )
+                CreateRecipeViewModel.RecipeUploadState.VIDEOS_UPLOAD_INIT -> showBottomDialog(
+                    getString(R.string.recipes_videos_are_uploading),
+                    false
+                )
+                CreateRecipeViewModel.RecipeUploadState.VIDEOS_UPLOADED -> showBottomDialog(
+                    getString(R.string.recipe_videos_uploaded),
+                    false
+                )
+                CreateRecipeViewModel.RecipeUploadState.SUCCESS -> {
+                    showBottomDialog(
+                        getString(R.string.recipe_uploaded),
+                        false
+                    )
                     sendEvent(EventConstants.Event.RECIPE_UPLOADED.id)
                 }
+                CreateRecipeViewModel.RecipeUploadState.FAILED -> showBottomDialog(
+                    getString(R.string.recipe_upload_failed),
+                    false
+                )
             }
         })
         viewModel.currentUploadingPhoto.observe(viewLifecycleOwner, { photo ->
@@ -117,11 +145,6 @@ class CreateRecipeFragment : BaseFragment() {
                 recipeVideoListController.notifyModelChanged(videos.indexOf(it))
             }
         })
-        viewModel.isUploadInProgress.observe(viewLifecycleOwner, { isUploading ->
-            if (!isUploading) {
-                sendEvent(EventConstants.Event.RECIPE_UPLOADED.id)
-            }
-        })
     }
 
     private fun setViews() {
@@ -132,7 +155,7 @@ class CreateRecipeFragment : BaseFragment() {
             showVideoDialog("RECIPE_VID_${videos.size}")
         }
         binding.btnSubmit.setOnClickListener {
-            viewModel.uploadRecipeData()
+            viewModel.uploadRecipe()
         }
     }
 
@@ -255,10 +278,10 @@ class CreateRecipeFragment : BaseFragment() {
     override fun onClickEvent(event: ClickEventMessage) {
         super.onClickEvent(event)
 
-        if (viewModel.isUploadInProgress.value == true) {
-            NotificationBottomDialog
-                .getInstance(getString(R.string.plz_wt_until_files_upload), true)
-                .show(childFragmentManager, NotificationBottomDialog.TAG)
+        if (viewModel.recipeUploadState.value != CreateRecipeViewModel.RecipeUploadState.SUCCESS
+            || viewModel.recipeUploadState.value != CreateRecipeViewModel.RecipeUploadState.FAILED
+        ) {
+            showBottomDialog(getString(R.string.plz_wt_until_files_upload), true)
             return
         }
 
@@ -282,6 +305,16 @@ class CreateRecipeFragment : BaseFragment() {
                     recipePhotoListController.setData(photos)
                 }
             }
+        }
+    }
+
+    private fun showBottomDialog(msg: String, isTimedDismissal: Boolean) {
+        if (NotificationBottomDialog.isShown) {
+            sendEvent(EventConstants.Event.UPDATE_BOTTOM_NOTIFICATION_TITLE.id, msg)
+        } else {
+            NotificationBottomDialog
+                .getInstance(msg, isTimedDismissal)
+                .show(childFragmentManager, NotificationBottomDialog.TAG)
         }
     }
 

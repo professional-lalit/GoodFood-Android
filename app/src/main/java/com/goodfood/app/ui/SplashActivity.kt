@@ -1,9 +1,10 @@
-package com.goodfood.app
+package com.goodfood.app.ui
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import com.goodfood.app.R
 import com.goodfood.app.common.Prefs
 import com.goodfood.app.ui.home.HomeActivity
 import com.goodfood.app.ui.login.LoginActivity

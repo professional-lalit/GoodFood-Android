@@ -3,7 +3,9 @@ package com.goodfood.app.ui.home.fragments.create_recipe
 import android.util.Log
 import androidx.core.net.toFile
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
 import com.goodfood.app.models.domain.RecipePhoto
 import com.goodfood.app.models.domain.RecipeVideo
@@ -12,6 +14,9 @@ import com.goodfood.app.models.response_dtos.CreateRecipeResponseDTO
 import com.goodfood.app.networking.NetworkResponse
 import com.goodfood.app.repositories.RecipeRepository
 import com.goodfood.app.ui.common.BaseViewModel
+import com.goodfood.app.ui.home.fragments.create_recipe.usecases.RecipeDataUploadUsecase
+import com.goodfood.app.ui.home.fragments.create_recipe.usecases.RecipeImageUploadUsecase
+import com.goodfood.app.ui.home.fragments.create_recipe.usecases.RecipeVideoUploadUsecase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -30,99 +35,57 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class CreateRecipeViewModel @Inject constructor(
-    private val recipeRepository: RecipeRepository
+    private val recipeImageUploadUsecase: RecipeImageUploadUsecase,
+    private val recipeVideoUploadUsecase: RecipeVideoUploadUsecase,
+    private val recipeDataUploadUsecase: RecipeDataUploadUsecase
 ) : BaseViewModel() {
 
-    private val _recipeUploadResponse = MutableLiveData<CreateRecipeResponseDTO>()
-    val recipeUploadResponse: LiveData<CreateRecipeResponseDTO> = _recipeUploadResponse
+    val photos = mutableListOf<RecipePhoto>()
+    val videos = mutableListOf<RecipeVideo>()
 
-    private val _currentUploadingVideo = MutableLiveData<RecipeVideo>()
+    enum class RecipeUploadState {
+        INIT, PHOTOS_UPLOAD_INIT, PHOTOS_UPLOADED, VIDEOS_UPLOAD_INIT, VIDEOS_UPLOADED, SUCCESS, FAILED
+    }
+
+    private val _currentUploadingVideo = recipeVideoUploadUsecase.currentUploadingVideo
     val currentUploadingVideo: LiveData<RecipeVideo> = _currentUploadingVideo
 
-    private val _currentUploadingPhoto = MutableLiveData<RecipePhoto>()
+    private val _currentUploadingPhoto = recipeImageUploadUsecase.currentUploadingPhoto
     val currentUploadingPhoto: LiveData<RecipePhoto> = _currentUploadingPhoto
 
-    private val _isUploadInProgress = MutableLiveData<Boolean>()
-    val isUploadInProgress: LiveData<Boolean> = _isUploadInProgress
+    private val _recipeUploadState = MutableLiveData<RecipeUploadState>()
+    val recipeUploadState: LiveData<RecipeUploadState> = _recipeUploadState
 
     val createRecipeUI = CreateRecipeUI()
 
-    fun startMultimediaUpload(
-        recipeId: String,
-        photos: List<RecipePhoto>,
-        videos: List<RecipeVideo>
-    ) {
-        viewModelScope.launch(Dispatchers.IO) {
-            _isUploadInProgress.postValue(true)
-            if (photos.isNotEmpty()) {
-                withContext(coroutineContext) { uploadRecipePhotos(recipeId, photos) }
-            }
-            if (videos.isNotEmpty()) {
-                withContext(coroutineContext) { uploadRecipeVideos(recipeId, videos) }
-            }
-            _isUploadInProgress.postValue(false)
-        }
-    }
 
-    private suspend fun uploadRecipePhotos(recipeId: String, photos: List<RecipePhoto>) {
-        Log.d(javaClass.simpleName, "TEST::uploading photos")
-        photos.forEach { photo ->
-            uploadPhoto(recipeId, photo)
-        }
-    }
-
-    private suspend fun uploadPhoto(recipeId: String, photo: RecipePhoto) {
-        val fileToUpload = photo.imgUri?.toFile()
-        Log.d(javaClass.simpleName, "TEST::uploading photo")
-        val imageResponse = recipeRepository.uploadRecipeImage(recipeId, fileToUpload!!)
-        { progress ->
-            photo.uploadProgress = progress
-            _currentUploadingPhoto.postValue(photo)
-        }
-        if (imageResponse is NetworkResponse.NetworkSuccess) {
-            val data = imageResponse.data as ServerMessage
-            Log.d(javaClass.simpleName, "file uploaded")
-        } else {
-            val errorData = (imageResponse as NetworkResponse.NetworkError).error
-            _errorData.postValue(errorData)
-        }
-    }
-
-    private suspend fun uploadRecipeVideos(recipeId: String, videos: List<RecipeVideo>) {
-        videos.forEach { video ->
-            uploadVideo(recipeId, video)
-        }
-    }
-
-    private suspend fun uploadVideo(recipeId: String, video: RecipeVideo) {
-        val fileToUpload = video.videoUri?.toFile()
-        val thumbFileToUpload = video.videoThumbUri?.toFile()
-        val imageResponse = recipeRepository.uploadRecipeVideo(recipeId, fileToUpload!!, thumbFileToUpload!!)
-        { progress ->
-            video.uploadProgress = progress
-            _currentUploadingVideo.postValue(video)
-        }
-        if (imageResponse is NetworkResponse.NetworkSuccess) {
-            val data = imageResponse.data as ServerMessage
-            Log.d(javaClass.simpleName, "file uploaded")
-        } else {
-            val errorData = (imageResponse as NetworkResponse.NetworkError).error
-            _errorData.postValue(errorData)
-        }
-    }
-
-    fun uploadRecipeData() {
+    fun uploadRecipe() {
         viewModelScope.launch {
             createRecipeUI.isRecipeDataUploading = true
-            val result = recipeRepository.addRecipe(createRecipeUI.getRequestDTO())
-            createRecipeUI.isRecipeDataUploading = false
-            if (result is NetworkResponse.NetworkSuccess) {
-                val data = result.data as CreateRecipeResponseDTO
-                _recipeUploadResponse.postValue(data)
-            } else {
-                val errorData = (result as NetworkResponse.NetworkError).error
-                _errorData.postValue(errorData)
+            _recipeUploadState.postValue(RecipeUploadState.INIT)
+            val recipeDataResponse = withContext(coroutineContext) {
+                recipeDataUploadUsecase.uploadRecipeData(createRecipeUI.getRequestDTO())
             }
+            if (recipeDataResponse?.recipeId?.isNotEmpty() == true) {
+                if (photos.isNotEmpty()) {
+                    _recipeUploadState.postValue(RecipeUploadState.PHOTOS_UPLOAD_INIT)
+                    withContext(coroutineContext) {
+                        recipeImageUploadUsecase.uploadRecipePhotos(recipeDataResponse.recipeId, photos)
+                    }
+                    _recipeUploadState.postValue(RecipeUploadState.PHOTOS_UPLOADED)
+                }
+                if (videos.isNotEmpty()) {
+                    _recipeUploadState.postValue(RecipeUploadState.VIDEOS_UPLOAD_INIT)
+                    withContext(coroutineContext) {
+                        recipeVideoUploadUsecase.uploadRecipeVideos(recipeDataResponse.recipeId, videos)
+                    }
+                    _recipeUploadState.postValue(RecipeUploadState.VIDEOS_UPLOADED)
+                }
+                _recipeUploadState.postValue(RecipeUploadState.SUCCESS)
+            } else {
+                _recipeUploadState.postValue(RecipeUploadState.FAILED)
+            }
+            createRecipeUI.isRecipeDataUploading = false
         }
     }
 

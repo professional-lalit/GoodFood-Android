@@ -16,7 +16,8 @@ object EventConstants {
         OPEN_CREATE_RECIPE_SCREEN(1),
         COPYING_VIDEO_FILE(2),
         RECIPE_UPLOADED(3),
-        NOT_AUTHENTICATED(4)
+        NOT_AUTHENTICATED(4),
+        UPDATE_BOTTOM_NOTIFICATION_TITLE(5)
     }
 
 }
