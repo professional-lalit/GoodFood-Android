@@ -1,5 +1,8 @@
 package com.goodfood.app.models.domain
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -14,12 +17,14 @@ import java.util.*
  * also if any suggestions they are welcomed at: `lalit.appsmail@gmail.com`
  * (please keep the subject as 'GoodFood Android Code Suggestion')
  */
+@Serializable
+@Parcelize
 data class Reaction(
     val username: String,
     val reaction: String,
     val reactedAt: String,
     val reactions: List<Reaction>?
-) {
+) : Parcelable {
     fun formatReactionTime(): Date? {
         val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
         try {

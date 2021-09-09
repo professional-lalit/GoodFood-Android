@@ -27,6 +27,8 @@ import org.greenrobot.eventbus.EventBus
  */
 class ExploreListController : TypedEpoxyController<List<Any>>() {
 
+    var clickListener: IClickListener? = null
+
     override fun buildModels(data: List<Any>) {
         data.forEach {
             when (it) {
@@ -54,11 +56,7 @@ class ExploreListController : TypedEpoxyController<List<Any>>() {
     private fun addRecipe(itemData: Recipe) {
         val model = RecipeModel_().id(itemData.hashCode())
         model.recipe = itemData
-        model.itemClickListener = object : IClickListener {
-            override fun onClick(view: View, model: Any?) {
-                sendClickEvent(view.id, model)
-            }
-        }
+        model.clickListener = clickListener
         model.addTo(this)
     }
 }

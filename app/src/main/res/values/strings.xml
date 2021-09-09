@@ -77,5 +77,6 @@
     <string name="recipe_videos_uploaded">Recipe videos are uploaded</string>
     <string name="recipe_uploaded">Recipe uploaded</string>
     <string name="recipe_upload_failed">Recipe uplaod failed</string>
+    <string name="comments">Comments</string>
 </resources>
 

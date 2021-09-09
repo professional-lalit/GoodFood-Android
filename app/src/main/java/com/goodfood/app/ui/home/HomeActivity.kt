@@ -17,9 +17,12 @@ import com.goodfood.app.events.ClickEventMessage
 import com.goodfood.app.events.EventConstants
 import com.goodfood.app.events.Message
 import com.goodfood.app.interfaces.Navigable
+import com.goodfood.app.models.domain.Comment
 import com.goodfood.app.models.domain.Recipe
+import com.goodfood.app.models.domain.User
 import com.goodfood.app.ui.common.BaseActivity
 import com.goodfood.app.ui.common.BaseViewModel
+import com.goodfood.app.ui.common.dialogs.CommentsBottomDialog
 import com.goodfood.app.ui.common.dialogs.DialogManager
 import com.goodfood.app.ui.home.fragments.*
 import com.goodfood.app.ui.home.fragments.create_recipe.CreateRecipeFragment

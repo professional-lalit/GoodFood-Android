@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/txt_recipe_title"
+        style="@style/BasicText"
+        android:includeFontPadding="false"
+        android:text="@string/comments"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/txt_comments_title"
+        style="@style/BasicText"
+        android:layout_below="@+id/txt_recipe_title"
+        android:includeFontPadding="false"
+        android:text="@string/comments"
+        android:textSize="@dimen/text_size_8" />
+
+    <ImageView
+        android:id="@+id/img_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="@dimen/dimen_size_10"
+        android:src="@drawable/ic_close" />
+
+    <View
+        android:id="@+id/view_horizontal_rule"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_size_0_5"
+        android:layout_below="@+id/txt_comments_title"
+        android:background="@color/faint_grey_text" />
+
+    <com.airbnb.epoxy.EpoxyRecyclerView
+        android:id="@+id/recycler_comments"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingBottom="@dimen/dimen_size_5"
+        android:clipToPadding="false"
+        android:layout_below="@+id/txt_comments_title" />
+
+</RelativeLayout>

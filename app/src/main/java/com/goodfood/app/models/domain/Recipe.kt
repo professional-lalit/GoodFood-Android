@@ -1,9 +1,11 @@
 package com.goodfood.app.models.domain
 
+import android.os.Parcelable
 import android.view.View
 import android.widget.TextView
 import com.airbnb.epoxy.EpoxyModel
 import com.goodfood.app.R
+import kotlinx.parcelize.Parcelize
 import java.io.Serializable
 
 
@@ -16,6 +18,7 @@ import java.io.Serializable
  * also if any suggestions they are welcomed at: `lalit.appsmail@gmail.com`
  * (please keep the subject as 'GoodFood Android Code Suggestion')
  */
+@Parcelize
 data class Recipe(
     val recipeId: String,
     val recipeTitle: String,
@@ -27,14 +30,15 @@ data class Recipe(
     val profile: User? = null,
     val price: Int? = 0,
     val comments: List<Comment>?
-) : Serializable {
+) : Serializable, Parcelable {
 
+    @Parcelize
     data class Video(
         val videoId: String,
         val thumbUrl: String,
         val url: String,
         val title: String
-    )
+    ) : Parcelable
 
     fun getPhotoCount(): Int {
         return imgUrls?.size ?: 0

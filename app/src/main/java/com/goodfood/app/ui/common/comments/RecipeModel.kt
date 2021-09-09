@@ -5,6 +5,8 @@ import com.airbnb.epoxy.DataBindingEpoxyModel
 import com.airbnb.epoxy.EpoxyModelClass
 import com.goodfood.app.R
 import com.goodfood.app.databinding.ItemRecipeDataBinding
+import com.goodfood.app.events.EventConstants
+import com.goodfood.app.events.sendClickEvent
 import com.goodfood.app.interfaces.IClickListener
 import com.goodfood.app.models.domain.Recipe
 
@@ -23,7 +25,7 @@ import com.goodfood.app.models.domain.Recipe
 open class RecipeModel : DataBindingEpoxyModel() {
 
     var recipe: Recipe? = null
-    var itemClickListener: IClickListener? = null
+    var clickListener: IClickListener? = null
 
     override fun getDefaultLayout(): Int {
         return R.layout.item_recipe_data
@@ -32,11 +34,20 @@ open class RecipeModel : DataBindingEpoxyModel() {
     override fun setDataBindingVariables(binding: ViewDataBinding?) {
         binding as ItemRecipeDataBinding
         binding.data = recipe
+        binding.txtCommentsCount.text = (recipe?.comments?.size ?: 0).toString()
 
-        val controller = CommentListController()
-        controller.setData(recipe!!.comments)
-        binding.recyclerComments.setController(controller)
+        binding.txtCommentsCount.setOnClickListener {
+            clickListener!!.onClick(
+                binding.txtCommentsCount,
+                recipe
+            )
+        }
 
-        binding.itemClickListener = itemClickListener
+        binding.clRoot.setOnClickListener {
+            clickListener!!.onClick(
+                binding.clRoot,
+                recipe
+            )
+        }
     }
 }
