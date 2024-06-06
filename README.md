@@ -1,6 +1,6 @@
 Introduction:
 
-Welcome to GoodFood - Your Ultimate Food Companion! This Android application is designed to bring the world of culinary delights right to your fingertips. Whether you're a foodie looking for new recipes, a restaurant enthusiast seeking the hottest spots in town, or a busy bee craving a convenient meal delivery service, DeliciousEats has got you covered.
+Welcome to GoodFood - Your Ultimate Food Companion! This Android application is designed to bring the world of culinary delights right to your fingertips. Whether you're a foodie looking for new recipes, a restaurant enthusiast seeking the hottest spots in town, or a busy bee craving a convenient meal delivery service, GoodFood has got you covered.
 
 Features:
 
